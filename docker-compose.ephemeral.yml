@@ -1,0 +1,23 @@
+# Local evaluation only. PostgreSQL and Redis keep no data after containers stop.
+services:
+  db:
+    volumes: !override []
+    tmpfs:
+      - /var/lib/postgresql/data:size=512m
+    restart: "no"
+
+  redis:
+    volumes: !override []
+    tmpfs:
+      - /data:size=64m
+    command: ["redis-server", "--save", "", "--appendonly", "no"]
+    restart: "no"
+
+  api:
+    restart: "no"
+
+  worker:
+    restart: "no"
+
+  scheduler:
+    restart: "no"

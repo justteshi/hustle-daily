@@ -1,0 +1,123 @@
+services:
+  caddy:
+    image: caddy:2
+    ports:
+      - "${HTTP_PORT:-80}:80"
+      - "${HTTPS_PORT:-443}:443"
+    environment:
+      APP_DOMAIN: ${APP_DOMAIN:?Set APP_DOMAIN to a real HTTPS hostname}
+    volumes:
+      - ./infrastructure/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped
+
+  api: &app
+    build:
+      context: ./backend
+      target: app
+    env_file: .env
+    environment:
+      DB_HOST: db
+      REDIS_HOST: redis
+      DB_CONNECTION: pgsql
+      CACHE_STORE: redis
+      QUEUE_CONNECTION: redis
+      SESSION_DRIVER: redis
+      REDIS_CLIENT: predis
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1/up >/dev/null && php artisan hustle:health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  worker:
+    <<: *app
+    user: "33:33"
+    command: php artisan queue:work redis --sleep=3 --tries=3 --max-time=3600
+    healthcheck:
+      test: ["CMD", "php", "artisan", "hustle:health", "--worker"]
+
+  scheduler:
+    <<: *app
+    user: "33:33"
+    command: php artisan schedule:work
+    healthcheck:
+      test: ["CMD", "php", "artisan", "hustle:health", "--scheduler"]
+
+  test:
+    build:
+      context: ./backend
+      target: test
+    env_file: .env
+    environment:
+      DB_HOST: db
+      DB_CONNECTION: pgsql
+      DB_DATABASE: hustle_daily_test
+      DB_USERNAME: ${DB_USERNAME:-hustle_daily}
+      DB_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD}
+      REDIS_HOST: redis
+      REDIS_CLIENT: predis
+      CACHE_STORE: array
+      QUEUE_CONNECTION: sync
+      SESSION_DRIVER: array
+      APP_ENV: testing
+    depends_on:
+      db:
+        condition: service_healthy
+    profiles: ["test"]
+
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: ${DB_DATABASE:-hustle_daily}
+      POSTGRES_USER: ${DB_USERNAME:-hustle_daily}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      retries: 5
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      retries: 5
+    restart: unless-stopped
+
+  backup:
+    image: postgres:17-alpine
+    environment:
+      PGHOST: db
+      PGDATABASE: ${DB_DATABASE:-hustle_daily}
+      PGUSER: ${DB_USERNAME:-hustle_daily}
+      PGPASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD}
+    volumes:
+      - ./infrastructure/backups:/backups
+    entrypoint: ["sh", "-c", "while true; do sleep 86400; done"]
+    depends_on:
+      db:
+        condition: service_healthy
+    profiles: ["backup"]
+
+volumes:
+  postgres_data:
+  redis_data:
+  caddy_data:
+  caddy_config:

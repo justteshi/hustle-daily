@@ -1,0 +1,4 @@
+/.env
+/mobile/.env
+/infrastructure/backups/*
+!/infrastructure/backups/.gitkeep

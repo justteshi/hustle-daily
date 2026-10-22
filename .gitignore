@@ -1,4 +1,7 @@
 /.env
 /mobile/.env
+/web/.env
+/web/node_modules/
+/web/dist/
 /infrastructure/backups/*
 !/infrastructure/backups/.gitkeep

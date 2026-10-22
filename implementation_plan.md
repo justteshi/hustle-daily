@@ -4,27 +4,32 @@
 
 Status: approved product direction  
 Repository name: `hustle-daily`  
-Primary user: one person initially, with multi-user isolation built into the schema  
-Initial distribution: private iPhone installation, not an App Store release
+Audience: multiple individual users, each with a private account and isolated data
+Initial distribution: private web access and registered-iPhone installation, not an App Store release
+
+Implementation priority: complete and test the user-facing desktop web application first, then continue the iPhone client. The existing Expo work is preserved; this changes the order of future work, not the shared backend or the final two-client product.
+
+Current progress (22 October 2026): Phase 0/1 backend foundation is in place. Phase 2 has food, category, recipe, consumption and Today API flows, initial mobile screens, and Filament catalogue/consumption administration. The `web/` app has browser login, today's food totals, searchable branded-food catalogue with nutrition/portion editing, reusable-recipe creation/editing, recipe or ingredient logging, and food history with audited past-meal correction. User-facing delete, full day summaries, day types, targets and HealthKit are not implemented. Two-account authorization tests cover catalogue editing and history isolation. Admin correction remains a safety net, not a replacement for editing a logged meal in the user-facing app.
 
 ## 1. Product goal
 
-Hustle Daily replaces the manual “Таблица Hustle” workflow with an iPhone application that:
+Hustle Daily replaces the manual “Таблица Hustle” workflow with iPhone and desktop web applications that:
 
 - reads activity, workouts, sleep and body measurements from Apple HealthKit;
 - records foods, ingredients, dishes and drinks entered in the app;
 - calculates consumed calories and macros only from food logged in Hustle Daily;
 - shows one live dashboard for the current day;
+- provides a full desktop web application for reviewing and editing the same personal data;
 - supports training-day and rest-day targets;
 - asks the user to review and conclude the day at 22:30 local time;
 - keeps past days editable and recalculates them after corrections;
 - synchronizes the resulting data to a self-hosted backend;
 - provides a browser-based administration panel;
-- is single-user at launch but does not require a database redesign to add friends later.
+- supports multiple independent users from the first useful release, with private records and per-user settings.
 
 ## 2. Confirmed product rules
 
-1. The first release is for one user. Every personal table still has a `user_id`, and all API queries are scoped to the authenticated user.
+1. The first useful release supports multiple invited/provisioned users. Every personal table has a `user_id`, and all API queries and mutations are scoped to the authenticated user. No user can view or modify another user's private records.
 2. The application is privately installed on registered iPhones. It is not submitted to the App Store.
 3. The phone schedules a local notification for 22:30 in the user's configured time zone with wording such as “Let’s conclude the day.”
 4. A concluded day may be reopened and edited. Any food, health or measurement correction recalculates the daily summary.
@@ -75,6 +80,17 @@ Migration policy:
 - Expo Camera for barcode scanning
 - Expo Localization with centralized Bulgarian and English strings
 
+### Desktop web application
+
+- React and TypeScript with Vite
+- React Router
+- TanStack Query
+- React Hook Form and Zod
+- Tailwind CSS with a reusable component system
+- Responsive desktop-first layouts, with tablet support
+
+The desktop web application is a user-facing product, separate from Filament, and is the first client to bring to a complete testable state. It supports the daily dashboard, food entry, foods and recipes, targets, history, day review and past-day editing. It displays HealthKit information already synchronized by the iPhone; browsers do not read Apple Health directly.
+
 ### Backend
 
 - Laravel, using the current stable release that is compatible with the selected packages
@@ -110,6 +126,7 @@ hustle-daily/
 │   │   └── state/
 │   └── modules/
 │       └── hustle-healthkit/  Local Swift Expo module
+├── web/                    User-facing React desktop web application
 ├── backend/                Laravel API and Filament admin
 │   ├── app/
 │   ├── database/
@@ -142,7 +159,7 @@ Use UUID or ULID primary keys. Store timestamps in UTC. Store the user’s IANA 
 - `user_settings`: `user_id`, time zone, locale, day-conclusion time, notification enabled flag and preferred units.
 - `devices`: user, installation UUID, platform, app version, last sync time and optional notification metadata.
 
-There will be one seeded user initially, but no domain table may assume a global singleton.
+The initial admin account is created through the setup command; additional users can be provisioned without a database redesign. No domain table or background job may assume a global singleton. Public self-registration is a separate future product decision.
 
 ### Day types and targets
 
@@ -297,6 +314,19 @@ If no food exists:
 - Units and locale.
 - Data export and sign out.
 
+## 8A. Desktop web experience
+
+The web application uses the same REST API and user account as the mobile application. It is not the administration panel.
+
+- Today dashboard with a wider view of targets, nutrition, energy, sleep, weight and workouts.
+- Quick Add Food flow with searchable foods, portions, categories and recent/favourite items.
+- Full branded-food catalogue and editor; recipe builder with ingredient table and live macro totals.
+- Calendar/history, detailed day review, and editing and reconcluding past days.
+- Trends for weight, energy balance, calories, protein, steps and sleep.
+- Target/day-type configuration, settings, account and HealthKit sync status.
+
+The iPhone remains responsible for HealthKit authorization and synchronization, barcode scanning, local notifications and on-the-go entry. The web application shows the most recent mobile HealthKit sync and cannot trigger a direct browser-to-HealthKit refresh.
+
 ## 9. Open Food Facts and barcode strategy
 
 Open Food Facts is free and open, but its data is community-provided and must be treated as unverified until the user confirms the label. Observe its licence and attribution requirements.
@@ -392,6 +422,8 @@ Admin edits to health-derived data should require an explicit manual-override fi
 - HealthKit remains on the phone by definition. If the backend is unreachable, the next foreground/background sync can query the affected date range again and upload an idempotent snapshot later.
 - HealthKit sync batches and normal food mutations use separate server-side queues so a large health import does not block adding food.
 
+The desktop web application also uses the REST API as its source of truth and TanStack Query for temporary server-state caching. It requires backend connectivity for mutations and clearly reports failed requests. Its browser authentication must use a secure, documented session approach appropriate for a web client; mobile Sanctum tokens remain in SecureStore on the phone.
+
 ## 13. Security and privacy
 
 - HTTPS is mandatory, including on the home server.
@@ -401,7 +433,7 @@ Admin edits to health-derived data should require an explicit manual-override fi
 - Scope every personal record by `user_id` and cover this with authorization tests.
 - Rate-limit authentication and Open Food Facts proxy endpoints.
 - Use least-privilege HealthKit permissions.
-- Provide account data export and deletion before onboarding friends.
+- Provide account data export and deletion before inviting additional real users beyond the initial tester; define a safe account recovery process.
 - Encrypt backups and periodically test restoration.
 - Keep secrets out of the repository and provide a complete `.env.example`.
 
@@ -436,7 +468,7 @@ backup     scheduled PostgreSQL dumps and retention
 
 Deployment requirements:
 
-- a stable host name reachable by the iPhone;
+- a stable host name reachable by the iPhone and desktop browser;
 - a trusted TLS certificate;
 - firewall rules exposing only the proxy;
 - database and Redis not exposed publicly;
@@ -474,21 +506,35 @@ Acceptance: Docker starts cleanly; an admin can sign in; the mobile API can auth
 
 - Implement foods, nutrition, portions, categories, consumptions and recipes.
 - Implement calorie/macro calculations and immutable snapshots.
-- Build mobile login, Today screen shell, food search, create-food and add-consumption flows.
+- Scaffold the desktop React/Vite application with routing, Bulgarian/English localization, API base URL configuration and secure browser session handling.
+- Build desktop-web login, Today food totals, food search/creation/editing, recipe creation/editing, and add-consumption flows for individual foods and ready meals.
+- Add user-facing consumption edit/delete API and web UI. Editing a logged breakfast should allow adding forgotten milk without deleting and recreating the whole entry; preserve an audit trail for material corrections.
 - Add API-backed server state with TanStack Query and clear connectivity/error handling.
+- Support provisioning more than one account and test that each user's catalogue, recipes and logged meals remain private.
+- Before inviting additional real users, provide account data export/deletion and a safe account recovery procedure.
+- Preserve the existing mobile food screens, but defer further mobile feature work until the web flows are testable.
 
-Acceptance: while connected to the backend, the user can add the recurring breakfast from different branded ingredients and see correct daily calories and protein. Failed requests are clearly shown and can be retried without creating duplicates.
+Acceptance: from a desktop browser, the user can sign in, create branded ingredients and a reusable breakfast, log it, edit the logged meal to add a forgotten ingredient, and see correct daily calories and protein. Failed requests are clearly shown and can be retried without creating duplicates. Cross-user access is denied.
 
 ### Phase 3 — Day types, targets and daily summary
 
 - Implement Training Day and Rest Day.
 - Implement editable metric targets and target progress.
 - Implement day assignment, summary calculation and history editing.
+- Build history, target and day-review workflows on desktop web first.
 - Add conclude/reopen states and audit revisions.
 
-Acceptance: targets change with the selected day type, past edits recalculate the correct day, and workout calories are not double-counted.
+Acceptance: on desktop web, targets change with the selected day type, past edits recalculate the correct day, and workout calories are not double-counted.
 
-### Phase 4 — HealthKit
+### Phase 4 — Mobile client parity
+
+- Resume the existing Expo application after the web food, history, target and review workflows are working.
+- Add mobile equivalents for authentication, food/recipe management, logging and editing consumptions, Today, history, targets and day review using the same API.
+- Keep the mobile experience optimized for quick on-the-go entry; do not duplicate business rules in a second client.
+
+Acceptance: the same account can complete the core food and day workflows on iPhone and desktop web, with consistent server-authoritative results and clear failure/retry behaviour.
+
+### Phase 5 — HealthKit
 
 - Build the local Swift Expo module.
 - Implement authorization, supported-type checks and foreground sync.
@@ -498,7 +544,7 @@ Acceptance: targets change with the selected day type, past edits recalculate th
 
 Acceptance: finishing an Apple Watch workout causes it to appear after background/foreground synchronization; a repeated sync creates no duplicates.
 
-### Phase 5 — Daily conclusion
+### Phase 6 — Daily conclusion
 
 - Schedule the 22:30 local notification.
 - Deep-link it to the review screen.
@@ -507,7 +553,7 @@ Acceptance: finishing an Apple Watch workout causes it to appear after backgroun
 
 Acceptance: the notification appears at 22:30, opening it produces an up-to-date review, and the application never claims an exact background refresh that iOS did not perform.
 
-### Phase 6 — Barcode and workbook migration
+### Phase 7 — Barcode and workbook migration
 
 - Add barcode scanning.
 - Add cached Open Food Facts product lookup and required attribution.
@@ -516,11 +562,12 @@ Acceptance: the notification appears at 22:30, opening it produces an up-to-date
 
 Acceptance: known barcodes import into private foods after confirmation; the workbook imports without inventing missing macros; key daily totals reconcile.
 
-### Phase 7 — Hardening and deployment
+### Phase 8 — Hardening and deployment
 
 - Add end-to-end tests for primary flows.
 - Validate time zones and daylight-saving boundaries.
 - Add backup/restore test, monitoring and deployment documentation.
+- Verify account export/deletion and recovery workflows in deployment tests.
 - Build and install the internal `.ipa` on the registered iPhone.
 - Perform a one-week parallel run against the workbook before retiring the spreadsheet.
 
@@ -543,6 +590,12 @@ Acceptance: the installed app handles temporary API failures, server restarts an
 - Tests for unit/portion calculations and local date assignment.
 - Deep-link test for the conclude notification.
 
+### Desktop web
+
+- Component tests for dashboard cards, tables, forms and responsive layouts.
+- Integration tests for authentication, food entry, recipe editing, history and past-day changes.
+- Accessibility tests for keyboard navigation, focus order, labels, contrast and error messages.
+
 ### Native HealthKit module
 
 - Swift unit tests for sample mapping, date boundaries and sleep merging.
@@ -564,7 +617,7 @@ Acceptance: the installed app handles temporary API failures, server restarts an
 
 ## 18. Definition of the first useful release
 
-The first useful release is complete when the private iPhone build can:
+The first useful release is complete when the private iPhone build and desktop web application can:
 
 - authenticate to the self-hosted backend;
 - show today’s food totals, targets and HealthKit metrics;
@@ -573,6 +626,7 @@ The first useful release is complete when the private iPhone build can:
 - notify at 22:30 and open the day-review flow;
 - conclude, reopen and correct a day;
 - browse prior days;
+- use the same dashboard, food, recipe, history and target workflows from a desktop browser;
 - administer foods and records through Filament;
 - handle temporary API failures clearly and synchronize HealthKit without duplicates;
 - run from Docker on the home server with HTTPS and tested backups.
@@ -585,12 +639,13 @@ The first useful release is complete when the private iPhone build can:
 You are implementing a new project named Hustle Daily in the current PhpStorm workspace. Treat this as production software, but implement it incrementally and keep every completed phase runnable and tested.
 
 PRODUCT
-Hustle Daily is a private iPhone health and nutrition tracker that replaces a Bulgarian Excel workbook. It combines food logged in the app with activity, workouts, sleep and weight read from Apple HealthKit. It shows a live daily dashboard, supports Training Day and Rest Day targets, and prompts the user at 22:30 local time to review and conclude the day. Past days remain editable.
+Hustle Daily is a private iPhone and desktop-web health and nutrition tracker that replaces a Bulgarian Excel workbook. It combines food logged in either client with activity, workouts, sleep and weight synchronized from Apple HealthKit by the iPhone. It shows a live daily dashboard, supports Training Day and Rest Day targets, and prompts the user at 22:30 local time on the iPhone to review and conclude the day. Past days remain editable from either client. The desktop web app is a user-facing product, separate from Filament, and cannot access HealthKit directly.
 
-The first release has one real user, but all personal database records and API operations must be scoped by user_id so friends can be added later. Do not build public registration yet. The application will be installed privately on registered iPhones and will not be submitted to the App Store.
+The first useful release supports multiple independent users with private accounts. Every personal database record and API operation must be scoped by user_id. Provision accounts through a controlled admin/setup workflow; do not build public self-registration unless separately approved. The iPhone application will be installed privately on registered devices and will not be submitted to the App Store.
 
 APPROVED STACK
 - Mobile: Expo, React Native, TypeScript, Expo Router, Expo Development Build, TanStack Query, Zustand, React Hook Form, Zod, SecureStore, Notifications, Camera and Localization.
+- Desktop web: React, TypeScript, Vite, React Router, TanStack Query, React Hook Form, Zod, Tailwind CSS and a reusable component system. Use responsive desktop-first layouts with tablet support.
 - Apple integration: a local Expo native module written in Swift using HealthKit. Expo Go is not a target.
 - Backend: Laravel, PostgreSQL, Redis, Sanctum, Filament and generated OpenAPI documentation.
 - Hosting: Docker Compose with Caddy, API, queue worker, scheduler, PostgreSQL, Redis and backup services.
@@ -599,6 +654,7 @@ APPROVED STACK
 REPOSITORY STRUCTURE
 Create:
 - mobile/
+- web/
 - backend/
 - infrastructure/
 - docs/
@@ -641,7 +697,7 @@ Implement or document migrations for:
 - health_sync_cursors, health_sync_runs
 - daily_summaries, daily_summary_revisions
 
-Use UUIDs or ULIDs. Enforce ownership with Laravel policies and query scoping. Add explicit cross-user authorization tests even though only one account is used initially.
+Use UUIDs or ULIDs. Enforce ownership with Laravel policies and query scoping. Add explicit cross-user authorization tests from the beginning; multiple real accounts are a first-release requirement.
 
 API
 Use /api/v1 and a consistent JSON error envelope. Mutations accept idempotency keys. The planned resources are auth/me/settings, dashboard/today, days/conclude/reopen, day-types, targets, meal-categories, foods/search/barcode, recipes, consumptions and health sync/status/recalculate. Generate OpenAPI documentation from the implementation.
@@ -651,6 +707,9 @@ Install Filament at /admin. Add an admin role and resources for users, foods, nu
 
 MOBILE DATA MODEL
 PostgreSQL behind the REST API is the single application database and source of truth. Do not add SQLite, an offline write queue or local replication in the first release. Use TanStack Query for temporary server-state caching and SecureStore only for authentication/session material. Food and settings mutations require backend connectivity. Show failed requests clearly and allow a safe retry. HealthKit sync remains idempotent so an affected date range can be queried and uploaded again after a temporary API failure.
+
+DESKTOP WEB DATA MODEL
+Use the same REST API and user account as mobile, with TanStack Query for temporary server-state caching. Implement secure browser-appropriate authentication; do not put mobile API tokens in browser storage. Support the dashboard, food entry and editing, branded foods, recipes, targets, history, day review and past-day editing. Show the last iPhone HealthKit sync status, and do not present browser-to-HealthKit refresh as available.
 
 OPEN FOOD FACTS
 Do not implement this in the first milestone, but keep a clean adapter boundary. Future barcode lookup checks the private database first, then calls the Open Food Facts product endpoint through the backend, identifies the app with a User-Agent, caches the response and asks the user to confirm imported nutrition. Local food autocomplete must not call Open Food Facts on each keystroke.
@@ -668,6 +727,8 @@ SECURITY AND OPERATIONS
 
 YOUR FIRST IMPLEMENTATION RUN
 Implement Phase 0 and Phase 1 only. Do not attempt HealthKit or the entire product in this first run.
+
+This embedded prompt is the historical first-run brief, not an instruction to repeat completed phases. For ongoing work in this repository, follow the current progress and web-first phase ordering above.
 
 Phase 0:
 1. Inspect the existing workspace and preserve any user work.

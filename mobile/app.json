@@ -18,7 +18,7 @@
       },
       "predictiveBackGestureEnabled": false
     },
-    "plugins": ["expo-router", "expo-localization", "expo-dev-client"],
+    "plugins": ["expo-router", "expo-localization", "expo-dev-client", "expo-secure-store"],
     "scheme": "hustledaily",
     "extra": {
       "apiBaseUrl": "https://your-real-domain.example/api/v1"

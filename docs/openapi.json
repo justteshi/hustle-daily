@@ -6,7 +6,7 @@
     },
     "servers": [
         {
-            "url": "https://your-real-domain.example/api"
+            "url": "https://localhost/api"
         }
     ],
     "security": [
@@ -235,6 +235,378 @@
                 }
             }
         },
+        "/v1/consumptions": {
+            "get": {
+                "operationId": "consumption.index",
+                "tags": [
+                    "Consumption"
+                ],
+                "parameters": [
+                    {
+                        "name": "date",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "date"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Consumption"
+                                            }
+                                        }
+                                    },
+                                    "required": [
+                                        "data"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    }
+                }
+            },
+            "post": {
+                "operationId": "consumption.store",
+                "tags": [
+                    "Consumption"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "meal_category_id": {
+                                        "type": "string",
+                                        "format": "uuid"
+                                    },
+                                    "eaten_at": {
+                                        "type": "string"
+                                    },
+                                    "notes": {
+                                        "type": [
+                                            "string",
+                                            "null"
+                                        ],
+                                        "maxLength": 2000
+                                    },
+                                    "recipe_id": {
+                                        "type": [
+                                            "string",
+                                            "null"
+                                        ],
+                                        "format": "uuid"
+                                    },
+                                    "servings": {
+                                        "type": [
+                                            "number",
+                                            "null"
+                                        ],
+                                        "maximum": 999999
+                                    },
+                                    "items": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "object",
+                                            "properties": {
+                                                "food_id": {
+                                                    "type": "string",
+                                                    "format": "uuid"
+                                                },
+                                                "quantity": {
+                                                    "type": "number",
+                                                    "maximum": 999999
+                                                },
+                                                "unit": {
+                                                    "type": "string",
+                                                    "enum": [
+                                                        "g",
+                                                        "ml",
+                                                        "serving",
+                                                        "portion"
+                                                    ]
+                                                },
+                                                "portion_id": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ],
+                                                    "format": "uuid"
+                                                }
+                                            },
+                                            "required": [
+                                                "food_id",
+                                                "quantity",
+                                                "unit"
+                                            ]
+                                        },
+                                        "minItems": 1,
+                                        "maxItems": 100
+                                    }
+                                },
+                                "required": [
+                                    "meal_category_id",
+                                    "eaten_at"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "anyOf": [
+                                        {
+                                            "type": "string"
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "data": {
+                                                    "$ref": "#/components/schemas/Consumption"
+                                                }
+                                            },
+                                            "required": [
+                                                "data"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "An error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "description": "Error overview.",
+                                            "examples": [
+                                                "Idempotency key was already used with different data."
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "message"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    }
+                }
+            }
+        },
+        "/v1/consumptions/dates": {
+            "get": {
+                "operationId": "consumption.dates",
+                "tags": [
+                    "Consumption"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Consumption"
+                                            }
+                                        }
+                                    },
+                                    "required": [
+                                        "data"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    }
+                }
+            }
+        },
+        "/v1/consumptions/{consumption}": {
+            "patch": {
+                "operationId": "consumption.update",
+                "tags": [
+                    "Consumption"
+                ],
+                "parameters": [
+                    {
+                        "name": "consumption",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "meal_category_id": {
+                                        "type": "string",
+                                        "format": "uuid"
+                                    },
+                                    "notes": {
+                                        "type": [
+                                            "string",
+                                            "null"
+                                        ],
+                                        "maxLength": 2000
+                                    },
+                                    "items": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "object",
+                                            "properties": {
+                                                "food_id": {
+                                                    "type": "string",
+                                                    "format": "uuid"
+                                                },
+                                                "quantity": {
+                                                    "type": "number",
+                                                    "maximum": 999999
+                                                },
+                                                "unit": {
+                                                    "type": "string",
+                                                    "enum": [
+                                                        "g",
+                                                        "ml",
+                                                        "serving",
+                                                        "portion"
+                                                    ]
+                                                },
+                                                "portion_id": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ],
+                                                    "format": "uuid"
+                                                }
+                                            },
+                                            "required": [
+                                                "food_id",
+                                                "quantity",
+                                                "unit"
+                                            ]
+                                        },
+                                        "minItems": 1,
+                                        "maxItems": 100
+                                    }
+                                },
+                                "required": [
+                                    "meal_category_id"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "anyOf": [
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "data": {
+                                                    "$ref": "#/components/schemas/Consumption"
+                                                }
+                                            },
+                                            "required": [
+                                                "data"
+                                            ]
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "data": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "required": [
+                                                "data"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "An error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "description": "Error overview.",
+                                            "examples": [
+                                                "Idempotency key was already used with different data."
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "message"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    }
+                }
+            }
+        },
         "/v1/devices/{device}": {
             "get": {
                 "operationId": "device.show",
@@ -278,6 +650,852 @@
                     }
                 }
             }
+        },
+        "/v1/foods": {
+            "get": {
+                "operationId": "food.index",
+                "tags": [
+                    "Food"
+                ],
+                "parameters": [
+                    {
+                        "name": "query",
+                        "in": "query",
+                        "schema": {
+                            "type": [
+                                "string",
+                                "null"
+                            ],
+                            "maxLength": 100
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Food"
+                                            }
+                                        }
+                                    },
+                                    "required": [
+                                        "data"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    }
+                }
+            },
+            "post": {
+                "operationId": "food.store",
+                "tags": [
+                    "Food"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "maxLength": 255
+                                    },
+                                    "brand": {
+                                        "type": "string",
+                                        "maxLength": 255
+                                    },
+                                    "barcode": {
+                                        "type": [
+                                            "string",
+                                            "null"
+                                        ],
+                                        "maxLength": 100
+                                    },
+                                    "nutrition": {
+                                        "type": "object",
+                                        "properties": {
+                                            "basis_amount": {
+                                                "type": "number"
+                                            },
+                                            "basis_unit": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "g",
+                                                    "ml",
+                                                    "serving"
+                                                ]
+                                            },
+                                            "calories": {
+                                                "type": "number",
+                                                "minimum": 0
+                                            },
+                                            "protein": {
+                                                "type": "number",
+                                                "minimum": 0
+                                            },
+                                            "carbohydrates": {
+                                                "type": "number",
+                                                "minimum": 0
+                                            },
+                                            "fat": {
+                                                "type": "number",
+                                                "minimum": 0
+                                            },
+                                            "fibre": {
+                                                "type": [
+                                                    "number",
+                                                    "null"
+                                                ],
+                                                "minimum": 0
+                                            },
+                                            "sugar": {
+                                                "type": [
+                                                    "number",
+                                                    "null"
+                                                ],
+                                                "minimum": 0
+                                            },
+                                            "salt": {
+                                                "type": [
+                                                    "number",
+                                                    "null"
+                                                ],
+                                                "minimum": 0
+                                            }
+                                        },
+                                        "required": [
+                                            "basis_amount",
+                                            "basis_unit",
+                                            "calories",
+                                            "protein",
+                                            "carbohydrates",
+                                            "fat"
+                                        ]
+                                    },
+                                    "portions": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "string",
+                                                    "format": "uuid"
+                                                },
+                                                "label": {
+                                                    "type": "string",
+                                                    "maxLength": 100
+                                                },
+                                                "base_amount": {
+                                                    "type": "number"
+                                                },
+                                                "base_unit": {
+                                                    "type": "string",
+                                                    "enum": [
+                                                        "g",
+                                                        "ml",
+                                                        "serving"
+                                                    ]
+                                                }
+                                            },
+                                            "required": [
+                                                "label",
+                                                "base_amount",
+                                                "base_unit"
+                                            ]
+                                        }
+                                    }
+                                },
+                                "required": [
+                                    "name",
+                                    "brand",
+                                    "nutrition"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "anyOf": [
+                                        {
+                                            "type": "string"
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "data": {
+                                                    "$ref": "#/components/schemas/Food"
+                                                }
+                                            },
+                                            "required": [
+                                                "data"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "An error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "description": "Error overview.",
+                                            "examples": [
+                                                "Idempotency key was already used with different data."
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "message"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    }
+                }
+            }
+        },
+        "/v1/foods/{food}": {
+            "get": {
+                "operationId": "food.show",
+                "tags": [
+                    "Food"
+                ],
+                "parameters": [
+                    {
+                        "name": "food",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "data"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    }
+                }
+            },
+            "patch": {
+                "operationId": "food.update",
+                "tags": [
+                    "Food"
+                ],
+                "parameters": [
+                    {
+                        "name": "food",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "maxLength": 255
+                                    },
+                                    "brand": {
+                                        "type": "string",
+                                        "maxLength": 255
+                                    },
+                                    "barcode": {
+                                        "type": [
+                                            "string",
+                                            "null"
+                                        ],
+                                        "maxLength": 100
+                                    },
+                                    "nutrition": {
+                                        "type": "object",
+                                        "properties": {
+                                            "basis_amount": {
+                                                "type": "number"
+                                            },
+                                            "basis_unit": {
+                                                "type": "string",
+                                                "enum": [
+                                                    "g",
+                                                    "ml",
+                                                    "serving"
+                                                ]
+                                            },
+                                            "calories": {
+                                                "type": "number",
+                                                "minimum": 0
+                                            },
+                                            "protein": {
+                                                "type": "number",
+                                                "minimum": 0
+                                            },
+                                            "carbohydrates": {
+                                                "type": "number",
+                                                "minimum": 0
+                                            },
+                                            "fat": {
+                                                "type": "number",
+                                                "minimum": 0
+                                            },
+                                            "fibre": {
+                                                "type": [
+                                                    "number",
+                                                    "null"
+                                                ],
+                                                "minimum": 0
+                                            },
+                                            "sugar": {
+                                                "type": [
+                                                    "number",
+                                                    "null"
+                                                ],
+                                                "minimum": 0
+                                            },
+                                            "salt": {
+                                                "type": [
+                                                    "number",
+                                                    "null"
+                                                ],
+                                                "minimum": 0
+                                            }
+                                        },
+                                        "required": [
+                                            "basis_amount",
+                                            "basis_unit",
+                                            "calories",
+                                            "protein",
+                                            "carbohydrates",
+                                            "fat"
+                                        ]
+                                    },
+                                    "portions": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "string",
+                                                    "format": "uuid"
+                                                },
+                                                "label": {
+                                                    "type": "string",
+                                                    "maxLength": 100
+                                                },
+                                                "base_amount": {
+                                                    "type": "number"
+                                                },
+                                                "base_unit": {
+                                                    "type": "string",
+                                                    "enum": [
+                                                        "g",
+                                                        "ml",
+                                                        "serving"
+                                                    ]
+                                                }
+                                            },
+                                            "required": [
+                                                "label",
+                                                "base_amount",
+                                                "base_unit"
+                                            ]
+                                        },
+                                        "minItems": 1
+                                    }
+                                },
+                                "required": [
+                                    "name",
+                                    "brand",
+                                    "nutrition",
+                                    "portions"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {}
+                                        }
+                                    },
+                                    "required": [
+                                        "data"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    }
+                }
+            }
+        },
+        "/v1/meal-categories": {
+            "get": {
+                "operationId": "mealCategory.index",
+                "tags": [
+                    "MealCategory"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/MealCategory"
+                                            }
+                                        }
+                                    },
+                                    "required": [
+                                        "data"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    }
+                }
+            }
+        },
+        "/v1/recipes": {
+            "get": {
+                "operationId": "recipe.index",
+                "tags": [
+                    "Recipe"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Recipe"
+                                            }
+                                        }
+                                    },
+                                    "required": [
+                                        "data"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    }
+                }
+            },
+            "post": {
+                "operationId": "recipe.store",
+                "tags": [
+                    "Recipe"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "maxLength": 255
+                                    },
+                                    "yield_servings": {
+                                        "type": "number",
+                                        "maximum": 999999
+                                    },
+                                    "ingredients": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "object",
+                                            "properties": {
+                                                "food_id": {
+                                                    "type": "string",
+                                                    "format": "uuid"
+                                                },
+                                                "quantity": {
+                                                    "type": "number",
+                                                    "maximum": 999999
+                                                },
+                                                "unit": {
+                                                    "type": "string",
+                                                    "enum": [
+                                                        "g",
+                                                        "ml",
+                                                        "serving",
+                                                        "portion"
+                                                    ]
+                                                },
+                                                "portion_id": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ],
+                                                    "format": "uuid"
+                                                }
+                                            },
+                                            "required": [
+                                                "food_id",
+                                                "quantity",
+                                                "unit"
+                                            ]
+                                        },
+                                        "minItems": 1,
+                                        "maxItems": 100
+                                    }
+                                },
+                                "required": [
+                                    "name",
+                                    "yield_servings",
+                                    "ingredients"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "anyOf": [
+                                        {
+                                            "type": "string"
+                                        },
+                                        {
+                                            "type": "object",
+                                            "properties": {
+                                                "data": {
+                                                    "$ref": "#/components/schemas/Recipe"
+                                                }
+                                            },
+                                            "required": [
+                                                "data"
+                                            ]
+                                        }
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "An error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "description": "Error overview.",
+                                            "examples": [
+                                                "Idempotency key was already used with different data."
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "message"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    }
+                }
+            }
+        },
+        "/v1/recipes/{recipe}": {
+            "get": {
+                "operationId": "recipe.show",
+                "tags": [
+                    "Recipe"
+                ],
+                "parameters": [
+                    {
+                        "name": "recipe",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "data"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    }
+                }
+            },
+            "patch": {
+                "operationId": "recipe.update",
+                "tags": [
+                    "Recipe"
+                ],
+                "parameters": [
+                    {
+                        "name": "recipe",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "maxLength": 255
+                                    },
+                                    "yield_servings": {
+                                        "type": "number",
+                                        "maximum": 999999
+                                    },
+                                    "ingredients": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "object",
+                                            "properties": {
+                                                "food_id": {
+                                                    "type": "string",
+                                                    "format": "uuid"
+                                                },
+                                                "quantity": {
+                                                    "type": "number",
+                                                    "maximum": 999999
+                                                },
+                                                "unit": {
+                                                    "type": "string",
+                                                    "enum": [
+                                                        "g",
+                                                        "ml",
+                                                        "serving",
+                                                        "portion"
+                                                    ]
+                                                },
+                                                "portion_id": {
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ],
+                                                    "format": "uuid"
+                                                }
+                                            },
+                                            "required": [
+                                                "food_id",
+                                                "quantity",
+                                                "unit"
+                                            ]
+                                        },
+                                        "minItems": 1,
+                                        "maxItems": 100
+                                    }
+                                },
+                                "required": [
+                                    "name",
+                                    "yield_servings",
+                                    "ingredients"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {}
+                                        }
+                                    },
+                                    "required": [
+                                        "data"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    }
+                }
+            }
+        },
+        "/v1/dashboard/today": {
+            "get": {
+                "operationId": "today",
+                "tags": [
+                    "Today"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "local_date": {
+                                                    "type": "string"
+                                                },
+                                                "time_zone": {
+                                                    "type": "string"
+                                                },
+                                                "consumed": {
+                                                    "type": "string"
+                                                },
+                                                "consumptions": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/components/schemas/Consumption"
+                                                    }
+                                                },
+                                                "health": {
+                                                    "type": "null"
+                                                }
+                                            },
+                                            "required": [
+                                                "local_date",
+                                                "time_zone",
+                                                "consumed",
+                                                "consumptions",
+                                                "health"
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "data"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    }
+                }
+            }
         }
     },
     "components": {
@@ -285,6 +1503,309 @@
             "http": {
                 "type": "http",
                 "scheme": "bearer"
+            }
+        },
+        "schemas": {
+            "Consumption": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "user_id": {
+                        "type": "string"
+                    },
+                    "meal_category_id": {
+                        "type": "string"
+                    },
+                    "local_date": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "eaten_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "notes": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "idempotency_key": {
+                        "type": "string"
+                    },
+                    "request_fingerprint": {
+                        "type": "string"
+                    },
+                    "calories": {
+                        "type": "string"
+                    },
+                    "protein": {
+                        "type": "string"
+                    },
+                    "carbohydrates": {
+                        "type": "string"
+                    },
+                    "fat": {
+                        "type": "string"
+                    },
+                    "fibre": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "sugar": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "salt": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "created_at": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "format": "date-time"
+                    },
+                    "source_type": {
+                        "type": "string"
+                    },
+                    "source_id": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "source_name": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "source_quantity": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "source_unit": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    }
+                },
+                "required": [
+                    "id",
+                    "user_id",
+                    "meal_category_id",
+                    "local_date",
+                    "eaten_at",
+                    "notes",
+                    "idempotency_key",
+                    "request_fingerprint",
+                    "calories",
+                    "protein",
+                    "carbohydrates",
+                    "fat",
+                    "fibre",
+                    "sugar",
+                    "salt",
+                    "created_at",
+                    "updated_at",
+                    "source_type",
+                    "source_id",
+                    "source_name",
+                    "source_quantity",
+                    "source_unit"
+                ],
+                "title": "Consumption"
+            },
+            "Food": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "user_id": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "brand": {
+                        "type": "string"
+                    },
+                    "barcode": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "is_archived": {
+                        "type": "string"
+                    },
+                    "idempotency_key": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "request_fingerprint": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "created_at": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "format": "date-time"
+                    }
+                },
+                "required": [
+                    "id",
+                    "user_id",
+                    "name",
+                    "brand",
+                    "barcode",
+                    "is_archived",
+                    "idempotency_key",
+                    "request_fingerprint",
+                    "created_at",
+                    "updated_at"
+                ],
+                "title": "Food"
+            },
+            "MealCategory": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "user_id": {
+                        "type": "string"
+                    },
+                    "key": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "sort_order": {
+                        "type": "integer"
+                    },
+                    "is_active": {
+                        "type": "string"
+                    },
+                    "created_at": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "format": "date-time"
+                    }
+                },
+                "required": [
+                    "id",
+                    "user_id",
+                    "key",
+                    "name",
+                    "sort_order",
+                    "is_active",
+                    "created_at",
+                    "updated_at"
+                ],
+                "title": "MealCategory"
+            },
+            "Recipe": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "user_id": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "yield_servings": {
+                        "type": "string"
+                    },
+                    "is_archived": {
+                        "type": "string"
+                    },
+                    "idempotency_key": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "request_fingerprint": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
+                    },
+                    "created_at": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "format": "date-time"
+                    }
+                },
+                "required": [
+                    "id",
+                    "user_id",
+                    "name",
+                    "yield_servings",
+                    "is_archived",
+                    "idempotency_key",
+                    "request_fingerprint",
+                    "created_at",
+                    "updated_at"
+                ],
+                "title": "Recipe"
             }
         },
         "responses": {

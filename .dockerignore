@@ -1,0 +1,10 @@
+.git
+.env
+backend
+mobile
+docs
+.idea
+web/.env
+web/node_modules
+web/dist
+infrastructure/backups

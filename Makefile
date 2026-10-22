@@ -3,7 +3,7 @@
 EPHEMERAL_COMPOSE = docker compose -p hustle-daily-ephemeral -f docker-compose.yml -f docker-compose.ephemeral.yml
 
 setup:
-	@test -f .env || (cp .env.example .env && echo 'Fill .env with DB_PASSWORD and APP_KEY; use localhost for APP_DOMAIN in ephemeral mode.')
+	@test -f .env || (cp .env.example .env && echo 'Set DB_PASSWORD, APP_KEY and APP_DOMAIN in the repository-root .env before starting the persistent stack.')
 
 up:
 	docker compose up --build -d
@@ -33,6 +33,7 @@ test:
 lint:
 	cd backend && vendor/bin/pint --test
 	cd mobile && npm run typecheck
+	cd web && npm run typecheck
 
 openapi:
 	docker compose run --rm --no-deps --user root -e HOST_UID=$$(id -u) -e HOST_GID=$$(id -g) -v "$$(pwd)/docs:/app/docs" api sh -c 'php artisan scramble:export --path=/app/docs/openapi.json && chown $$HOST_UID:$$HOST_GID /app/docs/openapi.json'

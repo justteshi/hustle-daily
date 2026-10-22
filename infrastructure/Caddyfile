@@ -1,4 +1,14 @@
 {$APP_DOMAIN} {
     encode zstd gzip
-    reverse_proxy api:80
+    redir /app / 308
+    redir /app/* / 308
+    @backend path /api/* /admin /admin/* /session/* /up /filament/* /livewire-* /css/filament/* /js/filament/* /fonts/filament/* /storage/*
+    handle @backend {
+        reverse_proxy api:80
+    }
+    handle {
+        root * /srv/web
+        try_files {path} /index.html
+        file_server
+    }
 }

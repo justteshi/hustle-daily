@@ -1,13 +1,14 @@
 services:
   caddy:
-    image: caddy:2
+    build:
+      context: .
+      dockerfile: infrastructure/docker/Caddy.Dockerfile
     ports:
       - "${HTTP_PORT:-80}:80"
       - "${HTTPS_PORT:-443}:443"
     environment:
       APP_DOMAIN: ${APP_DOMAIN:?Set APP_DOMAIN to a real HTTPS hostname}
     volumes:
-      - ./infrastructure/Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy_data:/data
       - caddy_config:/config
     depends_on:
@@ -71,6 +72,8 @@ services:
       QUEUE_CONNECTION: sync
       SESSION_DRIVER: array
       APP_ENV: testing
+      # Public deterministic key for tests only; the API uses the private APP_KEY from .env.
+      APP_KEY: base64:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
     depends_on:
       db:
         condition: service_healthy

@@ -80,6 +80,17 @@ class AuthApiTest extends TestCase
         $this->actingAs($admin)->get('/admin')->assertOk();
     }
 
+    public function test_phase_two_admin_resources_are_admin_only(): void
+    {
+        $admin = User::factory()->create(['is_admin' => true]);
+        $normal = User::factory()->create(['is_admin' => false]);
+
+        foreach (['/admin/food', '/admin/food/create', '/admin/meal-categories', '/admin/meal-categories/create', '/admin/recipes'] as $path) {
+            $this->actingAs($normal)->get($path)->assertForbidden();
+            $this->actingAs($admin)->get($path)->assertOk();
+        }
+    }
+
     public function test_first_admin_command_prompts_for_password_and_creates_settings(): void
     {
         $this->artisan('hustle:create-user', ['email' => 'owner@example.test', '--admin' => true])

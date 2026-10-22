@@ -15,7 +15,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-#[Fillable(['name', 'email', 'password'])]
+#[Fillable(['name', 'email', 'password', 'is_admin'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable implements FilamentUser
 {
@@ -24,7 +24,7 @@ class User extends Authenticatable implements FilamentUser
 
     public function canAccessPanel(Panel $panel): bool
     {
-        return $this->is_admin;
+        return (bool) $this->is_admin;
     }
 
     public function settings(): HasOne
@@ -35,6 +35,26 @@ class User extends Authenticatable implements FilamentUser
     public function devices(): HasMany
     {
         return $this->hasMany(Device::class);
+    }
+
+    public function foods(): HasMany
+    {
+        return $this->hasMany(Food::class);
+    }
+
+    public function mealCategories(): HasMany
+    {
+        return $this->hasMany(MealCategory::class);
+    }
+
+    public function consumptions(): HasMany
+    {
+        return $this->hasMany(Consumption::class);
+    }
+
+    public function recipes(): HasMany
+    {
+        return $this->hasMany(Recipe::class);
     }
 
     /**

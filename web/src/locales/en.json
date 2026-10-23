@@ -77,6 +77,8 @@
     "editFood": "Edit food",
     "editRecipe": "Edit ready meal",
     "ingredients": "Ingredients",
+    "ingredient": "ingredient",
+    "serving": "serving",
     "history": "History",
     "foodHistoryOnly": "Food history only; HealthKit and day summaries come in later phases.",
     "chooseDate": "Choose date",

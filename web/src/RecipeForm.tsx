@@ -4,6 +4,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { request, type Food, type Recipe } from './api';
 import FoodPicker from './FoodPicker';
 import { t } from './i18n';
+import { formatNumber } from './format';
 import { ErrorState, LoadingState } from './UiStates';
 
 type Ingredient = { food_id: string; quantity: number; unit: string; portion_id?: string };
@@ -130,14 +131,21 @@ export function RecipeCatalogue() {
                             <div>
                                 <h3 className="font-semibold">{recipe.name}</h3>
                                 <p className="text-sm text-slate-600">
-                                    {recipe.ingredients.length} {t('ingredients')} ·{' '}
-                                    {recipe.yield_servings} {t('servings')}
+                                    {recipe.ingredients.length}{' '}
+                                    {t(
+                                        recipe.ingredients.length === 1
+                                            ? 'ingredient'
+                                            : 'ingredients',
+                                    )}{' '}
+                                    · {formatNumber(recipe.yield_servings)}{' '}
+                                    {t(
+                                        Number(recipe.yield_servings) === 1
+                                            ? 'serving'
+                                            : 'servings',
+                                    )}
                                 </p>
                             </div>
-                            <Link
-                                to={`/recipes/${recipe.id}/edit`}
-                                className="text-emerald-800 underline"
-                            >
+                            <Link to={`/recipes/${recipe.id}/edit`} className="hd-touch-action">
                                 {t('edit')}
                             </Link>
                         </div>

@@ -4,6 +4,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { z } from 'zod';
 import { request, type Food } from './api';
 import { t } from './i18n';
+import { formatNumber } from './format';
 import { ErrorState, LoadingState } from './UiStates';
 
 const field = 'hd-field';
@@ -113,14 +114,12 @@ export function FoodCatalogue() {
                                     {food.brand} {food.name}
                                 </h3>
                                 <p className="text-sm text-slate-600">
-                                    {food.nutrition.calories} kcal / {food.nutrition.basis_amount}{' '}
+                                    {formatNumber(food.nutrition.calories)} kcal /{' '}
+                                    {formatNumber(food.nutrition.basis_amount)}{' '}
                                     {food.nutrition.basis_unit}
                                 </p>
                             </div>
-                            <Link
-                                className="text-emerald-800 underline"
-                                to={`/foods/${food.id}/edit`}
-                            >
+                            <Link className="hd-touch-action" to={`/foods/${food.id}/edit`}>
                                 {t('edit')}
                             </Link>
                         </div>

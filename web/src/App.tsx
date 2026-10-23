@@ -1,11 +1,13 @@
-import { useRef, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import {
     Link,
     NavLink,
     Route,
     Routes,
+    useLocation,
     useNavigate,
+    useNavigationType,
     useParams,
     useSearchParams,
 } from 'react-router-dom';
@@ -26,10 +28,31 @@ import History from './History';
 import RecipeForm, { IngredientFields, RecipeCatalogue } from './RecipeForm';
 import { ErrorState, LoadingState } from './UiStates';
 import { t } from './i18n';
+import { formatNumber } from './format';
 
 const button = 'hd-primary-button';
 const field = 'hd-field';
 const card = 'hd-card';
+
+function ScrollOnNavigation() {
+    const location = useLocation();
+    const navigationType = useNavigationType();
+    const previousPath = useRef(location.pathname);
+    const positions = useRef(new Map<string, number>());
+    useLayoutEffect(() => {
+        if (previousPath.current !== location.pathname) {
+            window.scrollTo(
+                0,
+                navigationType === 'POP' ? (positions.current.get(location.key) ?? 0) : 0,
+            );
+        }
+        previousPath.current = location.pathname;
+        return () => {
+            positions.current.set(location.key, window.scrollY);
+        };
+    }, [location.key, location.pathname, navigationType]);
+    return null;
+}
 
 function Login({ onSuccess }: { onSuccess: () => void }) {
     const [error, setError] = useState('');
@@ -223,7 +246,7 @@ function Dashboard() {
                                                 {meal.items
                                                     .map(
                                                         (item) =>
-                                                            `${item.quantity} ${item.input_unit || item.unit} ${item.food_name}`,
+                                                            `${formatNumber(item.quantity)} ${item.input_unit || item.unit} ${item.food_name}`,
                                                     )
                                                     .join(' · ')}
                                             </small>
@@ -247,6 +270,42 @@ function Dashboard() {
                                 ))}
                             </tbody>
                         </table>
+                    </div>
+                )}
+                {meals.length > 0 && (
+                    <div className="today-mobile-meals">
+                        {meals.map((meal) => (
+                            <article className="today-mobile-meal" key={meal.id}>
+                                <strong>
+                                    {meal.source_name ||
+                                        meal.items.map((item) => item.food_name).join(', ')}
+                                </strong>
+                                <p>
+                                    {meal.items
+                                        .map(
+                                            (item) =>
+                                                `${formatNumber(item.quantity)} ${item.input_unit || item.unit} ${item.food_name}`,
+                                        )
+                                        .join(' · ')}
+                                </p>
+                                <div className="today-mobile-totals">
+                                    <span>
+                                        <b>{formatNumber(meal.calories, 0)}</b> kcal
+                                    </span>
+                                    <span>
+                                        <b>{formatNumber(meal.protein, 1)}</b> g {t('protein')}
+                                    </span>
+                                </div>
+                                <div className="today-row-actions">
+                                    <Link
+                                        to={`/meals/${meal.id}/edit?date=${query.data.local_date}`}
+                                    >
+                                        {t('editMeal')}
+                                    </Link>
+                                    <DeleteMealButton id={meal.id} date={query.data.local_date} />
+                                </div>
+                            </article>
+                        ))}
                     </div>
                 )}
             </section>
@@ -605,6 +664,7 @@ export default function App() {
         );
     return (
         <div className="app-shell">
+            <ScrollOnNavigation />
             <aside className="app-sidebar">
                 <Link to="/" className="app-brand">
                     <img src="/branding/lockup-colour.png" alt={t('title')} />

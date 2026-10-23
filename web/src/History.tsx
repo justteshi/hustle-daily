@@ -108,7 +108,7 @@ export default function History() {
                                                 </div>
                                                 <div className="flex flex-wrap items-start gap-4">
                                                     <Link
-                                                        className="text-emerald-800 underline"
+                                                        className="hd-touch-action"
                                                         to={`/meals/${meal.id}/edit?date=${date}`}
                                                     >
                                                         {t('editMeal')}

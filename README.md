@@ -13,6 +13,8 @@ Hustle Daily is a self-hosted health and nutrition tracker for multiple users. T
 | iPhone app | Early development-build screens for sign-in, food search and creation, and meal logging. Not yet feature-complete. |
 | API (`/api/v1`) | Authenticated food, recipe, category, consumption, and today's food-total endpoints. The admin-only interactive OpenAPI interface is at `/api/docs`. |
 
+Under **Account** in the web app, each user can download their private data as JSON or permanently delete their account after entering their password. Export the data before deletion if it needs to be kept. A deleted meal leaves daily totals but remains in the account export with its correction history until the account itself is deleted.
+
 Food and recipe changes do **not** rewrite meals already logged: each log keeps a nutrition and ingredient snapshot. Consumed nutrition comes only from Hustle Daily food logs, not Apple Health. Every user's records are isolated by account.
 
 ## Run locally with persistent storage
@@ -62,6 +64,14 @@ docker compose exec -it api php artisan hustle:create-user friend@example.com
 ```
 
 Only accounts created with the admin option can access `/admin`. Multiple users share the application but cannot access one another's personal data.
+
+If a user loses access, a server operator can verify their identity through an agreed private channel and reset the password interactively:
+
+```bash
+docker compose exec -it api php artisan hustle:reset-user-password friend@example.com
+```
+
+The reset revokes mobile tokens. Browser sessions that carry an old password hash are signed out on their next request.
 
 ## Working with the web app
 

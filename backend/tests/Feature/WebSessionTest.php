@@ -29,4 +29,19 @@ class WebSessionTest extends TestCase
         $this->postJson('/session/login', ['email' => $user->email, 'password' => 'wrong'])->assertUnprocessable();
         $this->getJson('/api/v1/me')->assertUnauthorized();
     }
+
+    public function test_password_recovery_signs_out_existing_browser_session(): void
+    {
+        $user = User::factory()->create(['password' => 'old-password-123']);
+        $this->postJson('/session/login', ['email' => $user->email, 'password' => 'old-password-123'])->assertOk();
+        Auth::forgetGuards();
+        $this->withHeader('Origin', 'http://localhost')->getJson('/api/v1/me')->assertOk();
+        $this->artisan('hustle:reset-user-password', ['email' => $user->email])
+            ->expectsQuestion('New password (at least 12 characters)', 'new-password-456')
+            ->expectsQuestion('Confirm new password', 'new-password-456')
+            ->assertExitCode(0);
+
+        Auth::forgetGuards();
+        $this->withHeader('Origin', 'http://localhost')->getJson('/api/v1/me')->assertUnauthorized();
+    }
 }

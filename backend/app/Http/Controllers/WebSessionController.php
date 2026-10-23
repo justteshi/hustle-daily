@@ -24,6 +24,7 @@ class WebSessionController extends Controller
             throw ValidationException::withMessages(['email' => [__('auth.failed')]]);
         }
         $request->session()->regenerate();
+        $request->session()->put('hustle_password_hash', Auth::user()->getAuthPassword());
 
         return response()->json(['data' => ['authenticated' => true]]);
     }

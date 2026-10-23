@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { request, type FoodDate, type Meal } from './api';
+import DeleteMealButton from './DeleteMealButton';
 import { t } from './i18n';
 
 export default function History() {
@@ -15,6 +16,6 @@ export default function History() {
       {dates.isPending && <p>{t('loading')}</p>}{dates.isError && <p role="alert">{t('unavailable')} <button onClick={() => dates.refetch()}>{t('retry')}</button></p>}
       <div className="space-y-2">{dates.data?.map(day => <Link key={day.local_date} to={`/history/${day.local_date}`} className={`block rounded-xl border px-4 py-3 ${date === day.local_date ? 'border-emerald-700 bg-mint' : 'border-slate-200 bg-white'}`}><strong>{day.local_date}</strong><span className="block text-sm text-slate-600">{day.meal_count} {t('meals')} · {Math.round(Number(day.calories))} kcal</span></Link>)}</div>
     </aside><div className="space-y-3">{!date && <p>{t('chooseDate')}</p>}{date && <><h3 className="text-2xl font-semibold">{date}</h3>{entries.isPending && <p>{t('loading')}</p>}{entries.isError && <p role="alert">{t('unavailable')} <button onClick={() => entries.refetch()}>{t('retry')}</button></p>}
-      {entries.data && <><div className="rounded-2xl border border-slate-200 bg-white p-5"><strong>{calories.toFixed(0)} kcal · {protein.toFixed(1)} g {t('protein')}</strong></div>{entries.data.length === 0 && <p>{t('noMeals')}</p>}{entries.data.map(meal => <article className="rounded-2xl border border-slate-200 bg-white p-5" key={meal.id}><div className="flex justify-between gap-3"><div><h4 className="font-semibold">{meal.source_name || meal.items.map(item => item.food_name).join(', ')}</h4><p>{Number(meal.calories).toFixed(0)} kcal · {Number(meal.protein).toFixed(1)} g {t('protein')}</p>{meal.notes && <p className="text-sm text-slate-600">{meal.notes}</p>}</div><Link className="text-emerald-800 underline" to={`/meals/${meal.id}/edit?date=${date}`}>{t('editMeal')}</Link></div></article>)}</>}</>}</div></div>
+      {entries.data && <><div className="rounded-2xl border border-slate-200 bg-white p-5"><strong>{calories.toFixed(0)} kcal · {protein.toFixed(1)} g {t('protein')}</strong></div>{entries.data.length === 0 && <p>{t('noMeals')}</p>}{entries.data.map(meal => <article className="rounded-2xl border border-slate-200 bg-white p-5" key={meal.id}><div className="flex flex-wrap justify-between gap-3"><div><h4 className="font-semibold">{meal.source_name || meal.items.map(item => item.food_name).join(', ')}</h4><p>{Number(meal.calories).toFixed(0)} kcal · {Number(meal.protein).toFixed(1)} g {t('protein')}</p>{meal.notes && <p className="text-sm text-slate-600">{meal.notes}</p>}</div><div className="flex flex-wrap items-start gap-4"><Link className="text-emerald-800 underline" to={`/meals/${meal.id}/edit?date=${date}`}>{t('editMeal')}</Link><DeleteMealButton id={meal.id} date={date} /></div></div></article>)}</>}</>}</div></div>
   </section>;
 }

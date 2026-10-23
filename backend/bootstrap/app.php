@@ -7,6 +7,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Request;
+use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
@@ -19,6 +20,7 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->statefulApi();
+        $middleware->appendToGroup('web', AuthenticateSession::class);
         $middleware->append(RequestId::class);
         $middleware->trustProxies(at: '*');
         $middleware->redirectGuestsTo(

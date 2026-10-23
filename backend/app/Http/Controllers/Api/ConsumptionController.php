@@ -9,11 +9,37 @@ use App\Services\CorrectConsumption;
 use Carbon\CarbonImmutable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 class ConsumptionController extends Controller
 {
+    /**
+     * Remove a logged meal from daily totals while retaining its correction history.
+     */
+    public function destroy(Request $request, string $consumption): Response
+    {
+        $key = $request->header('Idempotency-Key');
+        if (! $key || mb_strlen($key) > 120) {
+            throw ValidationException::withMessages(['idempotency_key' => ['An Idempotency-Key header of at most 120 characters is required.']]);
+        }
+
+        DB::transaction(function () use ($request, $consumption, $key): void {
+            $record = $request->user()->consumptions()->withTrashed()->whereKey($consumption)->lockForUpdate()->firstOrFail();
+            if ($record->trashed()) {
+                abort_unless($record->deletion_idempotency_key === $key, 404);
+
+                return;
+            }
+            $record->deletion_idempotency_key = $key;
+            $record->save();
+            $record->delete();
+        });
+
+        return response()->noContent();
+    }
+
     /**
      * List recent dates with logged food.
      *

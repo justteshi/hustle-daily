@@ -4,6 +4,7 @@ import { Link, Route, Routes, useNavigate, useParams, useSearchParams } from 're
 import { useForm } from 'react-hook-form';
 import { ApiError, login, logout, request, type Category, type Meal, type Recipe, type Today } from './api';
 import { FoodCatalogue, FoodEditor } from './FoodCatalogue';
+import DeleteMealButton from './DeleteMealButton';
 import History from './History';
 import RecipeForm, { IngredientFields, RecipeCatalogue } from './RecipeForm';
 import { t } from './i18n';
@@ -36,8 +37,43 @@ function Dashboard() {
     <div><h2 className="text-3xl font-bold">{t('today')}</h2><p className="text-slate-600">{query.data.local_date}</p></div>
     <div className="grid gap-4 sm:grid-cols-2"><div className={card}><p>{t('calories')}</p><strong className="text-4xl">{Number(query.data.consumed.calories).toFixed(0)}</strong> kcal</div><div className={card}><p>{t('protein')}</p><strong className="text-4xl">{Number(query.data.consumed.protein).toFixed(1)}</strong> g</div></div>
     <section className="space-y-4"><div className="flex flex-wrap items-center justify-between gap-3"><h3 className="text-2xl font-semibold">{t('meals')}</h3><Link className={button} to="/meals/new">{t('addMeal')}</Link></div>
-      {query.data.consumptions.length === 0 ? <p>{t('noMeals')}</p> : query.data.consumptions.map(meal => <article className={card} key={meal.id}><div className="flex flex-wrap justify-between gap-3"><div><h4 className="font-semibold">{meal.source_name || meal.items.map(item => item.food_name).join(', ')}</h4><p>{Number(meal.calories).toFixed(0)} kcal · {Number(meal.protein).toFixed(1)} g {t('protein')}</p></div><Link className="text-emerald-800 underline" to={`/meals/${meal.id}/edit?date=${query.data.local_date}`}>{t('editMeal')}</Link></div></article>)}</section>
+      {query.data.consumptions.length === 0 ? <p>{t('noMeals')}</p> : query.data.consumptions.map(meal => <article className={card} key={meal.id}><div className="flex flex-wrap justify-between gap-3"><div><h4 className="font-semibold">{meal.source_name || meal.items.map(item => item.food_name).join(', ')}</h4><p>{Number(meal.calories).toFixed(0)} kcal · {Number(meal.protein).toFixed(1)} g {t('protein')}</p></div><div className="flex flex-wrap items-start gap-4"><Link className="text-emerald-800 underline" to={`/meals/${meal.id}/edit?date=${query.data.local_date}`}>{t('editMeal')}</Link><DeleteMealButton id={meal.id} date={query.data.local_date} /></div></div></article>)}</section>
   </div>;
+}
+
+function Account() {
+  const client = useQueryClient();
+  const navigate = useNavigate();
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [busy, setBusy] = useState(false);
+
+  async function download() {
+    setBusy(true); setError('');
+    try {
+      const data = await request<Record<string, unknown>>('/account/export');
+      const url = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }));
+      const link = document.createElement('a');
+      link.href = url; link.download = 'hustle-daily-data.json'; link.click();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    } catch (failure) { setError((failure as Error).message); } finally { setBusy(false); }
+  }
+
+  async function deleteAccount(event: React.FormEvent) {
+    event.preventDefault();
+    if (!window.confirm(t('confirmDeleteAccount'))) return;
+    setBusy(true); setError('');
+    try {
+      await request<void>('/account', { method: 'DELETE', body: JSON.stringify({ password }) }, true);
+      client.clear(); navigate('/');
+    } catch (failure) { setError((failure as Error).message); } finally { setBusy(false); }
+  }
+
+  return <section className="max-w-2xl space-y-8"><h2 className="text-3xl font-bold">{t('account')}</h2>
+    <div className={card}><h3 className="text-xl font-semibold">{t('exportData')}</h3><p className="my-3 text-slate-600">{t('exportDescription')}</p><button className={button} type="button" disabled={busy} onClick={download}>{t('downloadData')}</button></div>
+    <form className={card + ' space-y-4'} onSubmit={deleteAccount}><h3 className="text-xl font-semibold text-red-700">{t('deleteAccount')}</h3><p className="text-slate-600">{t('deleteAccountDescription')}</p><label className="block space-y-1">{t('password')}<input className={field} type="password" autoComplete="current-password" required value={password} onChange={event => setPassword(event.target.value)} /></label><button className="rounded-xl bg-red-700 px-5 py-3 font-semibold text-white disabled:opacity-50" disabled={busy}>{t('deleteAccount')}</button></form>
+    {error && <p role="alert" className="text-red-700">{error}</p>}
+  </section>;
 }
 
 type Row = { food_id: string; quantity: number; unit: string; portion_id?: string };
@@ -64,7 +100,7 @@ function MealForm() {
   const selectedCategory = category || meal?.meal_category_id || categories.data?.[0]?.id || '';
   if (id && !date) return <p role="alert">{t('missingMeal')}</p>;
   if ((id && entries.isPending) || categories.isPending || recipes.isPending) return <p>{t('loading')}</p>;
-  if ((id && entries.isError) || categories.isError || recipes.isError) return <p role="alert">{t('unavailable')}</p>;
+  if ((id && entries.isError) || categories.isError || recipes.isError) return <div role="alert" className="space-y-3"><p>{t('unavailable')}</p><button type="button" className={button} onClick={() => { void Promise.all([...(id && entries.isError ? [entries.refetch()] : []), ...(categories.isError ? [categories.refetch()] : []), ...(recipes.isError ? [recipes.refetch()] : [])]); }}>{t('retry')}</button></div>;
   if (id && !meal) return <p role="alert">{t('missingMeal')}</p>;
   const updateRow = (index: number, patch: Partial<Row>) => setRows(selectedRows.map((row, position) => position === index ? { ...row, ...patch } : row));
 
@@ -91,7 +127,7 @@ function MealForm() {
     {!id && <div className="flex gap-5"><label><input type="radio" checked={mode === 'foods'} onChange={() => setMode('foods')} /> {t('individual')}</label><label><input type="radio" checked={mode === 'recipe'} onChange={() => setMode('recipe')} /> {t('recipe')}</label></div>}
     {mode === 'recipe' && !id ? <div className={card}><label className="block space-y-1">{t('recipe')}<select className={field} required value={recipe} onChange={event => setRecipe(event.target.value)}><option value="">—</option>{recipes.data?.map(item => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label><label className="mt-3 block space-y-1">{t('servings')}<input className={field} type="number" min="0.01" step="any" value={servings} onChange={event => setServings(Number(event.target.value))} /></label></div> : <div className="space-y-3">{selectedRows.map((row, index) => <IngredientFields key={index} ingredient={row} onChange={patch => updateRow(index, patch)} onRemove={() => setRows(selectedRows.filter((_, position) => position !== index))} removable={selectedRows.length > 1} />)}<button type="button" className="text-emerald-800 underline" onClick={() => setRows([...selectedRows, { food_id: '', quantity: 100, unit: 'g' }])}>{t('addIngredient')}</button></div>}
     <label className="block max-w-2xl space-y-1">{t('notes')}<textarea className={field} value={notes ?? meal?.notes ?? ''} onChange={event => setNotes(event.target.value)} /></label>
-    {error && <p role="alert" className="text-red-700">{error}</p>}<div className="flex gap-3"><button className={button} disabled={busy}>{t('save')}</button><Link className="px-4 py-3 underline" to={date ? `/history/${date}` : '/'}>{t('cancel')}</Link></div>
+    {error && <p role="alert" className="text-red-700">{error}</p>}<div className="flex flex-wrap items-center gap-3"><button className={button} disabled={busy}>{t('save')}</button><Link className="px-4 py-3 underline" to={date ? `/history/${date}` : '/'}>{t('cancel')}</Link>{id && date && <DeleteMealButton id={id} date={date} onDeleted={() => navigate(`/history/${date}`)} />}</div>
   </form>;
 }
 
@@ -101,5 +137,5 @@ export default function App() {
   if (me.isPending) return <p className="p-6">{t('loading')}</p>;
   if (me.isError && !(me.error instanceof ApiError && me.error.status === 401)) return <main className="mx-auto max-w-xl space-y-4 p-6" role="alert"><p>{t('unavailable')}</p><button className={button} onClick={() => me.refetch()}>{t('retry')}</button></main>;
   if (me.isError) return <Login onSuccess={() => { client.invalidateQueries(); navigate('/'); }} />;
-  return <><header className="border-b border-slate-200 bg-white"><div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-4"><Link to="/" className="text-xl font-bold">{t('title')}</Link><nav className="flex flex-wrap items-center gap-4"><Link to="/">{t('today')}</Link><Link to="/history">{t('history')}</Link><Link to="/foods">{t('foods')}</Link><Link to="/recipes">{t('recipes')}</Link><a href="/api/docs">{t('apiDocs')}</a><span className="text-slate-500">{me.data.name}</span><button onClick={async () => { await logout(); client.clear(); navigate('/'); }}>{t('signOut')}</button></nav></div></header><main className="mx-auto max-w-6xl px-5 py-9"><Routes><Route path="/" element={<Dashboard />} /><Route path="/history" element={<History />} /><Route path="/history/:date" element={<History />} /><Route path="/meals/new" element={<MealForm />} /><Route path="/meals/:id/edit" element={<MealForm />} /><Route path="/foods" element={<FoodCatalogue />} /><Route path="/foods/new" element={<FoodEditor />} /><Route path="/foods/:id/edit" element={<FoodEditor />} /><Route path="/recipes" element={<RecipeCatalogue />} /><Route path="/recipes/new" element={<RecipeForm />} /><Route path="/recipes/:id/edit" element={<RecipeForm />} /></Routes></main></>;
+  return <><header className="border-b border-slate-200 bg-white"><div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-4"><Link to="/" className="text-xl font-bold">{t('title')}</Link><nav className="flex flex-wrap items-center gap-4"><Link to="/">{t('today')}</Link><Link to="/history">{t('history')}</Link><Link to="/foods">{t('foods')}</Link><Link to="/recipes">{t('recipes')}</Link><Link to="/account">{t('account')}</Link><a href="/api/docs">{t('apiDocs')}</a><span className="text-slate-500">{me.data.name}</span><button onClick={async () => { await logout(); client.clear(); navigate('/'); }}>{t('signOut')}</button></nav></div></header><main className="mx-auto max-w-6xl px-5 py-9"><Routes><Route path="/" element={<Dashboard />} /><Route path="/history" element={<History />} /><Route path="/history/:date" element={<History />} /><Route path="/meals/new" element={<MealForm />} /><Route path="/meals/:id/edit" element={<MealForm />} /><Route path="/foods" element={<FoodCatalogue />} /><Route path="/foods/new" element={<FoodEditor />} /><Route path="/foods/:id/edit" element={<FoodEditor />} /><Route path="/recipes" element={<RecipeCatalogue />} /><Route path="/recipes/new" element={<RecipeForm />} /><Route path="/recipes/:id/edit" element={<RecipeForm />} /><Route path="/account" element={<Account />} /></Routes></main></>;
 }

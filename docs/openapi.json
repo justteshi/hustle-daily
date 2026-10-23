@@ -15,6 +15,141 @@
         }
     ],
     "paths": {
+        "/v1/account/export": {
+            "get": {
+                "operationId": "account.export",
+                "tags": [
+                    "Account"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "exported_at": {
+                                                    "type": "string"
+                                                },
+                                                "account": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "string"
+                                                        },
+                                                        "name": {
+                                                            "type": "string"
+                                                        },
+                                                        "email": {
+                                                            "type": "string"
+                                                        },
+                                                        "created_at": {
+                                                            "type": [
+                                                                "string",
+                                                                "null"
+                                                            ],
+                                                            "format": "date-time"
+                                                        }
+                                                    },
+                                                    "required": [
+                                                        "id",
+                                                        "name",
+                                                        "email",
+                                                        "created_at"
+                                                    ]
+                                                },
+                                                "settings": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "locale": {
+                                                            "type": "string"
+                                                        },
+                                                        "time_zone": {
+                                                            "type": "string"
+                                                        }
+                                                    },
+                                                    "required": [
+                                                        "locale",
+                                                        "time_zone"
+                                                    ]
+                                                },
+                                                "devices": {
+                                                    "type": "string"
+                                                },
+                                                "meal_categories": {
+                                                    "type": "array",
+                                                    "items": {}
+                                                },
+                                                "foods": {
+                                                    "type": "array",
+                                                    "items": {}
+                                                },
+                                                "recipes": {
+                                                    "type": "array",
+                                                    "items": {}
+                                                },
+                                                "consumptions": {
+                                                    "type": "string"
+                                                }
+                                            },
+                                            "required": [
+                                                "exported_at",
+                                                "account",
+                                                "settings",
+                                                "devices",
+                                                "meal_categories",
+                                                "foods",
+                                                "recipes",
+                                                "consumptions"
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "data"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    }
+                }
+            }
+        },
+        "/v1/account": {
+            "delete": {
+                "operationId": "account.destroy",
+                "tags": [
+                    "Account"
+                ],
+                "parameters": [
+                    {
+                        "name": "password",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No content"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    }
+                }
+            }
+        },
         "/v1/auth/login": {
             "post": {
                 "operationId": "auth.login",
@@ -614,6 +749,31 @@
                     },
                     "422": {
                         "$ref": "#/components/responses/ValidationException"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    }
+                }
+            },
+            "delete": {
+                "operationId": "consumption.destroy",
+                "summary": "Remove a logged meal from daily totals while retaining its correction history",
+                "tags": [
+                    "Consumption"
+                ],
+                "parameters": [
+                    {
+                        "name": "consumption",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No content"
                     },
                     "401": {
                         "$ref": "#/components/responses/AuthenticationException"

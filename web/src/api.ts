@@ -16,6 +16,7 @@ export class ApiError extends Error {
 }
 
 async function decode<T>(response: Response): Promise<T> {
+  if (response.status === 204) return undefined as T;
   const body = await response.json();
   if (!response.ok) throw new ApiError(body.error?.message || body.message || `Request failed (${response.status})`, response.status);
   return body.data as T;

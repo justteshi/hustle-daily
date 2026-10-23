@@ -4,9 +4,10 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { z } from 'zod';
 import { request, type Food } from './api';
 import { t } from './i18n';
+import { ErrorState, LoadingState } from './UiStates';
 
-const field = 'w-full rounded-xl border border-slate-300 bg-white px-3 py-2';
-const button = 'rounded-xl bg-ink px-5 py-3 font-semibold text-white disabled:opacity-50';
+const field = 'hd-field';
+const button = 'hd-primary-button';
 type Draft = {
     name: string;
     brand: string;
@@ -85,14 +86,20 @@ export function FoodCatalogue() {
                 value={search}
                 onChange={(event) => setSearch(event.target.value)}
             />
-            {foods.isPending && <p>{t('loading')}</p>}
+            {foods.isPending && <LoadingState />}
             {foods.isError && (
-                <p role="alert">
-                    {t('unavailable')}{' '}
-                    <button type="button" onClick={() => foods.refetch()}>
-                        {t('retry')}
-                    </button>
-                </p>
+                <ErrorState
+                    onRetry={() => {
+                        void foods.refetch();
+                    }}
+                />
+            )}
+            {foods.data?.length === 0 && (
+                <div className="ui-empty">
+                    <strong>{t('noFoodsMatch')}</strong>
+                    <p>{t('noFoodsHelp')}</p>
+                    <Link to="/foods/new">{t('createFood')}</Link>
+                </div>
             )}
             <div className="grid gap-3 sm:grid-cols-2">
                 {foods.data?.map((food) => (
@@ -161,12 +168,14 @@ export function FoodEditor() {
         });
         setLoadedId(id);
     }
-    if (id && food.isPending) return <p>{t('loading')}</p>;
+    if (id && food.isPending) return <LoadingState />;
     if (id && food.isError)
         return (
-            <p role="alert">
-                {t('unavailable')} <button onClick={() => food.refetch()}>{t('retry')}</button>
-            </p>
+            <ErrorState
+                onRetry={() => {
+                    void food.refetch();
+                }}
+            />
         );
     const update = (patch: Partial<Draft>) => setDraft((current) => ({ ...current, ...patch }));
     async function save(event: React.FormEvent) {

@@ -16,9 +16,9 @@ export default function DeleteMealButton({
     const key = useRef(crypto.randomUUID());
     const [busy, setBusy] = useState(false);
     const [error, setError] = useState('');
+    const [confirming, setConfirming] = useState(false);
 
     async function remove() {
-        if (!window.confirm(t('confirmDeleteMeal'))) return;
         setBusy(true);
         setError('');
         try {
@@ -32,6 +32,7 @@ export default function DeleteMealButton({
                 client.invalidateQueries({ queryKey: ['food-dates'] }),
                 client.invalidateQueries({ queryKey: ['consumptions', date] }),
             ]);
+            setConfirming(false);
             onDeleted?.();
         } catch (failure) {
             setError((failure as Error).message);
@@ -46,10 +47,47 @@ export default function DeleteMealButton({
                 type="button"
                 disabled={busy}
                 className="text-red-700 underline disabled:opacity-50"
-                onClick={remove}
+                onClick={() => setConfirming(true)}
             >
                 {t('deleteMeal')}
             </button>
+            {confirming && (
+                <span className="confirm-overlay" onClick={() => !busy && setConfirming(false)}>
+                    <span
+                        className="confirm-dialog"
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby={`delete-meal-${id}`}
+                        onClick={(event) => event.stopPropagation()}
+                        onKeyDown={(event) => {
+                            if (event.key === 'Escape' && !busy) setConfirming(false);
+                        }}
+                    >
+                        <strong id={`delete-meal-${id}`}>{t('deleteMeal')}?</strong>
+                        <span>{t('confirmDeleteMeal')}</span>
+                        <span className="confirm-actions">
+                            <button
+                                type="button"
+                                autoFocus
+                                disabled={busy}
+                                onClick={() => setConfirming(false)}
+                            >
+                                {t('keepMeal')}
+                            </button>
+                            <button
+                                type="button"
+                                disabled={busy}
+                                className="confirm-danger"
+                                onClick={() => {
+                                    void remove();
+                                }}
+                            >
+                                {busy ? t('loading') : t('deleteMeal')}
+                            </button>
+                        </span>
+                    </span>
+                </span>
+            )}
             {error && (
                 <span role="alert" className="text-sm text-red-700">
                     {error}

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { Link } from 'react-router-dom';
 import { request, type Food } from './api';
 import { t } from './i18n';
 
@@ -55,6 +56,13 @@ export default function FoodPicker({
                 ))}
             </select>
             {results.isFetching && <span className="text-sm text-slate-500">{t('loading')}</span>}
+            {search.trim() && results.data?.length === 0 && (
+                <div className="ui-empty">
+                    <strong>{t('noFoodsMatch')}</strong>
+                    <p>{t('noFoodsHelp')}</p>
+                    <Link to="/foods/new">{t('createFood')}</Link>
+                </div>
+            )}
             {results.isError && (
                 <button
                     type="button"

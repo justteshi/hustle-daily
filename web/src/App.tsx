@@ -1,6 +1,14 @@
 import { useRef, useState } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { Link, Route, Routes, useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import {
+    Link,
+    NavLink,
+    Route,
+    Routes,
+    useNavigate,
+    useParams,
+    useSearchParams,
+} from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import {
     ApiError,
@@ -16,11 +24,12 @@ import { FoodCatalogue, FoodEditor } from './FoodCatalogue';
 import DeleteMealButton from './DeleteMealButton';
 import History from './History';
 import RecipeForm, { IngredientFields, RecipeCatalogue } from './RecipeForm';
+import { ErrorState, LoadingState } from './UiStates';
 import { t } from './i18n';
 
-const button = 'rounded-xl bg-ink px-5 py-3 font-semibold text-white disabled:opacity-50';
-const field = 'w-full rounded-xl border border-slate-300 bg-white px-3 py-2';
-const card = 'rounded-2xl border border-slate-200 bg-white p-6 shadow-sm';
+const button = 'hd-primary-button';
+const field = 'hd-field';
+const card = 'hd-card';
 
 function Login({ onSuccess }: { onSuccess: () => void }) {
     const [error, setError] = useState('');
@@ -31,10 +40,7 @@ function Login({ onSuccess }: { onSuccess: () => void }) {
             <div className="sign-in-container">
                 <section className="sign-in-intro" aria-label={t('title')}>
                     <div className="sign-in-brand">
-                        <span className="sign-in-mark" aria-hidden="true">
-                            HD
-                        </span>
-                        <strong>{t('title')}</strong>
+                        <img src="/branding/lockup-colour.png" alt={t('title')} />
                     </div>
                     <div className="sign-in-story">
                         <h1>{t('signInHeadline')}</h1>
@@ -118,73 +124,130 @@ function Dashboard() {
         queryKey: ['today'],
         queryFn: () => request<Today>('/dashboard/today'),
     });
-    if (query.isPending) return <p>{t('loading')}</p>;
+    if (query.isPending) return <LoadingState />;
     if (query.isError)
         return (
-            <div role="alert">
-                {t('unavailable')}{' '}
-                <button className={button} onClick={() => query.refetch()}>
-                    {t('retry')}
-                </button>
-            </div>
+            <ErrorState
+                onRetry={() => {
+                    void query.refetch();
+                }}
+            />
         );
+    const day = new Date(`${query.data.local_date}T12:00:00`);
+    const dateLabel = new Intl.DateTimeFormat(navigator.language, {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+    }).format(day);
+    const meals = query.data.consumptions;
     return (
-        <div className="space-y-8">
-            <div>
-                <h2 className="text-3xl font-bold">{t('today')}</h2>
-                <p className="text-slate-600">{query.data.local_date}</p>
-            </div>
-            <div className="grid gap-4 sm:grid-cols-2">
-                <div className={card}>
-                    <p>{t('calories')}</p>
-                    <strong className="text-4xl">
-                        {Number(query.data.consumed.calories).toFixed(0)}
-                    </strong>{' '}
-                    kcal
+        <div className="today-page">
+            <header className="today-heading">
+                <div>
+                    <span className="today-eyebrow">{t('todayInProgress')}</span>
+                    <h1>{t('today')}</h1>
+                    <p>{dateLabel}</p>
                 </div>
-                <div className={card}>
-                    <p>{t('protein')}</p>
-                    <strong className="text-4xl">
-                        {Number(query.data.consumed.protein).toFixed(1)}
-                    </strong>{' '}
-                    g
+                <Link className="today-primary" to="/meals/new">
+                    + {t('addMeal')}
+                </Link>
+            </header>
+
+            <section className="today-summary" aria-label={t('summary')}>
+                <div className="today-card today-food-summary">
+                    <div className="today-card-heading">
+                        <h2>{t('food')}</h2>
+                        <span>
+                            {meals.length} {t('entries')}
+                        </span>
+                    </div>
+                    <div className="today-big-number">
+                        <strong>{Number(query.data.consumed.calories).toFixed(0)}</strong>
+                        <span>kcal {t('consumed')}</span>
+                    </div>
+                    <div className="today-divider" />
+                    <div className="today-metric">
+                        <span>{t('protein')}</span>
+                        <strong>{Number(query.data.consumed.protein).toFixed(1)} g</strong>
+                    </div>
                 </div>
-            </div>
-            <section className="space-y-4">
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                    <h3 className="text-2xl font-semibold">{t('meals')}</h3>
-                    <Link className={button} to="/meals/new">
-                        {t('addMeal')}
-                    </Link>
+                <div className="today-card today-upcoming">
+                    <div className="today-card-heading">
+                        <h2>{t('energyAndActivity')}</h2>
+                        <span>{t('comingLater')}</span>
+                    </div>
+                    <p>{t('healthLaterDescription')}</p>
+                    <div className="today-upcoming-note">{t('foodOnlyForNow')}</div>
                 </div>
-                {query.data.consumptions.length === 0 ? (
-                    <p>{t('noMeals')}</p>
+            </section>
+
+            <section className="today-card today-meals" aria-labelledby="today-meals-heading">
+                <div className="today-meals-heading">
+                    <div>
+                        <h2 id="today-meals-heading">{t('todaysFood')}</h2>
+                        <p>{t('mealEditHint')}</p>
+                    </div>
+                    <span>
+                        {meals.length} {t('entries')}
+                    </span>
+                </div>
+                {meals.length === 0 ? (
+                    <div className="today-empty">
+                        <p>{t('noMeals')}</p>
+                        <Link to="/meals/new">+ {t('addMeal')}</Link>
+                    </div>
                 ) : (
-                    query.data.consumptions.map((meal) => (
-                        <article className={card} key={meal.id}>
-                            <div className="flex flex-wrap justify-between gap-3">
-                                <div>
-                                    <h4 className="font-semibold">
-                                        {meal.source_name ||
-                                            meal.items.map((item) => item.food_name).join(', ')}
-                                    </h4>
-                                    <p>
-                                        {Number(meal.calories).toFixed(0)} kcal ·{' '}
-                                        {Number(meal.protein).toFixed(1)} g {t('protein')}
-                                    </p>
-                                </div>
-                                <div className="flex flex-wrap items-start gap-4">
-                                    <Link
-                                        className="text-emerald-800 underline"
-                                        to={`/meals/${meal.id}/edit?date=${query.data.local_date}`}
-                                    >
-                                        {t('editMeal')}
-                                    </Link>
-                                    <DeleteMealButton id={meal.id} date={query.data.local_date} />
-                                </div>
-                            </div>
-                        </article>
-                    ))
+                    <div className="today-table-wrap">
+                        <table className="today-table">
+                            <thead>
+                                <tr>
+                                    <th>{t('food')}</th>
+                                    <th>{t('calories')}</th>
+                                    <th>{t('protein')}</th>
+                                    <th>
+                                        <span className="sr-only">{t('actions')}</span>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {meals.map((meal) => (
+                                    <tr key={meal.id}>
+                                        <td>
+                                            <strong>
+                                                {meal.source_name ||
+                                                    meal.items
+                                                        .map((item) => item.food_name)
+                                                        .join(', ')}
+                                            </strong>
+                                            <small>
+                                                {meal.items
+                                                    .map(
+                                                        (item) =>
+                                                            `${item.quantity} ${item.input_unit || item.unit} ${item.food_name}`,
+                                                    )
+                                                    .join(' · ')}
+                                            </small>
+                                        </td>
+                                        <td>{Number(meal.calories).toFixed(0)} kcal</td>
+                                        <td>{Number(meal.protein).toFixed(1)} g</td>
+                                        <td>
+                                            <div className="today-row-actions">
+                                                <Link
+                                                    to={`/meals/${meal.id}/edit?date=${query.data.local_date}`}
+                                                >
+                                                    {t('editMeal')}
+                                                </Link>
+                                                <DeleteMealButton
+                                                    id={meal.id}
+                                                    date={query.data.local_date}
+                                                />
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 )}
             </section>
         </div>
@@ -321,25 +384,18 @@ function MealForm() {
     const selectedCategory = category || meal?.meal_category_id || categories.data?.[0]?.id || '';
     if (id && !date) return <p role="alert">{t('missingMeal')}</p>;
     if ((id && entries.isPending) || categories.isPending || recipes.isPending)
-        return <p>{t('loading')}</p>;
+        return <LoadingState />;
     if ((id && entries.isError) || categories.isError || recipes.isError)
         return (
-            <div role="alert" className="space-y-3">
-                <p>{t('unavailable')}</p>
-                <button
-                    type="button"
-                    className={button}
-                    onClick={() => {
-                        void Promise.all([
-                            ...(id && entries.isError ? [entries.refetch()] : []),
-                            ...(categories.isError ? [categories.refetch()] : []),
-                            ...(recipes.isError ? [recipes.refetch()] : []),
-                        ]);
-                    }}
-                >
-                    {t('retry')}
-                </button>
-            </div>
+            <ErrorState
+                onRetry={() => {
+                    void Promise.all([
+                        ...(id && entries.isError ? [entries.refetch()] : []),
+                        ...(categories.isError ? [categories.refetch()] : []),
+                        ...(recipes.isError ? [recipes.refetch()] : []),
+                    ]);
+                }}
+            />
         );
     if (id && !meal) return <p role="alert">{t('missingMeal')}</p>;
     const updateRow = (index: number, patch: Partial<Row>) =>
@@ -548,33 +604,38 @@ export default function App() {
             />
         );
     return (
-        <>
-            <header className="border-b border-slate-200 bg-white">
-                <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-4">
-                    <Link to="/" className="text-xl font-bold">
-                        {t('title')}
-                    </Link>
-                    <nav className="flex flex-wrap items-center gap-4">
-                        <Link to="/">{t('today')}</Link>
-                        <Link to="/history">{t('history')}</Link>
-                        <Link to="/foods">{t('foods')}</Link>
-                        <Link to="/recipes">{t('recipes')}</Link>
-                        <Link to="/account">{t('account')}</Link>
-                        <a href="/api/docs">{t('apiDocs')}</a>
-                        <span className="text-slate-500">{me.data.name}</span>
-                        <button
-                            onClick={async () => {
-                                await logout();
-                                client.clear();
-                                navigate('/');
-                            }}
-                        >
-                            {t('signOut')}
-                        </button>
-                    </nav>
+        <div className="app-shell">
+            <aside className="app-sidebar">
+                <Link to="/" className="app-brand">
+                    <img src="/branding/lockup-colour.png" alt={t('title')} />
+                </Link>
+                <Link to="/meals/new" className="sidebar-add">
+                    + {t('addMeal')}
+                </Link>
+                <nav aria-label={t('mainNavigation')} className="sidebar-nav">
+                    <NavLink to="/" end>
+                        {t('today')}
+                    </NavLink>
+                    <NavLink to="/history">{t('history')}</NavLink>
+                    <NavLink to="/foods">{t('foods')}</NavLink>
+                    <NavLink to="/recipes">{t('recipes')}</NavLink>
+                    <NavLink to="/account">{t('account')}</NavLink>
+                </nav>
+                <div className="sidebar-bottom">
+                    <a href="/api/docs">{t('apiDocs')}</a>
+                    <span>{me.data.name}</span>
+                    <button
+                        onClick={async () => {
+                            await logout();
+                            client.clear();
+                            navigate('/');
+                        }}
+                    >
+                        {t('signOut')}
+                    </button>
                 </div>
-            </header>
-            <main className="mx-auto max-w-6xl px-5 py-9">
+            </aside>
+            <main className="app-content">
                 <Routes>
                     <Route path="/" element={<Dashboard />} />
                     <Route path="/history" element={<History />} />
@@ -590,6 +651,6 @@ export default function App() {
                     <Route path="/account" element={<Account />} />
                 </Routes>
             </main>
-        </>
+        </div>
     );
 }

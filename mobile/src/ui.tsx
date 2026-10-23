@@ -3,12 +3,12 @@ import { Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-
 import { strings } from './i18n';
 
 export const colors = {
-    background: '#f8f6f1',
-    ink: '#172d2a',
-    muted: '#63716d',
-    accent: '#237763',
-    border: '#dce2dc',
-    danger: '#a32732',
+    background: '#f5f3ee',
+    ink: '#17201b',
+    muted: '#4d5751',
+    accent: '#2f6b4f',
+    border: '#e3e0d7',
+    danger: '#a0322b',
     white: '#ffffff',
 };
 
@@ -99,10 +99,10 @@ export function ErrorNotice({ error, onRetry }: { error: unknown; onRetry?: () =
 export const styles = StyleSheet.create({
     page: { flex: 1, backgroundColor: colors.background },
     content: { padding: 24, paddingTop: 64, paddingBottom: 56, gap: 16 },
-    title: { fontSize: 32, fontWeight: '700', color: colors.ink },
-    subtitle: { fontSize: 19, fontWeight: '600', color: colors.ink },
-    body: { fontSize: 16, color: colors.ink },
-    muted: { fontSize: 14, color: colors.muted },
+    title: { fontSize: 34, fontWeight: '700', color: colors.ink },
+    subtitle: { fontSize: 17, fontWeight: '600', color: colors.ink },
+    body: { fontSize: 17, lineHeight: 24, color: colors.ink },
+    muted: { fontSize: 13, lineHeight: 19, color: colors.muted },
     card: {
         padding: 18,
         backgroundColor: colors.white,
@@ -136,6 +136,6 @@ export const styles = StyleSheet.create({
     disabled: { opacity: 0.5 },
     buttonText: { color: colors.white, fontWeight: '700', fontSize: 15 },
     secondaryText: { color: colors.ink },
-    error: { padding: 14, borderRadius: 10, backgroundColor: '#fff0f0', gap: 10 },
+    error: { padding: 14, borderRadius: 12, backgroundColor: '#fbe9e7', gap: 10 },
     errorText: { color: colors.danger, fontSize: 14 },
 });

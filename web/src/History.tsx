@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { request, type FoodDate, type Meal } from './api';
 import DeleteMealButton from './DeleteMealButton';
 import { t } from './i18n';
+import { ErrorState, LoadingState } from './UiStates';
 
 export default function History() {
     const { date } = useParams();
@@ -35,12 +36,13 @@ export default function History() {
                             }
                         />
                     </label>
-                    {dates.isPending && <p>{t('loading')}</p>}
+                    {dates.isPending && <LoadingState />}
                     {dates.isError && (
-                        <p role="alert">
-                            {t('unavailable')}{' '}
-                            <button onClick={() => dates.refetch()}>{t('retry')}</button>
-                        </p>
+                        <ErrorState
+                            onRetry={() => {
+                                void dates.refetch();
+                            }}
+                        />
                     )}
                     <div className="space-y-2">
                         {dates.data?.map((day) => (
@@ -63,12 +65,13 @@ export default function History() {
                     {date && (
                         <>
                             <h3 className="text-2xl font-semibold">{date}</h3>
-                            {entries.isPending && <p>{t('loading')}</p>}
+                            {entries.isPending && <LoadingState />}
                             {entries.isError && (
-                                <p role="alert">
-                                    {t('unavailable')}{' '}
-                                    <button onClick={() => entries.refetch()}>{t('retry')}</button>
-                                </p>
+                                <ErrorState
+                                    onRetry={() => {
+                                        void entries.refetch();
+                                    }}
+                                />
                             )}
                             {entries.data && (
                                 <>

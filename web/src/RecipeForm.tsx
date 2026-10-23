@@ -4,10 +4,11 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { request, type Food, type Recipe } from './api';
 import FoodPicker from './FoodPicker';
 import { t } from './i18n';
+import { ErrorState, LoadingState } from './UiStates';
 
 type Ingredient = { food_id: string; quantity: number; unit: string; portion_id?: string };
-const field = 'w-full rounded-xl border border-slate-300 bg-white px-3 py-2';
-const button = 'rounded-xl bg-ink px-5 py-3 font-semibold text-white disabled:opacity-50';
+const field = 'hd-field';
+const button = 'hd-primary-button';
 
 export function IngredientFields({
     ingredient,
@@ -105,12 +106,19 @@ export function RecipeCatalogue() {
                     {t('createRecipe')}
                 </Link>
             </div>
-            {recipes.isPending && <p>{t('loading')}</p>}
+            {recipes.isPending && <LoadingState />}
             {recipes.isError && (
-                <p role="alert">
-                    {t('unavailable')}{' '}
-                    <button onClick={() => recipes.refetch()}>{t('retry')}</button>
-                </p>
+                <ErrorState
+                    onRetry={() => {
+                        void recipes.refetch();
+                    }}
+                />
+            )}
+            {recipes.data?.length === 0 && (
+                <div className="ui-empty">
+                    <strong>{t('noRecipesYet')}</strong>
+                    <Link to="/recipes/new">{t('createRecipe')}</Link>
+                </div>
             )}
             <div className="grid gap-3 sm:grid-cols-2">
                 {recipes.data?.map((recipe) => (
@@ -171,12 +179,14 @@ export default function RecipeForm() {
         );
         setLoadedId(id);
     }
-    if (id && recipe.isPending) return <p>{t('loading')}</p>;
+    if (id && recipe.isPending) return <LoadingState />;
     if (id && recipe.isError)
         return (
-            <p role="alert">
-                {t('unavailable')} <button onClick={() => recipe.refetch()}>{t('retry')}</button>
-            </p>
+            <ErrorState
+                onRetry={() => {
+                    void recipe.refetch();
+                }}
+            />
         );
     const change = (index: number, patch: Partial<Ingredient>) =>
         setIngredients(

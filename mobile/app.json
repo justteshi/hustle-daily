@@ -1,30 +1,30 @@
 {
-  "expo": {
-    "name": "Hustle Daily",
-    "slug": "hustle-daily",
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
-    "ios": {
-      "supportsTablet": false
-    },
-    "android": {
-      "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/android-icon-foreground.png",
-        "backgroundImage": "./assets/android-icon-background.png",
-        "monochromeImage": "./assets/android-icon-monochrome.png"
-      },
-      "predictiveBackGestureEnabled": false
-    },
-    "plugins": ["expo-router", "expo-localization", "expo-dev-client", "expo-secure-store"],
-    "scheme": "hustledaily",
-    "extra": {
-      "apiBaseUrl": "https://your-real-domain.example/api/v1"
-    },
-    "web": {
-      "favicon": "./assets/favicon.png"
+    "expo": {
+        "name": "Hustle Daily",
+        "slug": "hustle-daily",
+        "version": "1.0.0",
+        "orientation": "portrait",
+        "icon": "./assets/icon.png",
+        "userInterfaceStyle": "light",
+        "ios": {
+            "supportsTablet": false
+        },
+        "android": {
+            "adaptiveIcon": {
+                "backgroundColor": "#E6F4FE",
+                "foregroundImage": "./assets/android-icon-foreground.png",
+                "backgroundImage": "./assets/android-icon-background.png",
+                "monochromeImage": "./assets/android-icon-monochrome.png"
+            },
+            "predictiveBackGestureEnabled": false
+        },
+        "plugins": ["expo-router", "expo-localization", "expo-dev-client", "expo-secure-store"],
+        "scheme": "hustledaily",
+        "extra": {
+            "apiBaseUrl": "https://your-real-domain.example/api/v1"
+        },
+        "web": {
+            "favicon": "./assets/favicon.png"
+        }
     }
-  }
 }

@@ -6,5 +6,13 @@ import App from './App';
 import './style.css';
 
 createRoot(document.getElementById('root')!).render(
-  <React.StrictMode><QueryClientProvider client={new QueryClient({ defaultOptions: { queries: { retry: 1 } } })}><BrowserRouter><App /></BrowserRouter></QueryClientProvider></React.StrictMode>,
+    <React.StrictMode>
+        <QueryClientProvider
+            client={new QueryClient({ defaultOptions: { queries: { retry: 1 } } })}
+        >
+            <BrowserRouter>
+                <App />
+            </BrowserRouter>
+        </QueryClientProvider>
+    </React.StrictMode>,
 );

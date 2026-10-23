@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Important states</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+a{color:#24563F}a:hover{color:#17201B}
+:focus-visible{outline:2px solid #2F6B4F;outline-offset:2px}
+</style>
+</helmet>
+<div style="width: 1440px; min-height: 1500px; background: #F5F3EE; color: #17201B; font-family: Inter, system-ui, sans-serif; font-variant-numeric: tabular-nums; padding: 72px 80px; display: flex; flex-direction: column; gap: 32px">
+  <h1 style="margin: 0; font-size: 40px; letter-spacing: -0.03em">Important states</h1>
+  <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px">
+
+    <div style="display: flex; flex-direction: column; gap: 10px"><span style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #646D67">Loading</span>
+      <div aria-busy="true" style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 16px; padding: 22px; display: flex; flex-direction: column; gap: 12px; height: 220px">
+        <div style="height: 12px; width: 40%; background: #ECE9E2; border-radius: 6px"></div>
+        <div style="height: 34px; width: 55%; background: #ECE9E2; border-radius: 8px"></div>
+        <div style="height: 8px; background: #ECE9E2; border-radius: 4px"></div>
+        <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px"><div style="height: 50px; background: #F1EFEA; border-radius: 10px"></div><div style="height: 50px; background: #F1EFEA; border-radius: 10px"></div><div style="height: 50px; background: #F1EFEA; border-radius: 10px"></div></div>
+        <span style="font-size: 13px; color: #646D67">Loading today…</span>
+      </div></div>
+
+    <div style="display: flex; flex-direction: column; gap: 10px"><span style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #646D67">Empty first day</span>
+      <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 16px; padding: 22px; display: flex; flex-direction: column; gap: 10px; height: 220px; justify-content: center; align-items: flex-start">
+        <strong style="font-size: 18px">Nothing logged yet today</strong>
+        <span style="font-size: 14px; line-height: 1.5; color: #4D5751">Your budget for a Training Day is 2,000 kcal. Add your first food, or open the app on your iPhone to bring in Apple Health data.</span>
+        <div style="display: flex; gap: 8px"><button type="button" style="height: 38px; padding: 0 14px; border-radius: 10px; border: 0; background: #2F6B4F; color: #FFFFFF; font: 600 14px Inter, sans-serif">+ Add food</button><button type="button" style="height: 38px; padding: 0 14px; border-radius: 10px; border: 1px solid #CFCAC0; background: #FFFFFF; font: 600 14px Inter, sans-serif">Import a recipe</button></div>
+      </div></div>
+
+    <div style="display: flex; flex-direction: column; gap: 10px"><span style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #646D67">No search results</span>
+      <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 16px; padding: 22px; display: flex; flex-direction: column; gap: 12px; height: 220px">
+        <div style="height: 40px; border: 1.5px solid #2F6B4F; border-radius: 8px; display: flex; align-items: center; padding: 0 12px; font-size: 15px">kefir lowfat</div>
+        <strong style="font-size: 15px">No foods match “kefir lowfat”</strong>
+        <span style="font-size: 14px; color: #4D5751">Check the spelling, try the brand name, or add the food yourself.</span>
+        <div style="display: flex; gap: 8px"><button type="button" style="height: 36px; padding: 0 12px; border-radius: 10px; border: 0; background: #2F6B4F; color: #FFFFFF; font: 600 13px Inter, sans-serif">Create “kefir lowfat”</button><button type="button" style="height: 36px; padding: 0 12px; border-radius: 10px; border: 1px solid #CFCAC0; background: #FFFFFF; font: 600 13px Inter, sans-serif">Enter barcode</button></div>
+      </div></div>
+
+    <div style="display: flex; flex-direction: column; gap: 10px"><span style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #646D67">Validation error</span>
+      <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 16px; padding: 22px; display: flex; flex-direction: column; gap: 10px; height: 220px">
+        <div role="alert" style="padding: 10px 12px; border-radius: 10px; background: #FBE9E7; color: #7D241F; font-size: 13px">Two fields need a look before saving.</div>
+        <label style="display: flex; flex-direction: column; gap: 4px; font-size: 13px; font-weight: 600">Calories per 100 g<input value="" aria-invalid="true" style="height: 38px; border: 1.5px solid #A0322B; border-radius: 8px; padding: 0 10px; font: 15px Inter, sans-serif"><span style="color: #A0322B; font-weight: 500">Enter calories. Use 0 if the label says 0.</span></label>
+        <span style="font-size: 13px; color: #A0322B">Portion “1 scoop” needs a weight in g.</span>
+      </div></div>
+
+    <div style="display: flex; flex-direction: column; gap: 10px"><span style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #646D67">Backend unavailable / save failed</span>
+      <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 16px; padding: 22px; display: flex; flex-direction: column; gap: 12px; height: 220px">
+        <div role="alert" style="display: flex; gap: 10px; padding: 14px; border-radius: 12px; background: #FBE9E7; border: 1px solid #EBC3BE; color: #7D241F; font-size: 14px; line-height: 1.5"><strong>!</strong><span>Couldn’t reach Hustle Daily. <strong>Skyr Natural · 100 g</strong> is saved on this device and will be sent when you’re back online.</span></div>
+        <div style="display: flex; gap: 8px"><button type="button" style="height: 36px; padding: 0 14px; border-radius: 10px; border: 0; background: #17201B; color: #FFFFFF; font: 600 13px Inter, sans-serif">Try again</button><span style="font-size: 13px; color: #646D67; align-self: center">Last try 18:51</span></div>
+      </div></div>
+
+    <div style="display: flex; flex-direction: column; gap: 10px"><span style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #646D67">Apple Health permission denied (iPhone)</span>
+      <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 16px; padding: 22px; display: flex; flex-direction: column; gap: 10px; height: 220px">
+        <strong style="font-size: 15px">Hustle Daily can’t read Apple Health</strong>
+        <span style="font-size: 14px; line-height: 1.5; color: #4D5751">Steps, energy, workouts, sleep and weight will stay empty. Food logging still works.</span>
+        <span style="font-size: 13px; color: #4D5751">Settings → Health → Data Access &amp; Devices → Hustle Daily</span>
+        <button type="button" style="align-self: flex-start; height: 38px; padding: 0 14px; border-radius: 10px; border: 0; background: #2F6B4F; color: #FFFFFF; font: 600 14px Inter, sans-serif">Open iPhone Settings</button>
+      </div></div>
+
+    <div style="display: flex; flex-direction: column; gap: 10px"><span style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #646D67">Apple Health data incomplete</span>
+      <div style="background: #FFFBF2; border: 1.5px dashed #C99A3E; border-radius: 16px; padding: 22px; display: flex; flex-direction: column; gap: 10px; height: 220px">
+        <strong style="font-size: 15px; color: #6B4A12">Some Apple Health data hasn’t arrived</strong>
+        <ul style="margin: 0; padding-left: 18px; font-size: 14px; line-height: 1.6; color: #4A3A1A"><li>Resting energy: missing since 09:05</li><li>Steps: iPhone only, so the watch may not have been worn</li></ul>
+        <span style="font-size: 13px; color: #6B4A12">Total burned and energy balance will appear once Resting energy syncs.</span>
+      </div></div>
+
+    <div style="display: flex; flex-direction: column; gap: 10px"><span style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #646D67">Syncing</span>
+      <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 16px; padding: 22px; display: flex; flex-direction: column; gap: 12px; height: 220px">
+        <div role="status" style="display: flex; align-items: center; gap: 10px; font-size: 14px"><span style="width: 16px; height: 16px; border-radius: 50%; border: 2px solid #CFCAC0; border-top-color: #2F6B4F"></span><strong>Syncing Apple Health…</strong></div>
+        <div style="height: 6px; border-radius: 3px; background: #ECE9E2; overflow: hidden"><div style="width: 60%; height: 100%; background: #2F6B4F"></div></div>
+        <span style="font-size: 13px; color: #4D5751">Workouts ✓ · Steps ✓ · Energy… · Sleep · Weight</span>
+        <span style="font-size: 13px; color: #646D67">Values you see may update in a moment.</span>
+      </div></div>
+
+    <div style="display: flex; flex-direction: column; gap: 10px"><span style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #646D67">Concluded day</span>
+      <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 16px; padding: 22px; display: flex; flex-direction: column; gap: 10px; height: 220px">
+        <span style="align-self: flex-start; display: inline-flex; align-items: center; height: 28px; padding: 0 10px; border-radius: 999px; background: #E6EFE9; color: #24563F; font-size: 13px; font-weight: 600">✓ Concluded 22:41</span>
+        <strong style="font-size: 18px">Tue 20 Oct · Training Day</strong>
+        <span style="font-size: 14px; color: #4D5751">1,880 kcal eaten · 2,910 kcal burned · <strong style="color: #1D6767">1,030 kcal deficit</strong></span>
+        <button type="button" style="align-self: flex-start; height: 36px; padding: 0 14px; border-radius: 10px; border: 1px solid #CFCAC0; background: #FFFFFF; font: 600 13px Inter, sans-serif">Reopen to edit</button>
+      </div></div>
+
+    <div style="display: flex; flex-direction: column; gap: 10px"><span style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #646D67">Reopened day</span>
+      <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 16px; padding: 22px; display: flex; flex-direction: column; gap: 10px; height: 220px">
+        <span style="align-self: flex-start; display: inline-flex; align-items: center; height: 28px; padding: 0 10px; border-radius: 999px; background: #E4ECF5; color: #2D5C91; font-size: 13px; font-weight: 600">↺ Reopened · editing</span>
+        <span style="font-size: 14px; line-height: 1.5; color: #4D5751">First concluded 20 Oct, 22:41. Changes recalculate totals right away. Conclude again to lock in the corrected day.</span>
+        <button type="button" style="align-self: flex-start; height: 38px; padding: 0 14px; border-radius: 10px; border: 0; background: #2F6B4F; color: #FFFFFF; font: 600 14px Inter, sans-serif">Conclude again</button>
+      </div></div>
+
+    <div style="display: flex; flex-direction: column; gap: 10px"><span style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #646D67">Destructive confirmation</span>
+      <div role="dialog" aria-labelledby="delT" style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 16px; padding: 22px; display: flex; flex-direction: column; gap: 10px; height: 220px; box-shadow: 0 12px 32px rgba(23,32,27,.10)">
+        <strong id="delT" style="font-size: 17px">Delete this entry?</strong>
+        <span style="font-size: 14px; line-height: 1.5; color: #4D5751">Banana, 130 g (116 kcal) will be removed from Snack. You can undo for 10 seconds afterwards.</span>
+        <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: auto"><button type="button" style="height: 38px; padding: 0 14px; border-radius: 10px; border: 1px solid #CFCAC0; background: #FFFFFF; font: 600 14px Inter, sans-serif">Keep</button><button type="button" style="height: 38px; padding: 0 14px; border-radius: 10px; border: 0; background: #A0322B; color: #FFFFFF; font: 600 14px Inter, sans-serif">Delete entry</button></div>
+      </div></div>
+
+    <div style="display: flex; flex-direction: column; gap: 10px"><span style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #646D67">External data awaiting confirmation</span>
+      <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 16px; padding: 22px; display: flex; flex-direction: column; gap: 10px; height: 220px">
+        <span style="align-self: flex-start; display: inline-flex; align-items: center; height: 24px; padding: 0 8px; border-radius: 6px; background: #E4ECF5; color: #2D5C91; font-size: 12px; font-weight: 600">Open Food Facts · community data · not yet confirmed</span>
+        <strong style="font-size: 16px">Protein Pudding Chocolate · Lumi</strong>
+        <span style="font-size: 14px; color: #4D5751">73 kcal · 10 g protein · 6.1 g carbs · 1.0 g fat per 100 g</span>
+        <div style="display: flex; gap: 8px; margin-top: auto"><button type="button" style="height: 38px; padding: 0 14px; border-radius: 10px; border: 0; background: #2F6B4F; color: #FFFFFF; font: 600 14px Inter, sans-serif">Matches the label</button><button type="button" style="height: 38px; padding: 0 14px; border-radius: 10px; border: 1px solid #CFCAC0; background: #FFFFFF; font: 600 14px Inter, sans-serif">Correct values</button></div>
+      </div></div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1500}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

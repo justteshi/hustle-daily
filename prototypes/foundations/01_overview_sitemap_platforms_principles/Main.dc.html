@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Hustle Daily overview</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+a{color:#24563F}a:hover{color:#17201B}
+:focus-visible{outline:2px solid #2F6B4F;outline-offset:2px}
+</style>
+</helmet>
+<div style="width: 1440px; min-height: 2250px; background: #F5F3EE; color: #17201B; font-family: Inter, system-ui, sans-serif; padding: 72px 80px; display: flex; flex-direction: column; gap: 56px">
+
+  <header style="display: flex; justify-content: space-between; align-items: flex-end; gap: 40px">
+    <div style="display: flex; flex-direction: column; gap: 14px">
+      <div style="display: flex; align-items: center; gap: 12px">
+        <svg width="40" height="40" viewBox="0 0 120 120" role="img" aria-label="Hustle Daily logo" style="flex: none; display: block"><rect width="120" height="120" rx="28" fill="#2F6B4F"></rect><path d="M60 26A34 34 0 1 1 46.99 28.59" fill="none" stroke="#F5F3EE" stroke-width="9" stroke-linecap="round"></path><circle cx="46.99" cy="28.59" r="6.5" fill="#E8C27A"></circle><path d="M46 61L56 71L75 51" fill="none" stroke="#F5F3EE" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+        <span style="font-size: 15px; font-weight: 600; color: #4D5751">Hustle Daily · product design v1</span>
+      </div>
+      <h1 style="margin: 0; font-size: 56px; line-height: 1.05; letter-spacing: -0.03em; font-weight: 700; max-width: 900px">One day at a glance. Honest numbers. A calm close at 22:30.</h1>
+      <p style="margin: 0; font-size: 18px; line-height: 1.55; color: #4D5751; max-width: 820px">Hustle Daily replaces the food, macro and energy spreadsheet. The iPhone collects Apple Health data and handles quick logging; the desktop web app is the full workspace for reviewing and editing the same data.</p>
+    </div>
+    <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 14px; padding: 18px 20px; display: flex; flex-direction: column; gap: 10px; min-width: 300px; font-size: 13px">
+      <strong style="font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: #646D67">How to read this canvas</strong>
+      <span>Foundations: this page, tokens, wireframes, states</span>
+      <span>Desktop web: 14 screens at 1440 px</span>
+      <span>iPhone: 19 screens at 393 × 852 pt</span>
+      <span style="color: #4D5751">Boards with a Play mark are clickable.</span>
+    </div>
+  </header>
+
+  <section style="display: flex; flex-direction: column; gap: 20px">
+    <h2 style="margin: 0; font-size: 28px; letter-spacing: -0.02em">1 · Sitemap</h2>
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px">
+      <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 16px; padding: 28px; display: flex; flex-direction: column; gap: 18px">
+        <div style="display: flex; justify-content: space-between; align-items: baseline"><h3 style="margin: 0; font-size: 20px">Desktop web</h3><span style="font-size: 13px; color: #646D67">Left sidebar · Add food always visible</span></div>
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; font-size: 14px; line-height: 1.5">
+          <div style="border: 1px solid #E3E0D7; border-radius: 12px; padding: 14px 16px; background: #E6EFE9"><strong>Today</strong><br><span style="color: #4D5751">Add food drawer · Day type · Daily review → Conclude</span></div>
+          <div style="border: 1px solid #E3E0D7; border-radius: 12px; padding: 14px 16px"><strong>History</strong><br><span style="color: #4D5751">Month calendar + list · Day detail → Reopen → Conclude again</span></div>
+          <div style="border: 1px solid #E3E0D7; border-radius: 12px; padding: 14px 16px"><strong>Foods &amp; Recipes</strong><br><span style="color: #4D5751">Catalogue · Recipe library · Food editor · Portions · Recipe builder</span></div>
+          <div style="border: 1px solid #E3E0D7; border-radius: 12px; padding: 14px 16px"><strong>Trends</strong><br><span style="color: #4D5751">Weight · Energy balance · Protein · Steps · Sleep</span></div>
+          <div style="border: 1px solid #E3E0D7; border-radius: 12px; padding: 14px 16px"><strong>Targets</strong><br><span style="color: #4D5751">Training Day · Rest Day · Add day type</span></div>
+          <div style="border: 1px solid #E3E0D7; border-radius: 12px; padding: 14px 16px"><strong>Settings</strong><br><span style="color: #4D5751">Time zone · Language · 22:30 reminder · Apple Health status · Account</span></div>
+        </div>
+      </div>
+      <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 16px; padding: 28px; display: flex; flex-direction: column; gap: 18px">
+        <div style="display: flex; justify-content: space-between; align-items: baseline"><h3 style="margin: 0; font-size: 20px">iPhone</h3><span style="font-size: 13px; color: #646D67">Bottom tab bar · centre Add button</span></div>
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; font-size: 14px; line-height: 1.5">
+          <div style="border: 1px solid #E3E0D7; border-radius: 12px; padding: 14px 16px; background: #E6EFE9"><strong>Today</strong><br><span style="color: #4D5751">Sync Apple Health · Workouts · Meals · Review</span></div>
+          <div style="border: 1px solid #E3E0D7; border-radius: 12px; padding: 14px 16px"><strong>History</strong><br><span style="color: #4D5751">Calendar strip + list · Day detail · Reopen</span></div>
+          <div style="border: 1px solid #E3E0D7; border-radius: 12px; padding: 14px 16px"><strong>+ Add food (sheet)</strong><br><span style="color: #4D5751">Search · Recent · Favourites · Quantity · Scan barcode → Open Food Facts / Create food</span></div>
+          <div style="border: 1px solid #E3E0D7; border-radius: 12px; padding: 14px 16px"><strong>Foods</strong><br><span style="color: #4D5751">Recipe library (9) · New recipe · My foods · Recipe detail → Log servings</span></div>
+          <div style="border: 1px solid #E3E0D7; border-radius: 12px; padding: 14px 16px"><strong>More</strong><br><span style="color: #4D5751">Trends · Targets · Apple Health · Notifications · Settings · Sign out</span></div>
+          <div style="border: 1px dashed #CFCAC0; border-radius: 12px; padding: 14px 16px"><strong>22:30 notification</strong><br><span style="color: #4D5751">Deep link → Daily review → Concluded</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="display: flex; flex-direction: column; gap: 20px">
+    <h2 style="margin: 0; font-size: 28px; letter-spacing: -0.02em">2 · Platform responsibilities</h2>
+    <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 16px; overflow: hidden">
+      <table style="width: 100%; border-collapse: collapse; font-size: 14px">
+        <thead>
+          <tr style="background: #FAF9F6; text-align: left">
+            <th scope="col" style="padding: 14px 24px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: #646D67; width: 30%">Capability</th>
+            <th scope="col" style="padding: 14px 24px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: #646D67">iPhone</th>
+            <th scope="col" style="padding: 14px 24px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; color: #646D67">Desktop web</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-top: 1px solid #ECE9E2"><th scope="row" style="padding: 14px 24px; text-align: left; font-weight: 600">Apple Health permission &amp; sync</th><td style="padding: 14px 24px"><strong style="color: #24563F">Owner.</strong> Background + manual sync</td><td style="padding: 14px 24px; color: #4D5751">Read-only: shows last iPhone sync time. No sync button.</td></tr>
+          <tr style="border-top: 1px solid #ECE9E2"><th scope="row" style="padding: 14px 24px; text-align: left; font-weight: 600">Workouts, steps, energy, sleep, weight</th><td style="padding: 14px 24px">Collected and shown</td><td style="padding: 14px 24px">Shown, labelled “Apple Health”</td></tr>
+          <tr style="border-top: 1px solid #ECE9E2"><th scope="row" style="padding: 14px 24px; text-align: left; font-weight: 600">Barcode</th><td style="padding: 14px 24px"><strong style="color: #24563F">Camera scan</strong></td><td style="padding: 14px 24px">Type or paste barcode</td></tr>
+          <tr style="border-top: 1px solid #ECE9E2"><th scope="row" style="padding: 14px 24px; text-align: left; font-weight: 600">Quick food entry</th><td style="padding: 14px 24px"><strong style="color: #24563F">Primary</strong></td><td style="padding: 14px 24px">Full drawer with keyboard flow</td></tr>
+          <tr style="border-top: 1px solid #ECE9E2"><th scope="row" style="padding: 14px 24px; text-align: left; font-weight: 600">Branded foods, portions, recipes</th><td style="padding: 14px 24px">Create, view, log</td><td style="padding: 14px 24px"><strong style="color: #24563F">Primary:</strong> manage, build, archive</td></tr>
+          <tr style="border-top: 1px solid #ECE9E2"><th scope="row" style="padding: 14px 24px; text-align: left; font-weight: 600">22:30 “Let’s conclude the day”</th><td style="padding: 14px 24px"><strong style="color: #24563F">Local notification</strong></td><td style="padding: 14px 24px">“Review due” status on Today</td></tr>
+          <tr style="border-top: 1px solid #ECE9E2"><th scope="row" style="padding: 14px 24px; text-align: left; font-weight: 600">Conclude, reopen, edit past days</th><td style="padding: 14px 24px">Yes</td><td style="padding: 14px 24px">Yes</td></tr>
+          <tr style="border-top: 1px solid #ECE9E2"><th scope="row" style="padding: 14px 24px; text-align: left; font-weight: 600">Trends, targets, day types</th><td style="padding: 14px 24px">Compact trends (7/30/90 days); targets editable</td><td style="padding: 14px 24px"><strong style="color: #24563F">Primary</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section style="display: flex; flex-direction: column; gap: 20px">
+    <h2 style="margin: 0; font-size: 28px; letter-spacing: -0.02em">3 · Design principles</h2>
+    <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px">
+      <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 14px; padding: 22px; display: flex; flex-direction: column; gap: 8px"><strong style="font-size: 16px">Missing is not zero</strong><span style="font-size: 14px; line-height: 1.55; color: #4D5751">No Apple Health data shows as “Missing”. Totals that depend on it say they can’t be calculated yet.</span></div>
+      <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 14px; padding: 22px; display: flex; flex-direction: column; gap: 8px"><strong style="font-size: 16px">Every number shows its source</strong><span style="font-size: 14px; line-height: 1.55; color: #4D5751">Each value is labelled as Apple Health, calculated (=) or entered by you, so you know which ones you can edit.</span></div>
+      <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 14px; padding: 22px; display: flex; flex-direction: column; gap: 8px"><strong style="font-size: 16px">Budget vs minimum</strong><span style="font-size: 14px; line-height: 1.55; color: #4D5751">Calories are a budget: “left” or “over”, never celebrated. Protein and steps are minimums: “to go” or “met ✓”.</span></div>
+      <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 14px; padding: 22px; display: flex; flex-direction: column; gap: 8px"><strong style="font-size: 16px">Words beside colour</strong><span style="font-size: 14px; line-height: 1.55; color: #4D5751">Deficit and surplus are always written out. Status chips have a label and a shape. Red is only used for errors.</span></div>
+      <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 14px; padding: 22px; display: flex; flex-direction: column; gap: 8px"><strong style="font-size: 16px">Calm, not coaching</strong><span style="font-size: 14px; line-height: 1.55; color: #4D5751">No streaks, badges or verdicts. Plain, neutral wording such as “320 kcal left” or “Steps: 1,580 to go”.</span></div>
+      <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 14px; padding: 22px; display: flex; flex-direction: column; gap: 8px"><strong style="font-size: 16px">Same model, right density</strong><span style="font-size: 14px; line-height: 1.55; color: #4D5751">The same day object everywhere. The desktop puts everything side by side with tables; the iPhone stacks it into cards.</span></div>
+    </div>
+  </section>
+
+  <section style="display: flex; flex-direction: column; gap: 20px">
+    <h2 style="margin: 0; font-size: 28px; letter-spacing: -0.02em">4 · Clickable prototypes</h2>
+    <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; font-size: 14px">
+      <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 10px"><strong>A · Log an existing food</strong><span style="color: #4D5751">Search “skyr”, pick the brand, 100 g, Breakfast, then save</span><span style="display: flex; gap: 14px"><a href="DeskToday.dc.html">Desktop →</a><a href="PhLog.dc.html">iPhone →</a></span></div>
+      <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 10px"><strong>B · Build &amp; log a breakfast recipe</strong><span style="color: #4D5751">Six ingredients, yield, save, log one serving</span><span style="display: flex; gap: 14px"><a href="DeskRecipe.dc.html">Desktop →</a><a href="PhRecipe.dc.html">iPhone →</a></span></div>
+      <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 10px"><strong>C · Barcode import</strong><span style="color: #4D5751">Scan, check the Open Food Facts data, confirm, save, log</span><span style="display: flex; gap: 14px"><a href="PhBarcodeFound.dc.html">iPhone →</a><a href="DeskAddFood.dc.html">Desktop (typed) →</a></span></div>
+      <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 10px"><strong>D · Workout sync</strong><span style="color: #4D5751">The morning workout appears; its kcal are shown as part of Active Energy</span><span style="display: flex; gap: 14px"><a href="PhSync.dc.html">iPhone →</a></span></div>
+      <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 10px"><strong>E · Conclude the day</strong><span style="color: #4D5751">22:30 notification, then review, refresh, conclude</span><span style="display: flex; gap: 14px"><a href="PhNotification.dc.html">iPhone →</a><a href="DeskReview.dc.html">Desktop →</a></span></div>
+      <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 14px; padding: 20px; display: flex; flex-direction: column; gap: 10px"><strong>F · Correct a past day</strong><span style="color: #4D5751">History, reopen, edit the quantity, conclude again</span><span style="display: flex; gap: 14px"><a href="DeskHistory.dc.html">Desktop →</a><a href="PhHistory.dc.html">iPhone →</a></span></div>
+    </div>
+  </section>
+
+  <section style="display: flex; flex-direction: column; gap: 20px">
+    <h2 style="margin: 0; font-size: 28px; letter-spacing: -0.02em">5 · Assumptions recorded</h2>
+    <ul style="margin: 0; padding: 24px 24px 24px 44px; background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 14px; font-size: 14px; line-height: 1.8; color: #2E3832; columns: 2; column-gap: 48px">
+      <li>A day runs from midnight to midnight in the user’s time zone (Europe/Sofia).</li>
+      <li>Sleep belongs to the day you wake up on.</li>
+      <li>Weight is the latest Apple Health reading of the day. If none arrives, it can be entered manually and is labelled “Entered by you”.</li>
+      <li>A logged entry keeps a copy of its nutrition. Editing a food later changes only future entries.</li>
+      <li>Energy values update during the day and are labelled “so far” until the day is concluded.</li>
+      <li>Open Food Facts lookup runs on the backend. The data is saved to your catalogue only after you confirm it.</li>
+      <li>Sign in uses email and password. There is no registration or social login, and an optional passkey can be added later.</li>
+      <li>Units are metric and energy is in kcal. Brand names in this prototype are fictional.</li>
+      <li>Strings sit in short, flexible containers so Bulgarian text (often 20–35% longer) has room.</li>
+      <li>Trends are full on the web; the iPhone shows a compact single-column version under More.</li>
+    </ul>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2250}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

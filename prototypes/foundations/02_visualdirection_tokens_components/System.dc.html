@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Visual direction and components</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+a{color:#24563F}a:hover{color:#17201B}
+:focus-visible{outline:2px solid #2F6B4F;outline-offset:2px}
+</style>
+</helmet>
+<div style="width: 1440px; min-height: 2500px; background: #F5F3EE; color: #17201B; font-family: Inter, system-ui, sans-serif; font-variant-numeric: tabular-nums; padding: 72px 80px; display: flex; flex-direction: column; gap: 48px">
+
+  <header style="display: flex; flex-direction: column; gap: 12px">
+    <span style="font-size: 13px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #2F6B4F">Visual direction</span>
+    <h1 style="margin: 0; font-size: 48px; letter-spacing: -0.03em">Calm, athletic and precise</h1>
+    <p style="margin: 0; font-size: 17px; line-height: 1.6; color: #4D5751; max-width: 900px">Warm paper ground, white surfaces, green-black ink and one natural green accent. Numbers carry the hierarchy: big tabular figures with the unit right beside them. Each category gets one accessible hue (food, movement, sleep, energy) that is used only for small marks and tints.</p>
+    <div style="display: flex; gap: 10px; flex-wrap: wrap; font-size: 13px">
+      <span style="padding: 6px 12px; border-radius: 999px; background: #E6EFE9; color: #24563F; font-weight: 600">Use: quiet surfaces · strong numerals · labelled status · thin bars</span>
+      <span style="padding: 6px 12px; border-radius: 999px; background: #FFFFFF; border: 1px solid #E3E0D7; color: #4D5751">Avoid: neon · glass · rings everywhere · streaks · red for “missed”</span>
+    </div>
+  </header>
+
+  <section style="display: flex; flex-direction: column; gap: 18px">
+    <h2 style="margin: 0; font-size: 24px">Colour tokens</h2>
+    <div style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 14px; font-size: 12px">
+      <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 12px; overflow: hidden"><div style="height: 72px; background: #F5F3EE; border-bottom: 1px solid #E3E0D7"></div><div style="padding: 10px 12px; line-height: 1.5"><strong>bg.ground</strong><br>#F5F3EE</div></div>
+      <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 12px; overflow: hidden"><div style="height: 72px; background: #FFFFFF; border-bottom: 1px solid #E3E0D7"></div><div style="padding: 10px 12px; line-height: 1.5"><strong>bg.surface</strong><br>#FFFFFF · border #E3E0D7</div></div>
+      <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 12px; overflow: hidden"><div style="height: 72px; background: #17201B"></div><div style="padding: 10px 12px; line-height: 1.5"><strong>ink.primary</strong><br>#17201B · 16.1:1</div></div>
+      <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 12px; overflow: hidden"><div style="height: 72px; background: #4D5751"></div><div style="padding: 10px 12px; line-height: 1.5"><strong>ink.secondary</strong><br>#4D5751 · 7.4:1</div></div>
+      <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 12px; overflow: hidden"><div style="height: 72px; background: #646D67"></div><div style="padding: 10px 12px; line-height: 1.5"><strong>ink.tertiary</strong><br>#646D67 · 5.2:1</div></div>
+      <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 12px; overflow: hidden"><div style="height: 72px; background: #2F6B4F"></div><div style="padding: 10px 12px; line-height: 1.5"><strong>accent.primary</strong><br>#2F6B4F · tint #E6EFE9</div></div>
+      <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 12px; overflow: hidden"><div style="height: 72px; background: #9A5B13"></div><div style="padding: 10px 12px; line-height: 1.5"><strong>food / carbs</strong><br>#9A5B13 · tint #F6ECDD</div></div>
+      <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 12px; overflow: hidden"><div style="height: 72px; background: #8A4569"></div><div style="padding: 10px 12px; line-height: 1.5"><strong>fat</strong><br>#8A4569 · tint #F3E6EC</div></div>
+      <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 12px; overflow: hidden"><div style="height: 72px; background: #2D5C91"></div><div style="padding: 10px 12px; line-height: 1.5"><strong>movement</strong><br>#2D5C91 · tint #E4ECF5</div></div>
+      <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 12px; overflow: hidden"><div style="height: 72px; background: #5B4D93"></div><div style="padding: 10px 12px; line-height: 1.5"><strong>sleep</strong><br>#5B4D93 · tint #ECE9F5</div></div>
+      <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 12px; overflow: hidden"><div style="height: 72px; background: #1D6767"></div><div style="padding: 10px 12px; line-height: 1.5"><strong>energy</strong><br>#1D6767 · tint #E0EEED</div></div>
+      <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 12px; overflow: hidden"><div style="height: 72px; background: repeating-linear-gradient(135deg, #FBF1DC 0 8px, #F6E6C4 8px 16px)"></div><div style="padding: 10px 12px; line-height: 1.5"><strong>missing / attention</strong><br>#8A5300 on #FBF1DC</div></div>
+    </div>
+    <p style="margin: 0; font-size: 13px; color: #4D5751">Error red #A0322B is reserved for failures such as a failed save or a destructive confirmation. It is never used for a target that wasn’t met.</p>
+  </section>
+
+  <section style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px">
+    <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 16px; padding: 28px; display: flex; flex-direction: column; gap: 16px">
+      <h2 style="margin: 0; font-size: 20px">Type · web (Inter, tabular numerals)</h2>
+      <div style="display: flex; align-items: baseline; gap: 16px"><span style="font-size: 44px; font-weight: 700; letter-spacing: -0.03em">1,540</span><span style="font-size: 13px; color: #646D67">metric.xl 44/48 · 700</span></div>
+      <div style="display: flex; align-items: baseline; gap: 16px"><span style="font-size: 28px; font-weight: 700; letter-spacing: -0.02em">Today, Thu 22 Oct</span><span style="font-size: 13px; color: #646D67">title.l 28/34 · 700</span></div>
+      <div style="display: flex; align-items: baseline; gap: 16px"><span style="font-size: 18px; font-weight: 600">Workouts</span><span style="font-size: 13px; color: #646D67">title.s 18/24 · 600</span></div>
+      <div style="display: flex; align-items: baseline; gap: 16px"><span style="font-size: 15px">Skyr Natural · Nordic Dairy</span><span style="font-size: 13px; color: #646D67">body 15/22 · 400</span></div>
+      <div style="display: flex; align-items: baseline; gap: 16px"><span style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #646D67">Resting energy</span><span style="font-size: 13px; color: #646D67">label 12/16 · 600 caps</span></div>
+    </div>
+    <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 16px; padding: 28px; display: flex; flex-direction: column; gap: 16px; font-family: -apple-system, 'SF Pro Text', Inter, system-ui, sans-serif">
+      <h2 style="margin: 0; font-size: 20px">Type · iPhone (SF Pro, Dynamic Type)</h2>
+      <div style="display: flex; align-items: baseline; gap: 16px"><span style="font-size: 34px; font-weight: 700; letter-spacing: -0.02em">Today</span><span style="font-size: 13px; color: #646D67">Large Title 34</span></div>
+      <div style="display: flex; align-items: baseline; gap: 16px"><span style="font-size: 28px; font-weight: 700">460 kcal left</span><span style="font-size: 13px; color: #646D67">Title 1 28 · metric</span></div>
+      <div style="display: flex; align-items: baseline; gap: 16px"><span style="font-size: 17px; font-weight: 600">Breakfast</span><span style="font-size: 13px; color: #646D67">Headline 17</span></div>
+      <div style="display: flex; align-items: baseline; gap: 16px"><span style="font-size: 17px">Skyr Natural · 100 g</span><span style="font-size: 13px; color: #646D67">Body 17</span></div>
+      <div style="display: flex; align-items: baseline; gap: 16px"><span style="font-size: 13px; color: #646D67">From Apple Health · 18:42</span><span style="font-size: 13px; color: #646D67">Footnote 13</span></div>
+    </div>
+  </section>
+
+  <section style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px">
+    <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 16px; padding: 28px; display: flex; flex-direction: column; gap: 14px">
+      <h2 style="margin: 0; font-size: 20px">Spacing &amp; shape</h2>
+      <div style="display: flex; align-items: flex-end; gap: 10px; font-size: 11px; color: #646D67">
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 6px"><div style="width: 4px; height: 4px; background: #2F6B4F"></div>4</div>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 6px"><div style="width: 8px; height: 8px; background: #2F6B4F"></div>8</div>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 6px"><div style="width: 12px; height: 12px; background: #2F6B4F"></div>12</div>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 6px"><div style="width: 16px; height: 16px; background: #2F6B4F"></div>16</div>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 6px"><div style="width: 24px; height: 24px; background: #2F6B4F"></div>24</div>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 6px"><div style="width: 32px; height: 32px; background: #2F6B4F"></div>32</div>
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 6px"><div style="width: 48px; height: 48px; background: #2F6B4F"></div>48</div>
+      </div>
+      <p style="margin: 0; font-size: 14px; line-height: 1.6; color: #4D5751">Radius: 8 for inputs and chips, 12 for buttons and rows, 16 for cards, 24 for sheets. The only shadow is 0 1px 2px rgba(23,32,27,.06), and overlays get 0 12px 32px rgba(23,32,27,.14).</p>
+    </div>
+    <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 16px; padding: 28px; display: flex; flex-direction: column; gap: 14px">
+      <h2 style="margin: 0; font-size: 20px">Buttons</h2>
+      <div style="display: flex; flex-wrap: wrap; gap: 10px">
+        <button type="button" style="height: 40px; padding: 0 16px; border-radius: 10px; border: 0; background: #2F6B4F; color: #FFFFFF; font: 600 14px Inter, sans-serif">+ Add food</button>
+        <button type="button" style="height: 40px; padding: 0 16px; border-radius: 10px; border: 1px solid #CFCAC0; background: #FFFFFF; color: #17201B; font: 600 14px Inter, sans-serif">Conclude day</button>
+        <button type="button" style="height: 40px; padding: 0 12px; border-radius: 10px; border: 0; background: transparent; color: #24563F; font: 600 14px Inter, sans-serif">Edit</button>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 10px">
+        <button type="button" style="height: 40px; padding: 0 16px; border-radius: 10px; border: 0; background: #A0322B; color: #FFFFFF; font: 600 14px Inter, sans-serif">Delete entry</button>
+        <button type="button" disabled="" style="height: 40px; padding: 0 16px; border-radius: 10px; border: 0; background: #E3E0D7; color: #6E756F; font: 600 14px Inter, sans-serif">Save</button>
+        <button type="button" style="height: 40px; padding: 0 16px; border-radius: 10px; border: 0; background: #2F6B4F; color: #FFFFFF; font: 600 14px Inter, sans-serif; outline: 2px solid #2F6B4F; outline-offset: 3px">Focus</button>
+      </div>
+      <p style="margin: 0; font-size: 13px; color: #646D67">Desktop 40 px · iPhone 50 px (min 44 pt target). The focus ring is always visible on keyboard focus.</p>
+    </div>
+    <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 16px; padding: 28px; display: flex; flex-direction: column; gap: 12px">
+      <h2 style="margin: 0; font-size: 20px">Inputs</h2>
+      <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600">Quantity
+        <span style="display: flex; align-items: center; height: 40px; border: 1px solid #CFCAC0; border-radius: 8px; overflow: hidden; background: #FFFFFF"><input value="100" style="flex: 1; border: 0; height: 100%; padding: 0 12px; font: 500 15px Inter, sans-serif; min-width: 0"><span style="padding: 0 12px; height: 100%; display: grid; place-items: center; background: #FAF9F6; border-left: 1px solid #E3E0D7; color: #4D5751; font-weight: 500">g</span></span>
+      </label>
+      <div style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600">Nutrition basis
+        <div role="radiogroup" aria-label="Nutrition basis" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); padding: 3px; background: #EFECE5; border-radius: 9px; gap: 3px">
+          <button type="button" role="radio" aria-checked="true" style="height: 32px; border: 0; border-radius: 7px; background: #FFFFFF; font: 600 13px Inter, sans-serif; box-shadow: 0 1px 2px rgba(23,32,27,.1)">per 100 g</button>
+          <button type="button" role="radio" aria-checked="false" style="height: 32px; border: 0; border-radius: 7px; background: transparent; font: 500 13px Inter, sans-serif; color: #4D5751">per 100 ml</button>
+          <button type="button" role="radio" aria-checked="false" style="height: 32px; border: 0; border-radius: 7px; background: transparent; font: 500 13px Inter, sans-serif; color: #4D5751">per serving</button>
+        </div>
+      </div>
+      <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600">Protein
+        <span style="display: flex; align-items: center; height: 40px; border: 1.5px solid #A0322B; border-radius: 8px; overflow: hidden"><input value="110" aria-invalid="true" style="flex: 1; border: 0; height: 100%; padding: 0 12px; font: 500 15px Inter, sans-serif; min-width: 0"><span style="padding: 0 12px; color: #4D5751">g</span></span>
+        <span style="font-weight: 500; color: #A0322B">Protein can’t be more than 100 g per 100 g. Check the label basis.</span>
+      </label>
+    </div>
+  </section>
+
+  <section style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px">
+    <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 16px; padding: 28px; display: flex; flex-direction: column; gap: 18px">
+      <h2 style="margin: 0; font-size: 20px">Progress: budget vs minimum</h2>
+      <div style="display: flex; flex-direction: column; gap: 8px">
+        <div style="display: flex; justify-content: space-between; font-size: 14px"><strong>Calories · budget</strong><span><strong>1,540</strong> / 2,000 kcal</span></div>
+        <div style="height: 8px; border-radius: 4px; background: #ECE9E2; overflow: hidden"><div style="width: 77%; height: 100%; background: #17201B"></div></div>
+        <span style="font-size: 13px; color: #4D5751">460 kcal left</span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 8px">
+        <div style="display: flex; justify-content: space-between; font-size: 14px"><strong>Calories · over budget</strong><span><strong>2,140</strong> / 2,000 kcal</span></div>
+        <div style="height: 8px; border-radius: 4px; background: #ECE9E2; display: flex; overflow: hidden"><div style="width: 93%; height: 100%; background: #17201B"></div><div style="width: 7%; height: 100%; background: repeating-linear-gradient(135deg, #9A5B13 0 3px, #F6ECDD 3px 6px)"></div></div>
+        <span style="font-size: 13px; color: #8A5300">140 kcal over budget (plain wording, no alarm)</span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 8px">
+        <div style="display: flex; justify-content: space-between; font-size: 14px"><strong>Protein · minimum</strong><span><strong>128</strong> / 160 g</span></div>
+        <div style="height: 8px; border-radius: 4px; background: #ECE9E2; position: relative"><div style="width: 80%; height: 100%; background: #2F6B4F; border-radius: 4px"></div></div>
+        <span style="font-size: 13px; color: #4D5751">32 g to go</span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 8px">
+        <div style="display: flex; justify-content: space-between; font-size: 14px"><strong>Steps · minimum met</strong><span><strong>11,204</strong> / 10,000</span></div>
+        <div style="height: 8px; border-radius: 4px; background: #2D5C91"></div>
+        <span style="font-size: 13px; color: #2D5C91; font-weight: 600">✓ Goal met</span>
+      </div>
+    </div>
+    <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 16px; padding: 28px; display: flex; flex-direction: column; gap: 16px">
+      <h2 style="margin: 0; font-size: 20px">Status chips</h2>
+      <div style="display: flex; flex-wrap: wrap; gap: 8px; font-size: 13px; font-weight: 600">
+        <span style="display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 10px; border-radius: 999px; border: 1px solid #CFCAC0; color: #4D5751"><span style="width: 8px; height: 8px; border-radius: 50%; border: 1.5px solid #646D67"></span>Open</span>
+        <span style="display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 10px; border-radius: 999px; background: #FBF1DC; color: #8A5300"><span style="width: 8px; height: 8px; border-radius: 50%; background: #B07A1E"></span>Review due</span>
+        <span style="display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 10px; border-radius: 999px; background: #E6EFE9; color: #24563F">✓ Concluded</span>
+        <span style="display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 10px; border-radius: 999px; background: #E4ECF5; color: #2D5C91">↺ Reopened</span>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 8px; font-size: 12px; font-weight: 600">
+        <span style="display: inline-flex; align-items: center; height: 24px; padding: 0 8px; border-radius: 6px; background: #F1EFEA; color: #4D5751">Apple Health</span>
+        <span style="display: inline-flex; align-items: center; height: 24px; padding: 0 8px; border-radius: 6px; background: #F1EFEA; color: #4D5751">= Calculated</span>
+        <span style="display: inline-flex; align-items: center; height: 24px; padding: 0 8px; border-radius: 6px; background: #F1EFEA; color: #4D5751">✎ Entered by you</span>
+        <span style="display: inline-flex; align-items: center; height: 24px; padding: 0 8px; border-radius: 6px; border: 1px dashed #C99A3E; background: #FBF1DC; color: #8A5300">Missing</span>
+        <span style="display: inline-flex; align-items: center; height: 24px; padding: 0 8px; border-radius: 6px; border: 1px dashed #C99A3E; color: #8A5300">Incomplete</span>
+        <span style="display: inline-flex; align-items: center; height: 24px; padding: 0 8px; border-radius: 6px; background: #E4ECF5; color: #2D5C91">Open Food Facts · unverified</span>
+        <span style="display: inline-flex; align-items: center; height: 24px; padding: 0 8px; border-radius: 6px; background: #E6EFE9; color: #24563F">✓ Verified</span>
+        <span style="display: inline-flex; align-items: center; height: 24px; padding: 0 8px; border-radius: 6px; background: #EFECE5; color: #646D67">Archived</span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 8px; padding-top: 6px; border-top: 1px solid #ECE9E2">
+        <strong style="font-size: 14px">Energy balance: always worded</strong>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap">
+          <span style="display: inline-flex; align-items: baseline; gap: 6px; padding: 8px 12px; border-radius: 10px; background: #E0EEED; color: #1D6767"><strong style="font-size: 20px">1,312</strong> kcal deficit ↓</span>
+          <span style="display: inline-flex; align-items: baseline; gap: 6px; padding: 8px 12px; border-radius: 10px; background: #F6ECDD; color: #8A5300"><strong style="font-size: 20px">240</strong> kcal surplus ↑</span>
+        </div>
+      </div>
+    </div>
+    <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 16px; padding: 28px; display: flex; flex-direction: column; gap: 14px">
+      <h2 style="margin: 0; font-size: 20px">Metric card</h2>
+      <div style="border: 1px solid #E3E0D7; border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 6px">
+        <span style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #646D67">Active energy</span>
+        <span><strong style="font-size: 28px; letter-spacing: -0.02em">892</strong> <span style="color: #4D5751">kcal</span></span>
+        <span style="font-size: 12px; color: #646D67">Apple Health · so far today</span>
+      </div>
+      <div style="border: 1.5px dashed #C99A3E; background: #FFFBF2; border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 6px">
+        <span style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #8A5300">Resting energy</span>
+        <span style="font-size: 20px; font-weight: 700; color: #8A5300">Missing</span>
+        <span style="font-size: 12px; color: #6B4A12">Not received from Apple Health yet</span>
+      </div>
+      <p style="margin: 0; font-size: 13px; color: #4D5751">A missing value never shows “0”, never draws an empty bar and is never added into a total.</p>
+    </div>
+  </section>
+
+  <section style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px">
+    <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 16px; padding: 28px; display: flex; flex-direction: column; gap: 12px">
+      <h2 style="margin: 0; font-size: 20px">Table row (desktop)</h2>
+      <div style="display: grid; grid-template-columns: 1fr 70px 70px 50px; gap: 8px; font-size: 12px; font-weight: 600; color: #646D67; text-transform: uppercase; letter-spacing: 0.05em; padding: 0 4px"><span>Food</span><span style="text-align: right">Qty</span><span style="text-align: right">kcal</span><span style="text-align: right">P</span></div>
+      <div style="display: grid; grid-template-columns: 1fr 70px 70px 50px; gap: 8px; align-items: center; font-size: 14px; padding: 10px 4px; border-top: 1px solid #ECE9E2"><span><strong style="font-weight: 600">Skyr Natural</strong><br><span style="font-size: 12px; color: #646D67">Nordic Dairy</span></span><span style="text-align: right">100 g</span><span style="text-align: right">63</span><span style="text-align: right">11 g</span></div>
+      <div style="display: grid; grid-template-columns: 1fr 70px 70px 50px; gap: 8px; align-items: center; font-size: 14px; padding: 10px 4px; border-top: 1px solid #ECE9E2; background: #F7FAF8; outline: 2px solid #2F6B4F; outline-offset: -2px; border-radius: 6px"><span><strong style="font-weight: 600">Skyr Natural</strong><br><span style="font-size: 12px; color: #646D67">Balkan Farm · focused row</span></span><span style="text-align: right">100 g</span><span style="text-align: right">66</span><span style="text-align: right">10 g</span></div>
+    </div>
+    <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 16px; padding: 28px; display: flex; flex-direction: column; gap: 12px">
+      <h2 style="margin: 0; font-size: 20px">Chart style</h2>
+      <svg viewBox="0 0 320 140" width="100%" role="img" aria-label="Sample weight line chart, 106.4 kilograms down to 104.0 kilograms over 30 days">
+        <g stroke="#ECE9E2" stroke-width="1"><line x1="30" y1="20" x2="320" y2="20"></line><line x1="30" y1="65" x2="320" y2="65"></line><line x1="30" y1="110" x2="320" y2="110"></line></g>
+        <g font-size="10" fill="#646D67" font-family="Inter, sans-serif"><text x="0" y="24">107</text><text x="0" y="69">105</text><text x="0" y="114">103</text><text x="30" y="132">1 Oct</text><text x="280" y="132">22 Oct</text></g>
+        <polyline fill="none" stroke="#2F6B4F" stroke-width="2.5" stroke-linejoin="round" points="30,34 60,40 90,36 120,48 150,52 180,50 210,62 240,70 270,72 300,78"></polyline>
+        <circle cx="300" cy="78" r="4" fill="#2F6B4F"></circle>
+        <text x="258" y="98" font-size="11" font-weight="600" fill="#17201B" font-family="Inter, sans-serif">104.0 kg</text>
+      </svg>
+      <p style="margin: 0; font-size: 13px; color: #4D5751">Hairline grid, labelled axes with units, direct labels instead of legends, and at most two series per chart.</p>
+    </div>
+    <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 16px; padding: 28px; display: flex; flex-direction: column; gap: 12px">
+      <h2 style="margin: 0; font-size: 20px">Navigation</h2>
+      <div style="display: flex; flex-direction: column; gap: 2px; font-size: 14px">
+        <span style="padding: 9px 12px; border-radius: 9px; background: #E6EFE9; color: #24563F; font-weight: 600">Today (current)</span>
+        <span style="padding: 9px 12px; border-radius: 9px; color: #2E3832">History</span>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); align-items: end; padding: 8px 6px; border-top: 1px solid #E3E0D7; font-family: -apple-system, Inter, sans-serif; font-size: 10px; text-align: center; color: #646D67">
+        <span style="color: #2F6B4F; font-weight: 600">Today</span><span>History</span><span><span style="display: grid; place-items: center; width: 44px; height: 44px; margin: 0 auto 2px; border-radius: 14px; background: #2F6B4F; color: #FFFFFF; font-size: 24px">+</span>Add</span><span>Foods</span><span>More</span>
+      </div>
+    </div>
+  </section>
+
+  <section style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px">
+    <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 16px; padding: 28px; display: flex; flex-direction: column; gap: 14px">
+      <h2 style="margin: 0; font-size: 20px">Dialog: destructive</h2>
+      <div role="dialog" aria-labelledby="dlgT" style="border-radius: 16px; box-shadow: 0 12px 32px rgba(23,32,27,.14); border: 1px solid #E3E0D7; padding: 22px; display: flex; flex-direction: column; gap: 10px">
+        <strong id="dlgT" style="font-size: 17px">Delete this entry?</strong>
+        <span style="font-size: 14px; line-height: 1.5; color: #4D5751">Almonds · Green Origin, 30 g (174 kcal) will be removed from Snack. Today’s totals will update.</span>
+        <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 6px">
+          <button type="button" style="height: 38px; padding: 0 14px; border-radius: 10px; border: 1px solid #CFCAC0; background: #FFFFFF; font: 600 14px Inter, sans-serif">Keep</button>
+          <button type="button" style="height: 38px; padding: 0 14px; border-radius: 10px; border: 0; background: #A0322B; color: #FFFFFF; font: 600 14px Inter, sans-serif">Delete entry</button>
+        </div>
+      </div>
+    </div>
+    <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 16px; padding: 28px; display: flex; flex-direction: column; gap: 14px">
+      <h2 style="margin: 0; font-size: 20px">Drawer &amp; sheet</h2>
+      <div style="display: flex; height: 150px; border-radius: 12px; overflow: hidden; border: 1px solid #E3E0D7">
+        <div style="flex: 1; background: #E9E6DF"></div>
+        <div style="width: 46%; background: #FFFFFF; box-shadow: -8px 0 24px rgba(23,32,27,.10); padding: 12px; display: flex; flex-direction: column; gap: 6px"><strong style="font-size: 13px">Add food</strong><div style="height: 26px; border: 1px solid #CFCAC0; border-radius: 6px"></div><div style="height: 8px; width: 70%; background: #ECE9E2; border-radius: 4px"></div><div style="height: 8px; width: 50%; background: #ECE9E2; border-radius: 4px"></div></div>
+      </div>
+      <p style="margin: 0; font-size: 13px; color: #4D5751">Desktop: the 520 px right drawer keeps Today visible. iPhone: a full-height sheet with a grabber.</p>
+    </div>
+    <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 16px; padding: 28px; display: flex; flex-direction: column; gap: 12px">
+      <h2 style="margin: 0; font-size: 20px">Toasts</h2>
+      <div role="status" style="display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-radius: 12px; background: #17201B; color: #FFFFFF; font-size: 14px"><span style="color: #9FD3B5">✓</span><span style="flex: 1">Added Skyr Natural · 100 g to Breakfast</span><button type="button" style="border: 0; background: transparent; color: #9FD3B5; font: 600 14px Inter, sans-serif">Undo</button></div>
+      <div role="alert" style="display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-radius: 12px; background: #FBE9E7; color: #7D241F; font-size: 14px; border: 1px solid #EBC3BE"><strong>!</strong><span style="flex: 1">Couldn’t save. Your entry is kept on this device.</span><button type="button" style="border: 0; background: transparent; color: #7D241F; font: 700 14px Inter, sans-serif; text-decoration: underline">Retry</button></div>
+      <div role="status" style="display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-radius: 12px; background: #FFFFFF; border: 1px solid #E3E0D7; font-size: 14px"><span style="width: 14px; height: 14px; border-radius: 50%; border: 2px solid #CFCAC0; border-top-color: #2F6B4F"></span><span>Syncing Apple Health…</span></div>
+    </div>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":2500}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

@@ -14,6 +14,11 @@ use Illuminate\Validation\ValidationException;
 
 class ConsumptionController extends Controller
 {
+    /**
+     * List recent dates with logged food.
+     *
+     * Returns up to 31 dates, newest first, with meal count and consumed calorie/protein totals for the signed-in user.
+     */
     public function dates(Request $request): JsonResponse
     {
         $dates = $request->user()->consumptions()
@@ -23,6 +28,11 @@ class ConsumptionController extends Controller
         return response()->json(['data' => $dates]);
     }
 
+    /**
+     * Correct one of your logged meals.
+     *
+     * Change its category or notes, or replace ingredients to recalculate nutrition. The correction keeps an audit revision. Send an Idempotency-Key header.
+     */
     public function update(Request $request, string $consumption, CorrectConsumption $correction): JsonResponse
     {
         $record = $request->user()->consumptions()->findOrFail($consumption);
@@ -59,6 +69,11 @@ class ConsumptionController extends Controller
         return response()->json(['data' => $updated]);
     }
 
+    /**
+     * List meals logged on a local date.
+     *
+     * Pass a required YYYY-MM-DD date. Results include immutable ingredient and nutrition snapshots for that user's day.
+     */
     public function index(Request $request): JsonResponse
     {
         $date = $request->validate(['date' => ['required', 'date_format:Y-m-d']])['date'];
@@ -68,6 +83,11 @@ class ConsumptionController extends Controller
         return response()->json(['data' => $consumptions]);
     }
 
+    /**
+     * Log a meal from a recipe or individual foods.
+     *
+     * Supply a category, eaten_at timestamp with offset, and either recipe_id plus servings or an items array. Nutrition is snapshotted from Hustle Daily foods, never HealthKit. Send an Idempotency-Key header.
+     */
     public function store(Request $request, ConsumptionSnapshots $builder): JsonResponse
     {
         $validated = $request->validate([

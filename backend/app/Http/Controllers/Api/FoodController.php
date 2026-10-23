@@ -13,6 +13,11 @@ use Illuminate\Validation\ValidationException;
 
 class FoodController extends Controller
 {
+    /**
+     * Update one of your branded foods.
+     *
+     * Replace its nutrition and explicit portions. Existing meal snapshots are not changed. A portion used by a recipe cannot be removed. Send an Idempotency-Key header for safe retries.
+     */
     public function update(Request $request, string $food, CatalogMutation $mutation): JsonResponse
     {
         $record = $request->user()->foods()->with(['nutrition', 'portions'])->findOrFail($food);
@@ -60,6 +65,11 @@ class FoodController extends Controller
         return response()->json(['data' => $result]);
     }
 
+    /**
+     * Search your private food catalogue.
+     *
+     * The optional query searches names and brands; at most 30 active foods are returned. This does not call Open Food Facts.
+     */
     public function index(Request $request): JsonResponse
     {
         $query = $request->validate(['query' => ['nullable', 'string', 'max:100']])['query'] ?? '';
@@ -72,11 +82,21 @@ class FoodController extends Controller
         return response()->json(['data' => $foods]);
     }
 
+    /**
+     * Get a branded food with nutrition and portions.
+     *
+     * Foods belonging to another account are not visible.
+     */
     public function show(Request $request, string $food): JsonResponse
     {
         return response()->json(['data' => $request->user()->foods()->with(['nutrition', 'portions'])->findOrFail($food)]);
     }
 
+    /**
+     * Create a branded food.
+     *
+     * Nutrition uses an explicit g, ml, or serving basis. Household portions require food-specific conversions; density is never guessed. Send an Idempotency-Key header for safe retries.
+     */
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate($this->rules());

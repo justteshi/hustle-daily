@@ -18,6 +18,8 @@
         "/v1/auth/login": {
             "post": {
                 "operationId": "auth.login",
+                "description": "Send email, password, and a device name. There is no public registration endpoint. Browser clients use the session login instead.",
+                "summary": "Sign in and create a mobile API token",
                 "tags": [
                     "Auth"
                 ],
@@ -129,6 +131,8 @@
         "/v1/me": {
             "get": {
                 "operationId": "auth.me",
+                "description": "Returns the account and its locale/time-zone settings. Requires a valid Sanctum token or browser session.",
+                "summary": "Get the signed-in user",
                 "tags": [
                     "Auth"
                 ],
@@ -199,6 +203,8 @@
         "/v1/auth/logout": {
             "post": {
                 "operationId": "auth.logout",
+                "description": "Only the token used for this request is revoked; other devices stay signed in.",
+                "summary": "Revoke the current mobile API token",
                 "tags": [
                     "Auth"
                 ],
@@ -238,6 +244,8 @@
         "/v1/consumptions": {
             "get": {
                 "operationId": "consumption.index",
+                "description": "Pass a required YYYY-MM-DD date. Results include immutable ingredient and nutrition snapshots for that user's day.",
+                "summary": "List meals logged on a local date",
                 "tags": [
                     "Consumption"
                 ],
@@ -284,6 +292,8 @@
             },
             "post": {
                 "operationId": "consumption.store",
+                "description": "Supply a category, eaten_at timestamp with offset, and either recipe_id plus servings or an items array. Nutrition is snapshotted from Hustle Daily foods, never HealthKit. Send an Idempotency-Key header.",
+                "summary": "Log a meal from a recipe or individual foods",
                 "tags": [
                     "Consumption"
                 ],
@@ -430,6 +440,8 @@
         "/v1/consumptions/dates": {
             "get": {
                 "operationId": "consumption.dates",
+                "description": "Returns up to 31 dates, newest first, with meal count and consumed calorie/protein totals for the signed-in user.",
+                "summary": "List recent dates with logged food",
                 "tags": [
                     "Consumption"
                 ],
@@ -464,6 +476,8 @@
         "/v1/consumptions/{consumption}": {
             "patch": {
                 "operationId": "consumption.update",
+                "description": "Change its category or notes, or replace ingredients to recalculate nutrition. The correction keeps an audit revision. Send an Idempotency-Key header.",
+                "summary": "Correct one of your logged meals",
                 "tags": [
                     "Consumption"
                 ],
@@ -610,6 +624,8 @@
         "/v1/devices/{device}": {
             "get": {
                 "operationId": "device.show",
+                "description": "Returns its name, platform, and last-seen time. Another user's device is not visible.",
+                "summary": "Get one of your registered devices",
                 "tags": [
                     "Device"
                 ],
@@ -654,6 +670,8 @@
         "/v1/foods": {
             "get": {
                 "operationId": "food.index",
+                "description": "The optional query searches names and brands; at most 30 active foods are returned. This does not call Open Food Facts.",
+                "summary": "Search your private food catalogue",
                 "tags": [
                     "Food"
                 ],
@@ -702,6 +720,8 @@
             },
             "post": {
                 "operationId": "food.store",
+                "description": "Nutrition uses an explicit g, ml, or serving basis. Household portions require food-specific conversions; density is never guessed. Send an Idempotency-Key header for safe retries.",
+                "summary": "Create a branded food",
                 "tags": [
                     "Food"
                 ],
@@ -890,6 +910,8 @@
         "/v1/foods/{food}": {
             "get": {
                 "operationId": "food.show",
+                "description": "Foods belonging to another account are not visible.",
+                "summary": "Get a branded food with nutrition and portions",
                 "tags": [
                     "Food"
                 ],
@@ -929,6 +951,8 @@
             },
             "patch": {
                 "operationId": "food.update",
+                "description": "Replace its nutrition and explicit portions. Existing meal snapshots are not changed. A portion used by a recipe cannot be removed. Send an Idempotency-Key header for safe retries.",
+                "summary": "Update one of your branded foods",
                 "tags": [
                     "Food"
                 ],
@@ -1101,6 +1125,8 @@
         "/v1/meal-categories": {
             "get": {
                 "operationId": "mealCategory.index",
+                "description": "Creates the default categories for this account on first access, then returns them in display order.",
+                "summary": "List your meal categories",
                 "tags": [
                     "MealCategory"
                 ],
@@ -1135,6 +1161,8 @@
         "/v1/recipes": {
             "get": {
                 "operationId": "recipe.index",
+                "description": "Includes each recipe's branded ingredients and portion definitions.",
+                "summary": "List your active ready meals",
                 "tags": [
                     "Recipe"
                 ],
@@ -1167,6 +1195,8 @@
             },
             "post": {
                 "operationId": "recipe.store",
+                "description": "Supply a name, yield in servings, and one or more branded ingredients with exact units or food-specific portions. Send an Idempotency-Key header.",
+                "summary": "Create a reusable ready meal",
                 "tags": [
                     "Recipe"
                 ],
@@ -1294,6 +1324,8 @@
         "/v1/recipes/{recipe}": {
             "get": {
                 "operationId": "recipe.show",
+                "description": "Returns the recipe and its ingredient details; other users' recipes are not visible.",
+                "summary": "Get one of your ready meals",
                 "tags": [
                     "Recipe"
                 ],
@@ -1333,6 +1365,8 @@
             },
             "patch": {
                 "operationId": "recipe.update",
+                "description": "Replaces the ingredient list using your branded foods and their explicit portions. Previously logged meals keep their immutable snapshots. Send an Idempotency-Key header.",
+                "summary": "Update a reusable ready meal",
                 "tags": [
                     "Recipe"
                 ],
@@ -1442,6 +1476,8 @@
         "/v1/dashboard/today": {
             "get": {
                 "operationId": "today",
+                "description": "Today is based on the user's time zone. This phase reports consumed nutrition only; health data is not yet synchronized.",
+                "summary": "Show today's food totals and logged meals",
                 "tags": [
                     "Today"
                 ],

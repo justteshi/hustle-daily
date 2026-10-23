@@ -2,7 +2,14 @@
     encode zstd gzip
     redir /app / 308
     redir /app/* / 308
-    @backend path /api/* /admin /admin/* /session/* /up /filament/* /livewire-* /css/filament/* /js/filament/* /fonts/filament/* /storage/*
+    redir /api /api/docs 308
+    redir /api/ /api/docs 308
+    redir /docs/api /api/docs 308
+    handle /api/docs {
+        rewrite * /docs/api
+        reverse_proxy api:80
+    }
+    @backend path /api/* /admin /admin/* /session/* /up /docs/api.json /filament/* /livewire-* /css/filament/* /js/filament/* /fonts/filament/* /storage/*
     handle @backend {
         reverse_proxy api:80
     }

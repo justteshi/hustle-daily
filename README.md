@@ -11,7 +11,7 @@ Hustle Daily is a self-hosted health and nutrition tracker for multiple users. T
 | Web app (`/`) | Sign in, view today's food calories and protein, search and edit branded foods and portions, create and edit reusable recipes, log a recipe or individual ingredients, browse food history, and correct a past meal. |
 | Administration (`/admin`) | Admin-only management of users, foods, portions, recipes, categories, and consumption corrections. Corrections have an audit trail. |
 | iPhone app | Early development-build screens for sign-in, food search and creation, and meal logging. Not yet feature-complete. |
-| API (`/api/v1`) | Authenticated food, recipe, category, consumption, and today's food-total endpoints. |
+| API (`/api/v1`) | Authenticated food, recipe, category, consumption, and today's food-total endpoints. The admin-only interactive OpenAPI interface is at `/api/docs`. |
 
 Food and recipe changes do **not** rewrite meals already logged: each log keeps a nutrition and ingredient snapshot. Consumed nutrition comes only from Hustle Daily food logs, not Apple Health. Every user's records are isolated by account.
 
@@ -116,7 +116,7 @@ Set `EXPO_PUBLIC_API_BASE_URL` to your reachable HTTPS API base URL, such as `ht
 
 ## API, security, and further reading
 
-The web app uses a server-side session cookie and CSRF protection. The mobile API uses Sanctum bearer tokens. There is no public registration. API mutations require an `Idempotency-Key` header; errors use a consistent `error` object and responses include `X-Request-ID`. See the generated [OpenAPI specification](docs/openapi.json) for endpoint and request details.
+The web app uses a server-side session cookie and CSRF protection. The mobile API uses Sanctum bearer tokens. There is no public registration. API mutations require an `Idempotency-Key` header; errors use a consistent `error` object and responses include `X-Request-ID`. `/api` redirects to `/api/docs`, where admins can explore and try endpoints through the interactive OpenAPI interface. Its schema is served from `/docs/api.json`. The generated [OpenAPI specification](docs/openapi.json) is also kept in the repository. The current Scramble interface loads Stoplight Elements from a third-party CDN; self-hosting that asset remains a deployment hardening task.
 
 Filament is for administration, not the everyday user-facing web workflow. Its consumption editor can correct notes/category or replace ingredients with an explicit reason; before/after values are kept in read-only revisions. Health-derived data is not editable as an ordinary food log.
 

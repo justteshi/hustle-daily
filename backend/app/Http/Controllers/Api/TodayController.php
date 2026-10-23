@@ -9,6 +9,11 @@ use Illuminate\Http\Request;
 
 class TodayController extends Controller
 {
+    /**
+     * Show today's food totals and logged meals.
+     *
+     * Today is based on the user's time zone. This phase reports consumed nutrition only; health data is not yet synchronized.
+     */
     public function __invoke(Request $request): JsonResponse
     {
         $timeZone = $request->user()->settings?->time_zone ?? 'Europe/Sofia';

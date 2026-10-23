@@ -11,6 +11,11 @@ use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
+    /**
+     * Sign in and create a mobile API token.
+     *
+     * Send email, password, and a device name. There is no public registration endpoint. Browser clients use the session login instead.
+     */
     public function login(Request $request): JsonResponse
     {
         $credentials = $request->validate([
@@ -30,11 +35,21 @@ class AuthController extends Controller
         ]]);
     }
 
+    /**
+     * Get the signed-in user.
+     *
+     * Returns the account and its locale/time-zone settings. Requires a valid Sanctum token or browser session.
+     */
     public function me(Request $request): JsonResponse
     {
         return response()->json(['data' => $this->userData($request->user())]);
     }
 
+    /**
+     * Revoke the current mobile API token.
+     *
+     * Only the token used for this request is revoked; other devices stay signed in.
+     */
     public function logout(Request $request): JsonResponse
     {
         $request->user()->currentAccessToken()->delete();

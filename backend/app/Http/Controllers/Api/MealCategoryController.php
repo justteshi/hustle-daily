@@ -8,6 +8,11 @@ use Illuminate\Http\Request;
 
 class MealCategoryController extends Controller
 {
+    /**
+     * List your meal categories.
+     *
+     * Creates the default categories for this account on first access, then returns them in display order.
+     */
     public function index(Request $request): JsonResponse
     {
         $defaults = ['breakfast', 'lunch', 'dinner', 'snack', 'pre-workout', 'post-workout', 'drinks', 'cooking-ingredients'];

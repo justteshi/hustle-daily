@@ -12,6 +12,11 @@ use Illuminate\Validation\ValidationException;
 
 class RecipeController extends Controller
 {
+    /**
+     * Update a reusable ready meal.
+     *
+     * Replaces the ingredient list using your branded foods and their explicit portions. Previously logged meals keep their immutable snapshots. Send an Idempotency-Key header.
+     */
     public function update(Request $request, string $recipe, CatalogMutation $mutation): JsonResponse
     {
         $record = $request->user()->recipes()->findOrFail($recipe);
@@ -33,6 +38,11 @@ class RecipeController extends Controller
         return response()->json(['data' => $result]);
     }
 
+    /**
+     * List your active ready meals.
+     *
+     * Includes each recipe's branded ingredients and portion definitions.
+     */
     public function index(Request $request): JsonResponse
     {
         $recipes = $request->user()->recipes()->where('is_archived', false)
@@ -42,6 +52,11 @@ class RecipeController extends Controller
         return response()->json(['data' => $recipes]);
     }
 
+    /**
+     * Get one of your ready meals.
+     *
+     * Returns the recipe and its ingredient details; other users' recipes are not visible.
+     */
     public function show(Request $request, string $recipe): JsonResponse
     {
         $record = $request->user()->recipes()->with(['ingredients.food.nutrition', 'ingredients.portion'])->findOrFail($recipe);
@@ -49,6 +64,11 @@ class RecipeController extends Controller
         return response()->json(['data' => $record]);
     }
 
+    /**
+     * Create a reusable ready meal.
+     *
+     * Supply a name, yield in servings, and one or more branded ingredients with exact units or food-specific portions. Send an Idempotency-Key header.
+     */
     public function store(Request $request): JsonResponse
     {
         $validated = $request->validate($this->rules());

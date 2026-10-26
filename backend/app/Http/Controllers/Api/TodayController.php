@@ -22,6 +22,7 @@ class TodayController extends Controller
         $dayType = $targets->forDate($request->user(), $localDate);
         $entries = $request->user()->consumptions()->with('items')
             ->whereDate('local_date', $localDate)->orderBy('eaten_at')->orderBy('id')->get();
+        $reviewStatus = $request->user()->dailySummaries()->whereDate('local_date', $localDate)->value('status') ?? 'open';
 
         return response()->json(['data' => [
             'local_date' => $localDate,
@@ -30,6 +31,7 @@ class TodayController extends Controller
             'consumed' => $nutrition->totals($entries),
             'consumptions' => $entries,
             'health' => null,
+            'review_status' => $reviewStatus,
         ]]);
     }
 }

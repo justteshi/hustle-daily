@@ -46,11 +46,18 @@ export type Meal = {
 };
 export type Today = {
     local_date: string;
+    review_status?: 'open' | 'concluded' | 'reopened';
     consumed: { calories: number; protein: number; carbohydrates?: number | null; fat?: number | null };
     consumptions: Meal[];
     day_type: DayType;
 };
-export type DaySummary = Today & { source: 'default' | 'manual'; health: null };
+export type DayReview = {
+    status: 'open' | 'concluded' | 'reopened';
+    concluded_at: string | null;
+    last_conclusion: { day_type: DayType; consumed: Today['consumed']; health_available: false } | null;
+    revisions: { action: 'conclude' | 'reopen' | 'reconclude'; created_at: string }[];
+};
+export type DaySummary = Today & { source: 'default' | 'manual'; health: null; review?: DayReview };
 export type DayType = {
     id: string;
     key: string;

@@ -31,6 +31,7 @@ class CorrectConsumption
         ])->validate();
 
         return DB::transaction(function () use ($consumption, $actor, $data, $idempotencyKey, $requestFingerprint): Consumption {
+            User::whereKey($consumption->user_id)->lockForUpdate()->firstOrFail();
             $record = Consumption::with('items')->lockForUpdate()->findOrFail($consumption->id);
             if ($idempotencyKey !== null) {
                 $existing = $record->revisions()->where('idempotency_key', $idempotencyKey)->first();
@@ -40,6 +41,7 @@ class CorrectConsumption
                     return $record;
                 }
             }
+            abort_if($record->user->dailySummaries()->whereDate('local_date', $record->local_date)->where('status', 'concluded')->exists(), 409, 'Reopen this day before editing it.');
             $owner = User::with('settings')->findOrFail($record->user_id);
             if (! $owner->mealCategories()->where('is_active', true)->whereKey($data['meal_category_id'])->exists()) {
                 throw ValidationException::withMessages(['meal_category_id' => 'Choose an active category belonging to this user.']);

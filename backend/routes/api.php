@@ -26,6 +26,8 @@ Route::prefix('v1')->group(function () {
         Route::put('/day-types/{dayType}', [DayTypeController::class, 'update']);
         Route::get('/days/{date}', [DayController::class, 'show']);
         Route::patch('/days/{date}', [DayController::class, 'update']);
+        Route::post('/days/{date}/conclude', [DayController::class, 'conclude']);
+        Route::post('/days/{date}/reopen', [DayController::class, 'reopen']);
         Route::get('/meal-categories', [MealCategoryController::class, 'index']);
         Route::get('/foods', [FoodController::class, 'index']);
         Route::post('/foods', [FoodController::class, 'store']);

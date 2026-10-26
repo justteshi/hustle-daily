@@ -26,6 +26,7 @@ import {
 import { FoodCatalogue, FoodEditor } from './FoodCatalogue';
 import DeleteMealButton from './DeleteMealButton';
 import History from './History';
+import PastDay from './PastDay';
 import RecipeForm, { IngredientFields, RecipeCatalogue } from './RecipeForm';
 import { ErrorState, LoadingState } from './UiStates';
 import { t } from './i18n';
@@ -211,7 +212,7 @@ function Dashboard() {
         <div className="today-page">
             <header className="today-heading">
                 <div>
-                    <span className="today-eyebrow">{t('todayInProgress')}</span>
+                    <span className="today-eyebrow">{query.data.review_status === 'concluded' ? t('concluded') : t('todayInProgress')}</span>
                     <h1>{t('today')}</h1>
                     <p>{dateLabel}</p>
                     <div className="today-heading-details">
@@ -219,7 +220,7 @@ function Dashboard() {
                             {t('dayType')}
                             <select
                                 value={pendingDayTypeId ?? query.data.day_type.id}
-                                disabled={savingDayType || !typesQuery.data}
+                                disabled={savingDayType || !typesQuery.data || query.data.review_status === 'concluded'}
                                 onChange={(event) => void changeDayType(event.target.value)}
                             >
                                 {(typesQuery.data || [query.data.day_type]).map((type) => (
@@ -227,15 +228,15 @@ function Dashboard() {
                                 ))}
                             </select>
                         </label>
-                        <span className="today-open-pill">{t('openStatus')} · {t('sampleOnly')}</span>
+                        <span className="today-open-pill">{query.data.review_status === 'concluded' ? t('concluded') : t('openStatus')}</span>
                     </div>
                     {dayTypeError && <p role="alert">{t('dayTypeSaveError')}</p>}
                 </div>
                 <div className="today-heading-actions">
-                    <button className="today-review-preview" type="button" disabled title={t('reviewNotAvailable')}>
-                        {t('reviewAndConclude')} · {t('preview')}
-                    </button>
-                    <Link className="today-primary" to="/meals/new">+ {t('addMeal')}</Link>
+                    <Link className="today-review-preview" to={`/history/${query.data.local_date}/day`}>
+                        {t('reviewAndConclude')}
+                    </Link>
+                    {query.data.review_status !== 'concluded' && <Link className="today-primary" to="/meals/new">+ {t('addMeal')}</Link>}
                 </div>
             </header>
 
@@ -296,7 +297,7 @@ function Dashboard() {
                 {meals.length === 0 ? (
                     <div className="today-empty">
                         <p>{t('noMeals')}</p>
-                        <Link to="/meals/new">+ {t('addMeal')}</Link>
+                        {query.data.review_status !== 'concluded' && <Link to="/meals/new">+ {t('addMeal')}</Link>}
                     </div>
                 ) : (
                     <div className="today-table-wrap">
@@ -337,7 +338,7 @@ function Dashboard() {
                                         <td>{meal.carbohydrates == null ? '—' : `${formatNumber(meal.carbohydrates, 1)} g`}</td>
                                         <td>{meal.fat == null ? '—' : `${formatNumber(meal.fat, 1)} g`}</td>
                                         <td>
-                                            <div className="today-row-actions">
+                                            {query.data.review_status !== 'concluded' && <div className="today-row-actions">
                                                 <Link
                                                     className="today-icon-action"
                                                     to={`/meals/${meal.id}/edit?date=${query.data.local_date}`}
@@ -351,7 +352,7 @@ function Dashboard() {
                                                     date={query.data.local_date}
                                                     iconOnly
                                                 />
-                                            </div>
+                                            </div>}
                                         </td>
                                     </tr>
                                 ))}
@@ -389,14 +390,14 @@ function Dashboard() {
                                         <b>{meal.fat == null ? '—' : `${formatNumber(meal.fat, 1)} g`}</b> {t('fat')}
                                     </span>
                                 </div>
-                                <div className="today-row-actions">
+                                {query.data.review_status !== 'concluded' && <div className="today-row-actions">
                                     <Link
                                         to={`/meals/${meal.id}/edit?date=${query.data.local_date}`}
                                     >
                                         {t('editMeal')}
                                     </Link>
                                     <DeleteMealButton id={meal.id} date={query.data.local_date} />
-                                </div>
+                                </div>}
                             </article>
                         ))}
                     </div>
@@ -809,6 +810,7 @@ export default function App() {
                     <Route path="/" element={<Dashboard />} />
                     <Route path="/history" element={<History />} />
                     <Route path="/history/:date" element={<History />} />
+                    <Route path="/history/:date/day" element={<PastDay />} />
                     <Route path="/meals/new" element={<MealForm />} />
                     <Route path="/meals/:id/edit" element={<MealForm />} />
                     <Route path="/foods" element={<FoodCatalogue />} />

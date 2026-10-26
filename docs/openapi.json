@@ -831,9 +831,19 @@
                                                 "day_type": {"type": "object"},
                                                 "consumed": {"type": "object"},
                                                 "consumptions": {"type": "array", "items": {"type": "object"}},
-                                                "health": {"type": "null"}
+                                                "health": {"type": "null"},
+                                                "review": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "status": {"type": "string", "enum": ["open", "concluded", "reopened"]},
+                                                        "concluded_at": {"type": ["string", "null"], "format": "date-time"},
+                                                        "last_conclusion": {"type": ["object", "null"]},
+                                                        "revisions": {"type": "array", "items": {"type": "object"}}
+                                                    },
+                                                    "required": ["status", "concluded_at", "last_conclusion", "revisions"]
+                                                }
                                             },
-                                            "required": ["local_date", "source", "day_type", "consumed", "consumptions", "health"]
+                                            "required": ["local_date", "source", "day_type", "consumed", "consumptions", "health", "review"]
                                         }
                                     },
                                     "required": ["data"]
@@ -970,6 +980,44 @@
                     "401": {
                         "$ref": "#/components/responses/AuthenticationException"
                     }
+                }
+            }
+        },
+        "/v1/days/{date}/conclude": {
+            "post": {
+                "operationId": "day.conclude",
+                "summary": "Conclude a reviewed day",
+                "description": "Snapshots the current food totals and targets, marks the day concluded, and appends an audit revision. Health data remains unavailable. Retrying with the same Idempotency-Key is safe.",
+                "tags": ["Day"],
+                "parameters": [
+                    {"name": "date", "in": "path", "required": true, "schema": {"type": "string", "format": "date"}},
+                    {"name": "Idempotency-Key", "in": "header", "required": true, "schema": {"type": "string", "maxLength": 120}}
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {"application/json": {"schema": {"type": "object", "properties": {"acknowledge_missing_health": {"type": "boolean", "const": true}}, "required": ["acknowledge_missing_health"]}}}
+                },
+                "responses": {
+                    "200": {"description": "Current review state and audit history", "content": {"application/json": {"schema": {"type": "object", "properties": {"data": {"type": "object"}}}}}},
+                    "409": {"description": "Day already concluded or idempotency key conflict"},
+                    "422": {"$ref": "#/components/responses/ValidationException"}
+                }
+            }
+        },
+        "/v1/days/{date}/reopen": {
+            "post": {
+                "operationId": "day.reopen",
+                "summary": "Reopen a concluded day for corrections",
+                "description": "Appends an audit revision and permits food and day-type edits before reconclusion.",
+                "tags": ["Day"],
+                "parameters": [
+                    {"name": "date", "in": "path", "required": true, "schema": {"type": "string", "format": "date"}},
+                    {"name": "Idempotency-Key", "in": "header", "required": true, "schema": {"type": "string", "maxLength": 120}}
+                ],
+                "responses": {
+                    "200": {"description": "Current review state and audit history", "content": {"application/json": {"schema": {"type": "object", "properties": {"data": {"type": "object"}}}}}},
+                    "409": {"description": "Day is not concluded or idempotency key conflict"},
+                    "422": {"$ref": "#/components/responses/ValidationException"}
                 }
             }
         },
@@ -2127,6 +2175,10 @@
                                                 },
                                                 "health": {
                                                     "type": "null"
+                                                },
+                                                "review_status": {
+                                                    "type": "string",
+                                                    "enum": ["open", "concluded", "reopened"]
                                                 }
                                             },
                                             "required": [
@@ -2135,7 +2187,8 @@
                                                 "day_type",
                                                 "consumed",
                                                 "consumptions",
-                                                "health"
+                                                "health",
+                                                "review_status"
                                             ]
                                         }
                                     },

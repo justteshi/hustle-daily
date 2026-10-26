@@ -116,7 +116,8 @@ it('retries a lost meal-save response with the same payload and idempotency key'
 
     expect(screen.getByText('Preview sections below')).toBeTruthy();
     expect(screen.getAllByText('Sample data')).toHaveLength(5);
-    expect(screen.getByRole('button', { name: /Review & conclude/ }).hasAttribute('disabled')).toBe(true);
+    expect(screen.getByRole('link', { name: /Review & conclude/ }).getAttribute('href'))
+        .toContain('/history/');
 
     expect(writes).toHaveLength(2);
     expect(writes[0].key).toBe(writes[1].key);

@@ -26,12 +26,14 @@ class ConsumptionController extends Controller
         }
 
         DB::transaction(function () use ($request, $consumption, $key): void {
+            User::whereKey($request->user()->id)->lockForUpdate()->firstOrFail();
             $record = $request->user()->consumptions()->withTrashed()->whereKey($consumption)->lockForUpdate()->firstOrFail();
             if ($record->trashed()) {
                 abort_unless($record->deletion_idempotency_key === $key, 404);
 
                 return;
             }
+            abort_if($request->user()->dailySummaries()->whereDate('local_date', $record->local_date)->where('status', 'concluded')->exists(), 409, 'Reopen this day before editing it.');
             $record->deletion_idempotency_key = $key;
             $record->save();
             $record->delete();
@@ -175,6 +177,7 @@ class ConsumptionController extends Controller
 
                 return [$existing->load('items'), false];
             }
+            abort_if($request->user()->dailySummaries()->whereDate('local_date', $localDate)->where('status', 'concluded')->exists(), 409, 'Reopen this day before editing it.');
             $consumption = $request->user()->consumptions()->create([
                 'meal_category_id' => $category->id, 'eaten_at' => $eatenAt,
                 'local_date' => $localDate, 'notes' => $validated['notes'] ?? null,

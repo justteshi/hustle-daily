@@ -24,7 +24,7 @@ class DayController extends Controller
         return response()->json(['data' => [
             'local_date' => $date,
             'source' => $assignment->source,
-            'day_type' => $targets->serialize($type->load('targetProfile.values')),
+            'day_type' => $targets->serialize($type, $date),
         ]]);
     }
 }

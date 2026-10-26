@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\User;
+use App\Services\DayTargets;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -70,6 +71,7 @@ class DayTargetsApiTest extends TestCase
 
     public function test_target_edit_updates_values_and_rejects_invalid_input(): void
     {
+        $this->travelTo('2026-10-26 10:00:00');
         $user = User::factory()->create();
         $type = $this->actingAs($user)->getJson('/api/v1/day-types')->json('data.0');
 
@@ -83,7 +85,31 @@ class DayTargetsApiTest extends TestCase
         ])->assertUnprocessable()->assertJsonPath('error.code', 'validation_failed')
             ->assertJsonStructure(['error' => ['details' => ['targets.consumed_calories']]]);
 
-        $this->assertDatabaseCount('target_values', 4);
+        $this->assertDatabaseCount('target_profiles', 3);
+        $this->assertDatabaseCount('target_values', 7);
+    }
+
+    public function test_target_edits_preserve_past_targets_and_replace_same_day_version(): void
+    {
+        $this->travelTo('2026-10-26 10:00:00');
+        $user = User::factory()->create();
+        $type = $this->actingAs($user)->getJson('/api/v1/day-types')->json('data.0');
+
+        $this->actingAs($user)->putJson('/api/v1/day-types/'.$type['id'], [
+            'targets' => ['consumed_calories' => 2300, 'protein_g' => 175],
+        ])->assertOk();
+        $this->actingAs($user)->putJson('/api/v1/day-types/'.$type['id'], [
+            'targets' => ['consumed_calories' => 2400, 'protein_g' => 180],
+        ])->assertOk()->assertJsonPath('data.targets.consumed_calories.value', 2400);
+
+        $dayType = $user->dayTypes()->findOrFail($type['id']);
+        $targets = app(DayTargets::class);
+        $this->assertSame(2000.0, $targets->serialize($dayType, '2026-10-25')['targets']['consumed_calories']['value']);
+        $this->assertSame(2400.0, $targets->serialize($dayType, '2026-10-26')['targets']['consumed_calories']['value']);
+        $this->assertDatabaseCount('target_profiles', 3);
+        $this->assertDatabaseHas('target_profiles', [
+            'day_type_id' => $type['id'], 'effective_to' => '2026-10-25',
+        ]);
     }
 
     public function test_returns_404_for_invalid_local_date(): void

@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class DayType extends Model
 {
@@ -13,9 +12,9 @@ class DayType extends Model
 
     protected $fillable = ['user_id', 'key', 'name', 'color', 'is_active', 'sort_order'];
 
-    public function targetProfile(): HasOne
+    public function targetProfiles(): HasMany
     {
-        return $this->hasOne(TargetProfile::class);
+        return $this->hasMany(TargetProfile::class);
     }
 
     public function assignments(): HasMany

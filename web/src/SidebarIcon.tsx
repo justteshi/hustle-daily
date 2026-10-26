@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-type IconName = 'today' | 'history' | 'foods' | 'recipes' | 'account' | 'signOut';
+type IconName = 'today' | 'history' | 'foods' | 'recipes' | 'targets' | 'account' | 'signOut';
 
 export default function SidebarIcon({ name }: { name: IconName }) {
     const paths: Record<IconName, ReactNode> = {
@@ -26,6 +26,13 @@ export default function SidebarIcon({ name }: { name: IconName }) {
             <>
                 <path d="M4 4h13a3 3 0 0 1 3 3v13H7a3 3 0 0 1-3-3V4Z" />
                 <path d="M4 17a3 3 0 0 1 3-3h13M9 8h6" />
+            </>
+        ),
+        targets: (
+            <>
+                <circle cx="12" cy="12" r="9" />
+                <circle cx="12" cy="12" r="5" />
+                <circle cx="12" cy="12" r="1" />
             </>
         ),
         account: (

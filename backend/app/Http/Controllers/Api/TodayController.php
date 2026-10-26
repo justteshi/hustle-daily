@@ -39,7 +39,7 @@ class TodayController extends Controller
         return response()->json(['data' => [
             'local_date' => $localDate,
             'time_zone' => $timeZone,
-            'day_type' => $targets->serialize($dayType),
+            'day_type' => $targets->serialize($dayType, $localDate),
             'consumed' => $totals,
             'consumptions' => $entries,
             'health' => null,

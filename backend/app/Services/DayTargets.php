@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\DayType;
+use App\Models\TargetProfile;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
@@ -18,10 +19,10 @@ class DayTargets
                 $type = $user->dayTypes()->firstOrCreate(['key' => $key], [
                     'name' => $name, 'color' => $color, 'sort_order' => $order,
                 ]);
-                if ($type->targetProfile()->exists()) {
+                if ($type->targetProfiles()->exists()) {
                     continue;
                 }
-                $profile = $type->targetProfile()->create();
+                $profile = $type->targetProfiles()->create();
                 foreach ([
                     ['consumed_calories', $calories, 'kcal', 'budget'],
                     ['protein_g', $protein, 'g', 'minimum'],
@@ -41,19 +42,30 @@ class DayTargets
         $this->ensureDefaults($user);
         $assignment = $user->dayAssignments()->whereDate('local_date', $date)->first();
 
-        return $user->dayTypes()->with('targetProfile.values')
+        return $user->dayTypes()
             ->findOrFail($assignment?->day_type_id ?? $user->dayTypes()->where('key', 'rest')->value('id'));
     }
 
-    public function serialize(DayType $type): array
+    public function profileForDate(DayType $type, string $date): TargetProfile
     {
+        return $type->targetProfiles()->with('values')
+            ->where(fn ($query) => $query->whereNull('effective_from')->orWhereDate('effective_from', '<=', $date))
+            ->where(fn ($query) => $query->whereNull('effective_to')->orWhereDate('effective_to', '>=', $date))
+            ->orderByDesc('effective_from')
+            ->firstOrFail();
+    }
+
+    public function serialize(DayType $type, string $date): array
+    {
+        $profile = $this->profileForDate($type, $date);
+
         return [
             'id' => $type->id,
             'key' => $type->key,
             'name' => $type->name,
             'color' => $type->color,
             'is_active' => $type->is_active,
-            'targets' => $type->targetProfile->values->mapWithKeys(fn ($value) => [
+            'targets' => $profile->values->mapWithKeys(fn ($value) => [
                 $value->metric_code => [
                     'value' => (float) $value->target_value,
                     'unit' => $value->unit,

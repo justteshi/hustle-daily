@@ -33,6 +33,7 @@ import { formatNumber } from './format';
 import SidebarIcon from './SidebarIcon';
 import MealActionIcon from './MealActionIcon';
 import { ActivityPreview, EnergyPreview, TodaySidePanels } from './TodayPreview';
+import Targets from './Targets';
 
 const button = 'hd-primary-button';
 const field = 'hd-field';
@@ -150,6 +151,7 @@ function Dashboard() {
     const client = useQueryClient();
     const [dayTypeError, setDayTypeError] = useState(false);
     const [savingDayType, setSavingDayType] = useState(false);
+    const [pendingDayTypeId, setPendingDayTypeId] = useState<string | null>(null);
     const query = useQuery({
         queryKey: ['today'],
         queryFn: () => request<Today>('/dashboard/today'),
@@ -159,7 +161,7 @@ function Dashboard() {
         queryFn: () => request<DayType[]>('/day-types'),
     });
     if (query.isPending) return <LoadingState />;
-    if (query.isError)
+    if (!query.data)
         return (
             <ErrorState
                 onRetry={() => {
@@ -178,17 +180,30 @@ function Dashboard() {
     const calorieTarget = query.data.day_type.targets.consumed_calories?.value;
     const proteinTarget = query.data.day_type.targets.protein_g?.value;
     async function changeDayType(dayTypeId: string) {
+        const selectedType = typesQuery.data?.find((type) => type.id === dayTypeId);
+        if (!selectedType || savingDayType) return;
         setDayTypeError(false);
         setSavingDayType(true);
+        setPendingDayTypeId(dayTypeId);
+        await client.cancelQueries({ queryKey: ['today'] });
+        const previousToday = client.getQueryData<Today>(['today']);
+        client.setQueryData<Today>(['today'], (current) =>
+            current ? { ...current, day_type: selectedType } : current,
+        );
         try {
-            await request(`/days/${localDate}`, {
+            const updated = await request<{ day_type: DayType }>(`/days/${localDate}`, {
                 method: 'PATCH',
                 body: JSON.stringify({ day_type_id: dayTypeId }),
             }, true);
+            client.setQueryData<Today>(['today'], (current) =>
+                current ? { ...current, day_type: updated.day_type } : current,
+            );
             await client.invalidateQueries({ queryKey: ['today'] });
         } catch {
+            if (previousToday) client.setQueryData(['today'], previousToday);
             setDayTypeError(true);
         } finally {
+            setPendingDayTypeId(null);
             setSavingDayType(false);
         }
     }
@@ -203,8 +218,8 @@ function Dashboard() {
                         <label className="today-day-type">
                             {t('dayType')}
                             <select
-                                value={query.data.day_type.id}
-                                disabled={savingDayType || typesQuery.isPending || typesQuery.isError}
+                                value={pendingDayTypeId ?? query.data.day_type.id}
+                                disabled={savingDayType || !typesQuery.data}
                                 onChange={(event) => void changeDayType(event.target.value)}
                             >
                                 {(typesQuery.data || [query.data.day_type]).map((type) => (
@@ -760,6 +775,7 @@ export default function App() {
                     <NavLink to="/history"><SidebarIcon name="history" />{t('history')}</NavLink>
                     <NavLink to="/foods"><SidebarIcon name="foods" />{t('foods')}</NavLink>
                     <NavLink to="/recipes"><SidebarIcon name="recipes" />{t('recipes')}</NavLink>
+                    <NavLink to="/targets"><SidebarIcon name="targets" />{t('targets')}</NavLink>
                 </nav>
                 <div className="sidebar-sync-preview" role="note">
                     <strong><span className="sidebar-sync-dot" />Apple Health {t('viaIphone')}</strong>
@@ -799,6 +815,7 @@ export default function App() {
                     <Route path="/recipes" element={<RecipeCatalogue />} />
                     <Route path="/recipes/new" element={<RecipeForm />} />
                     <Route path="/recipes/:id/edit" element={<RecipeForm />} />
+                    <Route path="/targets" element={<Targets />} />
                     <Route path="/account" element={<Account />} />
                 </Routes>
             </main>

@@ -114,6 +114,10 @@ it('retries a lost meal-save response with the same payload and idempotency key'
     fireEvent.click(screen.getByRole('button', { name: 'Save' }));
     await waitFor(() => expect(screen.getByRole('heading', { name: 'Today' })).toBeTruthy());
 
+    expect(screen.getByText('Preview sections below')).toBeTruthy();
+    expect(screen.getAllByText('Sample data')).toHaveLength(5);
+    expect(screen.getByRole('button', { name: /Review & conclude/ }).hasAttribute('disabled')).toBe(true);
+
     expect(writes).toHaveLength(2);
     expect(writes[0].key).toBe(writes[1].key);
     expect(writes[0].body).toBe(writes[1].body);

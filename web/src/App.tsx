@@ -30,6 +30,9 @@ import RecipeForm, { IngredientFields, RecipeCatalogue } from './RecipeForm';
 import { ErrorState, LoadingState } from './UiStates';
 import { t } from './i18n';
 import { formatNumber } from './format';
+import SidebarIcon from './SidebarIcon';
+import MealActionIcon from './MealActionIcon';
+import { ActivityPreview, EnergyPreview, TodaySidePanels } from './TodayPreview';
 
 const button = 'hd-primary-button';
 const field = 'hd-field';
@@ -196,24 +199,35 @@ function Dashboard() {
                     <span className="today-eyebrow">{t('todayInProgress')}</span>
                     <h1>{t('today')}</h1>
                     <p>{dateLabel}</p>
-                    <label className="today-day-type">
-                        {t('dayType')}
-                        <select
-                            value={query.data.day_type.id}
-                            disabled={savingDayType || typesQuery.isPending || typesQuery.isError}
-                            onChange={(event) => void changeDayType(event.target.value)}
-                        >
-                            {(typesQuery.data || [query.data.day_type]).map((type) => (
-                                <option key={type.id} value={type.id}>{type.name}</option>
-                            ))}
-                        </select>
-                    </label>
+                    <div className="today-heading-details">
+                        <label className="today-day-type">
+                            {t('dayType')}
+                            <select
+                                value={query.data.day_type.id}
+                                disabled={savingDayType || typesQuery.isPending || typesQuery.isError}
+                                onChange={(event) => void changeDayType(event.target.value)}
+                            >
+                                {(typesQuery.data || [query.data.day_type]).map((type) => (
+                                    <option key={type.id} value={type.id}>{type.name}</option>
+                                ))}
+                            </select>
+                        </label>
+                        <span className="today-open-pill">{t('openStatus')} · {t('sampleOnly')}</span>
+                    </div>
                     {dayTypeError && <p role="alert">{t('dayTypeSaveError')}</p>}
                 </div>
-                <Link className="today-primary" to="/meals/new">
-                    + {t('addMeal')}
-                </Link>
+                <div className="today-heading-actions">
+                    <button className="today-review-preview" type="button" disabled title={t('reviewNotAvailable')}>
+                        {t('reviewAndConclude')} · {t('preview')}
+                    </button>
+                    <Link className="today-primary" to="/meals/new">+ {t('addMeal')}</Link>
+                </div>
             </header>
+
+            <div className="today-preview-notice" role="note">
+                <strong>{t('previewNoticeTitle')}</strong>
+                <span>{t('previewNoticeBody')}</span>
+            </div>
 
             <section className="today-summary" aria-label={t('summary')}>
                 <div className="today-card today-food-summary">
@@ -239,17 +253,21 @@ function Dashboard() {
                         <strong>{Number(query.data.consumed.protein).toFixed(1)} / {formatNumber(proteinTarget, 0)} g · {t('minimum')}</strong>
                     </div>
                     <progress className="today-progress today-progress-protein" max={proteinTarget} value={Math.min(Number(query.data.consumed.protein), proteinTarget)} aria-label={t('proteinMinimum')} />
-                </div>
-                <div className="today-card today-upcoming">
-                    <div className="today-card-heading">
-                        <h2>{t('energyAndActivity')}</h2>
-                        <span>{t('comingLater')}</span>
+                    <small className="today-target-note">
+                        {Number(query.data.consumed.protein) >= proteinTarget
+                            ? t('minimumMet')
+                            : `${formatNumber(proteinTarget - Number(query.data.consumed.protein), 1)} g ${t('toGo')}`}
+                    </small>
+                    <div className="today-food-macros">
+                        <span>{t('carbohydrates')} <strong>{query.data.consumed.carbohydrates == null ? '—' : `${formatNumber(query.data.consumed.carbohydrates, 1)} g`}</strong></span>
+                        <span>{t('fat')} <strong>{query.data.consumed.fat == null ? '—' : `${formatNumber(query.data.consumed.fat, 1)} g`}</strong></span>
                     </div>
-                    <p>{t('healthLaterDescription')}</p>
-                    <div className="today-upcoming-note">{t('foodOnlyForNow')}</div>
                 </div>
+                <EnergyPreview consumedCalories={Number(query.data.consumed.calories)} />
+                <ActivityPreview stepsTarget={query.data.day_type.targets.steps?.value} />
             </section>
 
+            <div className="today-detail-grid">
             <section className="today-card today-meals" aria-labelledby="today-meals-heading">
                 <div className="today-meals-heading">
                     <div>
@@ -273,6 +291,8 @@ function Dashboard() {
                                     <th>{t('food')}</th>
                                     <th>{t('calories')}</th>
                                     <th>{t('protein')}</th>
+                                    <th>{t('carbohydrates')}</th>
+                                    <th>{t('fat')}</th>
                                     <th>
                                         <span className="sr-only">{t('actions')}</span>
                                     </th>
@@ -299,16 +319,22 @@ function Dashboard() {
                                         </td>
                                         <td>{Number(meal.calories).toFixed(0)} kcal</td>
                                         <td>{Number(meal.protein).toFixed(1)} g</td>
+                                        <td>{meal.carbohydrates == null ? '—' : `${formatNumber(meal.carbohydrates, 1)} g`}</td>
+                                        <td>{meal.fat == null ? '—' : `${formatNumber(meal.fat, 1)} g`}</td>
                                         <td>
                                             <div className="today-row-actions">
                                                 <Link
+                                                    className="today-icon-action"
                                                     to={`/meals/${meal.id}/edit?date=${query.data.local_date}`}
+                                                    aria-label={t('editMeal')}
+                                                    title={t('editMeal')}
                                                 >
-                                                    {t('editMeal')}
+                                                    <MealActionIcon name="edit" />
                                                 </Link>
                                                 <DeleteMealButton
                                                     id={meal.id}
                                                     date={query.data.local_date}
+                                                    iconOnly
                                                 />
                                             </div>
                                         </td>
@@ -341,6 +367,12 @@ function Dashboard() {
                                     <span>
                                         <b>{formatNumber(meal.protein, 1)}</b> g {t('protein')}
                                     </span>
+                                    <span>
+                                        <b>{meal.carbohydrates == null ? '—' : `${formatNumber(meal.carbohydrates, 1)} g`}</b> {t('carbohydrates')}
+                                    </span>
+                                    <span>
+                                        <b>{meal.fat == null ? '—' : `${formatNumber(meal.fat, 1)} g`}</b> {t('fat')}
+                                    </span>
                                 </div>
                                 <div className="today-row-actions">
                                     <Link
@@ -355,6 +387,8 @@ function Dashboard() {
                     </div>
                 )}
             </section>
+            <TodaySidePanels />
+            </div>
         </div>
     );
 }
@@ -720,14 +754,20 @@ export default function App() {
                 </Link>
                 <nav aria-label={t('mainNavigation')} className="sidebar-nav">
                     <NavLink to="/" end>
+                        <SidebarIcon name="today" />
                         {t('today')}
                     </NavLink>
-                    <NavLink to="/history">{t('history')}</NavLink>
-                    <NavLink to="/foods">{t('foods')}</NavLink>
-                    <NavLink to="/recipes">{t('recipes')}</NavLink>
+                    <NavLink to="/history"><SidebarIcon name="history" />{t('history')}</NavLink>
+                    <NavLink to="/foods"><SidebarIcon name="foods" />{t('foods')}</NavLink>
+                    <NavLink to="/recipes"><SidebarIcon name="recipes" />{t('recipes')}</NavLink>
                 </nav>
+                <div className="sidebar-sync-preview" role="note">
+                    <strong><span className="sidebar-sync-dot" />Apple Health {t('viaIphone')}</strong>
+                    <span>{t('sampleSyncTime')} · {t('sampleOnly')}</span>
+                </div>
                 <nav aria-label={t('account')} className="sidebar-bottom">
                     <NavLink to="/account" className="sidebar-bottom-item">
+                        <SidebarIcon name="account" />
                         {me.data.name}
                     </NavLink>
                     <button
@@ -738,6 +778,7 @@ export default function App() {
                             navigate('/');
                         }}
                     >
+                        <SidebarIcon name="signOut" />
                         {t('signOut')}
                     </button>
                     <a className="sidebar-api-link" href="/api/docs">

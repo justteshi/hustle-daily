@@ -40,11 +40,13 @@ export type Meal = {
     source_name: string | null;
     calories: number;
     protein: number;
+    carbohydrates?: number | null;
+    fat?: number | null;
     items: Item[];
 };
 export type Today = {
     local_date: string;
-    consumed: { calories: number; protein: number };
+    consumed: { calories: number; protein: number; carbohydrates?: number | null; fat?: number | null };
     consumptions: Meal[];
     day_type: DayType;
 };

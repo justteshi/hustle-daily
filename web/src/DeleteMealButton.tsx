@@ -3,15 +3,18 @@ import { createPortal } from 'react-dom';
 import { useQueryClient } from '@tanstack/react-query';
 import { request } from './api';
 import { t } from './i18n';
+import MealActionIcon from './MealActionIcon';
 
 export default function DeleteMealButton({
     id,
     date,
     onDeleted,
+    iconOnly = false,
 }: {
     id: string;
     date: string;
     onDeleted?: () => void;
+    iconOnly?: boolean;
 }) {
     const client = useQueryClient();
     const key = useRef(crypto.randomUUID());
@@ -79,10 +82,12 @@ export default function DeleteMealButton({
                 ref={trigger}
                 type="button"
                 disabled={busy}
-                className="hd-touch-action hd-touch-danger disabled:opacity-50"
+                className={iconOnly ? 'today-icon-action today-icon-danger' : 'hd-touch-action hd-touch-danger disabled:opacity-50'}
+                aria-label={t('deleteMeal')}
+                title={iconOnly ? t('deleteMeal') : undefined}
                 onClick={() => setConfirming(true)}
             >
-                {t('deleteMeal')}
+                {iconOnly ? <MealActionIcon name="delete" /> : t('deleteMeal')}
             </button>
             {confirming &&
                 createPortal(

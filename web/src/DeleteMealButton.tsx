@@ -66,6 +66,7 @@ export default function DeleteMealButton({
                 client.invalidateQueries({ queryKey: ['today'] }),
                 client.invalidateQueries({ queryKey: ['food-dates'] }),
                 client.invalidateQueries({ queryKey: ['consumptions', date] }),
+                client.invalidateQueries({ queryKey: ['day-summary', date] }),
             ]);
             setConfirming(false);
             onDeleted?.();

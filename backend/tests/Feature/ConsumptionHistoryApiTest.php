@@ -10,6 +10,36 @@ class ConsumptionHistoryApiTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function test_month_filter_returns_only_the_users_logged_dates_in_that_month(): void
+    {
+        $owner = User::factory()->create();
+        $other = User::factory()->create();
+        $ownerCategory = $owner->mealCategories()->create(['key' => 'breakfast', 'name' => 'Breakfast', 'sort_order' => 0]);
+        $otherCategory = $other->mealCategories()->create(['key' => 'breakfast', 'name' => 'Breakfast', 'sort_order' => 0]);
+        foreach (['2026-09-30', '2026-10-01', '2026-10-25'] as $index => $date) {
+            $owner->consumptions()->create([
+                'meal_category_id' => $ownerCategory->id, 'local_date' => $date,
+                'eaten_at' => $date.'T08:00:00Z', 'idempotency_key' => 'owner-'.$index,
+                'request_fingerprint' => str_repeat('a', 64), 'calories' => 100 + $index,
+                'protein' => 20, 'carbohydrates' => 5, 'fat' => 2,
+            ]);
+        }
+        $other->consumptions()->create([
+            'meal_category_id' => $otherCategory->id, 'local_date' => '2026-10-20',
+            'eaten_at' => '2026-10-20T08:00:00Z', 'idempotency_key' => 'other',
+            'request_fingerprint' => str_repeat('b', 64), 'calories' => 999,
+            'protein' => 99, 'carbohydrates' => 40, 'fat' => 15,
+        ]);
+
+        $this->actingAs($owner)->getJson('/api/v1/consumptions/dates?month=2026-10')->assertOk()
+            ->assertJsonCount(2, 'data')
+            ->assertJsonPath('data.0.local_date', '2026-10-25')
+            ->assertJsonPath('data.0.calories', '102.000')
+            ->assertJsonPath('data.1.local_date', '2026-10-01');
+        $this->actingAs($owner)->getJson('/api/v1/consumptions/dates?month=2026-13')->assertUnprocessable()
+            ->assertJsonStructure(['error' => ['details' => ['month']]]);
+    }
+
     public function test_history_lists_only_the_users_dates_and_past_meals_remain_editable(): void
     {
         $owner = User::factory()->create();

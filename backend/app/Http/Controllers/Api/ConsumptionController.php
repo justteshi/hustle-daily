@@ -43,13 +43,23 @@ class ConsumptionController extends Controller
     /**
      * List recent dates with logged food.
      *
-     * Returns up to 31 dates, newest first, with meal count and consumed calorie/protein totals for the signed-in user.
+     * Returns up to 31 recent dates, or every logged date in the requested YYYY-MM month, with meal count and consumed calorie/protein totals for the signed-in user.
      */
     public function dates(Request $request): JsonResponse
     {
-        $dates = $request->user()->consumptions()
+        $month = $request->validate(['month' => ['sometimes', 'regex:/^[1-9][0-9]{3}-(0[1-9]|1[0-2])$/']])['month'] ?? null;
+        $query = $request->user()->consumptions()
             ->selectRaw('local_date, COUNT(*) AS meal_count, SUM(calories) AS calories, SUM(protein) AS protein')
-            ->groupBy('local_date')->orderByDesc('local_date')->limit(31)->get();
+            ->groupBy('local_date')->orderByDesc('local_date');
+        if ($month !== null) {
+            $start = CarbonImmutable::createFromFormat('!Y-m', $month)->startOfMonth();
+            $query->whereDate('local_date', '>=', $start->toDateString())
+                ->whereDate('local_date', '<=', $start->endOfMonth()->toDateString());
+        } else {
+            $query->limit(31);
+        }
+
+        $dates = $query->get();
 
         return response()->json(['data' => $dates]);
     }

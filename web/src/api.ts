@@ -50,6 +50,7 @@ export type Today = {
     consumptions: Meal[];
     day_type: DayType;
 };
+export type DaySummary = Today & { source: 'default' | 'manual'; health: null };
 export type DayType = {
     id: string;
     key: string;

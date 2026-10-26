@@ -598,7 +598,9 @@ function MealForm() {
                 true,
             );
             await client.invalidateQueries({ queryKey: ['today'] });
+            await client.invalidateQueries({ queryKey: ['food-dates'] });
             if (date) await client.invalidateQueries({ queryKey: ['consumptions', date] });
+            if (date) await client.invalidateQueries({ queryKey: ['day-summary', date] });
             navigate(date ? `/history/${date}` : '/');
         } catch (failure) {
             setError((failure as Error).message);

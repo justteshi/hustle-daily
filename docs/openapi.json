@@ -585,10 +585,22 @@
         "/v1/consumptions/dates": {
             "get": {
                 "operationId": "consumption.dates",
-                "description": "Returns up to 31 dates, newest first, with meal count and consumed calorie/protein totals for the signed-in user.",
+                "description": "Returns up to 31 recent dates, or every logged date in the requested YYYY-MM month, with meal count and consumed calorie/protein totals for the signed-in user.",
                 "summary": "List recent dates with logged food",
                 "tags": [
                     "Consumption"
+                ],
+                "parameters": [
+                    {
+                        "name": "month",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^[1-9][0-9]{3}-(0[1-9]|1[0-2])$",
+                            "example": "2026-10"
+                        }
+                    }
                 ],
                 "responses": {
                     "200": {
@@ -792,6 +804,47 @@
             }
         },
         "/v1/days/{date}": {
+            "get": {
+                "operationId": "day.show",
+                "summary": "Show the selected day's food totals and effective targets",
+                "description": "Returns the authenticated user's dated meal snapshots and their recalculated totals. Health data is unavailable until synchronization is implemented.",
+                "tags": ["Day"],
+                "parameters": [{
+                    "name": "date",
+                    "in": "path",
+                    "required": true,
+                    "schema": {"type": "string", "format": "date"}
+                }],
+                "responses": {
+                    "200": {
+                        "description": "Dated day summary",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "local_date": {"type": "string", "format": "date"},
+                                                "source": {"type": "string", "enum": ["default", "manual"]},
+                                                "day_type": {"type": "object"},
+                                                "consumed": {"type": "object"},
+                                                "consumptions": {"type": "array", "items": {"type": "object"}},
+                                                "health": {"type": "null"}
+                                            },
+                                            "required": ["local_date", "source", "day_type", "consumed", "consumptions", "health"]
+                                        }
+                                    },
+                                    "required": ["data"]
+                                }
+                            }
+                        }
+                    },
+                    "401": {"$ref": "#/components/responses/AuthenticationException"},
+                    "404": {"$ref": "#/components/responses/ModelNotFoundException"}
+                }
+            },
             "patch": {
                 "operationId": "day.update",
                 "tags": [

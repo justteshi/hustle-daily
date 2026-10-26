@@ -24,6 +24,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/dashboard/today', TodayController::class);
         Route::get('/day-types', [DayTypeController::class, 'index']);
         Route::put('/day-types/{dayType}', [DayTypeController::class, 'update']);
+        Route::get('/days/{date}', [DayController::class, 'show']);
         Route::patch('/days/{date}', [DayController::class, 'update']);
         Route::get('/meal-categories', [MealCategoryController::class, 'index']);
         Route::get('/foods', [FoodController::class, 'index']);

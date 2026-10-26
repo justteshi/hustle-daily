@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Targets · Hustle Daily</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+a{color:#24563F}a:hover{color:#17201B}
+:focus-visible{outline:2px solid #2F6B4F;outline-offset:2px}
+</style>
+</helmet>
+<div style="min-height: 1100px; background: #F5F3EE; color: #17201B; font-family: Inter, system-ui, sans-serif; font-variant-numeric: tabular-nums; display: flex; flex-wrap: wrap">
+
+  <nav aria-label="Main" style="flex: 1 1 232px; max-width: 272px; background: #FFFFFF; border-right: 1px solid #E3E0D7; padding: 20px 14px; display: flex; flex-direction: column; gap: 18px">
+    <a href="DeskToday.dc.html" style="display: flex; align-items: center; gap: 10px; padding: 4px 8px; text-decoration: none; color: #17201B"><svg width="30" height="30" viewBox="0 0 120 120" role="img" aria-label="Hustle Daily logo" style="flex: none; display: block"><rect width="120" height="120" rx="28" fill="#2F6B4F"></rect><path d="M60 26A34 34 0 1 1 46.99 28.59" fill="none" stroke="#F5F3EE" stroke-width="9" stroke-linecap="round"></path><circle cx="46.99" cy="28.59" r="6.5" fill="#E8C27A"></circle><path d="M46 61L56 71L75 51" fill="none" stroke="#F5F3EE" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"></path></svg><strong style="font-size: 16px">Hustle Daily</strong></a>
+    <a href="DeskAddFood.dc.html" style="height: 42px; border-radius: 10px; background: #2F6B4F; color: #FFFFFF; font-weight: 600; font-size: 14px; display: flex; align-items: center; justify-content: center; text-decoration: none">+ Add food</a>
+    <div style="display: flex; flex-direction: column; gap: 2px; font-size: 14px">
+      <a href="DeskToday.dc.html" style="padding: 9px 10px; border-radius: 9px; color: #2E3832; text-decoration: none">Today</a>
+      <a href="DeskHistory.dc.html" style="padding: 9px 10px; border-radius: 9px; color: #2E3832; text-decoration: none">History</a>
+      <a href="DeskFoods.dc.html" style="padding: 9px 10px; border-radius: 9px; color: #2E3832; text-decoration: none">Foods &amp; Recipes</a>
+      <a href="DeskTrends.dc.html" style="padding: 9px 10px; border-radius: 9px; color: #2E3832; text-decoration: none">Trends</a>
+      <a href="DeskTargets.dc.html" aria-current="page" style="padding: 9px 10px; border-radius: 9px; background: #E6EFE9; color: #24563F; font-weight: 600; text-decoration: none">Targets</a>
+      <a href="DeskSettings.dc.html" style="padding: 9px 10px; border-radius: 9px; color: #2E3832; text-decoration: none">Settings</a>
+    </div>
+  </nav>
+
+  <main style="flex: 999 1 560px; min-width: 0; padding: 28px 36px 48px; display: flex; flex-direction: column; gap: 18px; max-width: 1120px">
+    <header style="display: flex; flex-direction: column; gap: 6px"><h1 style="margin: 0; font-size: 30px; letter-spacing: -0.02em">Targets &amp; day types</h1><span style="font-size: 14px; color: #4D5751">You choose the day type for each day. Changes apply from today; past days keep the targets they had.</span></header>
+
+    <div role="tablist" aria-label="Day types" style="display: flex; gap: 8px; flex-wrap: wrap">
+      <sc-for list="{{tabs}}" as="t" hint-placeholder-count="2">
+        <button type="button" role="tab" aria-selected="{{t.on}}" onClick="{{t.pick}}" style="height: 40px; padding: 0 16px; border-radius: 10px; border: 1px solid {{t.border}}; background: {{t.bg}}; color: {{t.ink}}; font: 600 14px Inter, sans-serif; cursor: pointer">{{t.label}}</button>
+      </sc-for>
+      <button type="button" style="height: 40px; padding: 0 16px; border-radius: 10px; border: 1px dashed #CFCAC0; background: transparent; color: #24563F; font: 600 14px Inter, sans-serif">+ Add day type</button>
+    </div>
+
+    <section style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px">
+      <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 16px; padding: 22px; display: flex; flex-direction: column; gap: 12px">
+        <div style="display: flex; justify-content: space-between; align-items: center"><h2 style="margin: 0; font-size: 16px">Consumed calories</h2><span style="font-size: 12px; font-weight: 700; padding: 4px 8px; border-radius: 6px; background: #17201B; color: #FFFFFF; letter-spacing: 0.04em">BUDGET</span></div>
+        <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600">Stay at or under
+          <span style="display: flex; align-items: center; height: 44px; border: 1px solid #CFCAC0; border-radius: 10px; overflow: hidden"><input value="{{kcal}}" onChange="{{setKcal}}" inputmode="numeric" style="flex: 1; min-width: 0; border: 0; height: 100%; padding: 0 12px; font: 600 18px Inter, sans-serif"><span style="padding: 0 12px; background: #FAF9F6; height: 100%; display: grid; place-items: center; border-left: 1px solid #E3E0D7">kcal</span></span>
+        </label>
+        <div style="display: flex; flex-direction: column; gap: 6px"><div style="height: 8px; border-radius: 4px; background: #ECE9E2; overflow: hidden"><div style="width: 77%; height: 100%; background: #17201B"></div></div><span style="font-size: 12px; color: #4D5751">Shown as “kcal left” or “kcal over budget”. Going over is never celebrated.</span></div>
+      </div>
+      <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 16px; padding: 22px; display: flex; flex-direction: column; gap: 12px">
+        <div style="display: flex; justify-content: space-between; align-items: center"><h2 style="margin: 0; font-size: 16px">Protein</h2><span style="font-size: 12px; font-weight: 700; padding: 4px 8px; border-radius: 6px; background: #E6EFE9; color: #24563F; letter-spacing: 0.04em">MINIMUM</span></div>
+        <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600">Reach at least
+          <span style="display: flex; align-items: center; height: 44px; border: 1px solid #CFCAC0; border-radius: 10px; overflow: hidden"><input value="{{protein}}" onChange="{{setProtein}}" inputmode="numeric" style="flex: 1; min-width: 0; border: 0; height: 100%; padding: 0 12px; font: 600 18px Inter, sans-serif"><span style="padding: 0 12px; background: #FAF9F6; height: 100%; display: grid; place-items: center; border-left: 1px solid #E3E0D7">g</span></span>
+        </label>
+        <div style="display: flex; flex-direction: column; gap: 6px"><div style="height: 8px; border-radius: 4px; background: #ECE9E2; overflow: hidden"><div style="width: 80%; height: 100%; background: #2F6B4F"></div></div><span style="font-size: 12px; color: #4D5751">Shown as “g to go”, then “✓ Minimum met”. Going over is fine.</span></div>
+      </div>
+      <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 16px; padding: 22px; display: flex; flex-direction: column; gap: 12px">
+        <div style="display: flex; justify-content: space-between; align-items: center"><h2 style="margin: 0; font-size: 16px">Steps</h2><span style="font-size: 12px; font-weight: 700; padding: 4px 8px; border-radius: 6px; background: #E4ECF5; color: #2D5C91; letter-spacing: 0.04em">MINIMUM</span></div>
+        <label style="display: flex; align-items: center; gap: 10px; font-size: 14px"><input type="checkbox" checked="{{hasSteps}}" onChange="{{toggleSteps}}" style="width: 18px; height: 18px; accent-color: #2F6B4F">Set a steps target for this day type</label>
+        <sc-if value="{{hasSteps}}" hint-placeholder-val="{{true}}">
+          <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600">Reach at least
+            <span style="display: flex; align-items: center; height: 44px; border: 1px solid #CFCAC0; border-radius: 10px; overflow: hidden"><input value="{{steps}}" onChange="{{setSteps}}" inputmode="numeric" style="flex: 1; min-width: 0; border: 0; height: 100%; padding: 0 12px; font: 600 18px Inter, sans-serif"><span style="padding: 0 12px; background: #FAF9F6; height: 100%; display: grid; place-items: center; border-left: 1px solid #E3E0D7">steps</span></span>
+          </label>
+        </sc-if>
+        <sc-if value="{{noSteps}}" hint-placeholder-val="{{false}}"><span style="font-size: 14px; color: #4D5751; line-height: 1.5">No steps target. Steps are still shown on Today for reference.</span></sc-if>
+      </div>
+    </section>
+
+    <section style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 16px; padding: 22px; display: flex; flex-direction: column; gap: 12px">
+      <h2 style="margin: 0; font-size: 16px">Day type suggestions</h2>
+      <label style="display: flex; align-items: flex-start; gap: 10px; font-size: 14px; line-height: 1.5"><input type="checkbox" checked="" style="width: 18px; height: 18px; margin-top: 2px; accent-color: #2F6B4F"><span>When Apple Health records a workout of 20 minutes or more, <strong>suggest</strong> Training Day.<br><span style="color: #4D5751">It’s only a suggestion. The day type you pick is never changed for you.</span></span></label>
+      <label style="display: flex; align-items: center; gap: 10px; font-size: 14px">Default day type for a new day
+        <select style="height: 38px; border: 1px solid #CFCAC0; border-radius: 8px; padding: 0 10px; font: 600 14px Inter, sans-serif; background: #FFFFFF"><option>Rest Day</option><option>Training Day</option></select>
+      </label>
+    </section>
+
+    <div style="display: flex; justify-content: flex-end; gap: 12px; align-items: center">
+      <sc-if value="{{saved}}" hint-placeholder-val="{{false}}"><span role="status" style="font-size: 14px; color: #24563F; font-weight: 600">✓ Saved. Applies from today, 22 Oct.</span></sc-if>
+      <button type="button" onClick="{{save}}" style="height: 44px; padding: 0 20px; border: 0; border-radius: 10px; background: #2F6B4F; color: #FFFFFF; font: 600 14px Inter, sans-serif; cursor: pointer">Save {{tabName}}</button>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1100}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state;
+    const tab = s.tab ?? 'training';
+    const D = { training: { kcal: '2000', protein: '160', steps: '10000', hasSteps: true }, rest: { kcal: '3000', protein: '120', steps: '6000', hasSteps: false } };
+    const v = Object.assign({}, D[tab], (s.edits || {})[tab] || {});
+    const set = (patch) => this.setState({ saved: false, edits: Object.assign({}, s.edits, { [tab]: Object.assign({}, v, patch) }) });
+    return {
+      tabs: [['training', 'Training Day'], ['rest', 'Rest Day']].map(([id, label]) => ({ label, on: id === tab ? 'true' : 'false', bg: id === tab ? '#17201B' : '#FFFFFF', ink: id === tab ? '#FFFFFF' : '#2E3832', border: id === tab ? '#17201B' : '#CFCAC0', pick: () => this.setState({ tab: id, saved: false }) })),
+      tabName: tab === 'training' ? 'Training Day' : 'Rest Day',
+      kcal: v.kcal, setKcal: (e) => set({ kcal: e.target.value }),
+      protein: v.protein, setProtein: (e) => set({ protein: e.target.value }),
+      steps: v.steps, setSteps: (e) => set({ steps: e.target.value }),
+      hasSteps: v.hasSteps, noSteps: !v.hasSteps, toggleSteps: () => set({ hasSteps: !v.hasSteps }),
+      saved: !!s.saved, save: () => this.setState({ saved: true })
+    };
+  }
+}
+</script>
+</body>
+</html>

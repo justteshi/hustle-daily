@@ -21,6 +21,7 @@ import {
     type Meal,
     type Recipe,
     type Today,
+    type DayType,
 } from './api';
 import { FoodCatalogue, FoodEditor } from './FoodCatalogue';
 import DeleteMealButton from './DeleteMealButton';
@@ -143,9 +144,16 @@ function Login({ onSuccess }: { onSuccess: () => void }) {
 }
 
 function Dashboard() {
+    const client = useQueryClient();
+    const [dayTypeError, setDayTypeError] = useState(false);
+    const [savingDayType, setSavingDayType] = useState(false);
     const query = useQuery({
         queryKey: ['today'],
         queryFn: () => request<Today>('/dashboard/today'),
+    });
+    const typesQuery = useQuery({
+        queryKey: ['day-types'],
+        queryFn: () => request<DayType[]>('/day-types'),
     });
     if (query.isPending) return <LoadingState />;
     if (query.isError)
@@ -163,6 +171,24 @@ function Dashboard() {
         month: 'long',
     }).format(day);
     const meals = query.data.consumptions;
+    const localDate = query.data.local_date;
+    const calorieTarget = query.data.day_type.targets.consumed_calories?.value;
+    const proteinTarget = query.data.day_type.targets.protein_g?.value;
+    async function changeDayType(dayTypeId: string) {
+        setDayTypeError(false);
+        setSavingDayType(true);
+        try {
+            await request(`/days/${localDate}`, {
+                method: 'PATCH',
+                body: JSON.stringify({ day_type_id: dayTypeId }),
+            }, true);
+            await client.invalidateQueries({ queryKey: ['today'] });
+        } catch {
+            setDayTypeError(true);
+        } finally {
+            setSavingDayType(false);
+        }
+    }
     return (
         <div className="today-page">
             <header className="today-heading">
@@ -170,6 +196,19 @@ function Dashboard() {
                     <span className="today-eyebrow">{t('todayInProgress')}</span>
                     <h1>{t('today')}</h1>
                     <p>{dateLabel}</p>
+                    <label className="today-day-type">
+                        {t('dayType')}
+                        <select
+                            value={query.data.day_type.id}
+                            disabled={savingDayType || typesQuery.isPending || typesQuery.isError}
+                            onChange={(event) => void changeDayType(event.target.value)}
+                        >
+                            {(typesQuery.data || [query.data.day_type]).map((type) => (
+                                <option key={type.id} value={type.id}>{type.name}</option>
+                            ))}
+                        </select>
+                    </label>
+                    {dayTypeError && <p role="alert">{t('dayTypeSaveError')}</p>}
                 </div>
                 <Link className="today-primary" to="/meals/new">
                     + {t('addMeal')}
@@ -186,13 +225,20 @@ function Dashboard() {
                     </div>
                     <div className="today-big-number">
                         <strong>{Number(query.data.consumed.calories).toFixed(0)}</strong>
-                        <span>kcal {t('consumed')}</span>
+                        <span>/ {formatNumber(calorieTarget, 0)} kcal {t('budget')}</span>
                     </div>
+                    <progress className="today-progress" max={calorieTarget} value={Math.min(Number(query.data.consumed.calories), calorieTarget)} aria-label={t('calorieBudget')} />
+                    <small className="today-target-note">
+                        {calorieTarget >= Number(query.data.consumed.calories)
+                            ? `${formatNumber(calorieTarget - Number(query.data.consumed.calories), 0)} kcal ${t('remaining')}`
+                            : `${formatNumber(Number(query.data.consumed.calories) - calorieTarget, 0)} kcal ${t('overBudget')}`}
+                    </small>
                     <div className="today-divider" />
                     <div className="today-metric">
                         <span>{t('protein')}</span>
-                        <strong>{Number(query.data.consumed.protein).toFixed(1)} g</strong>
+                        <strong>{Number(query.data.consumed.protein).toFixed(1)} / {formatNumber(proteinTarget, 0)} g · {t('minimum')}</strong>
                     </div>
+                    <progress className="today-progress today-progress-protein" max={proteinTarget} value={Math.min(Number(query.data.consumed.protein), proteinTarget)} aria-label={t('proteinMinimum')} />
                 </div>
                 <div className="today-card today-upcoming">
                     <div className="today-card-heading">
@@ -679,12 +725,13 @@ export default function App() {
                     <NavLink to="/history">{t('history')}</NavLink>
                     <NavLink to="/foods">{t('foods')}</NavLink>
                     <NavLink to="/recipes">{t('recipes')}</NavLink>
-                    <NavLink to="/account">{t('account')}</NavLink>
                 </nav>
-                <div className="sidebar-bottom">
-                    <a href="/api/docs">{t('apiDocs')}</a>
-                    <span>{me.data.name}</span>
+                <nav aria-label={t('account')} className="sidebar-bottom">
+                    <NavLink to="/account" className="sidebar-bottom-item">
+                        {me.data.name}
+                    </NavLink>
                     <button
+                        className="sidebar-bottom-item"
                         onClick={async () => {
                             await logout();
                             client.clear();
@@ -693,7 +740,10 @@ export default function App() {
                     >
                         {t('signOut')}
                     </button>
-                </div>
+                    <a className="sidebar-api-link" href="/api/docs">
+                        {t('apiDocs')}
+                    </a>
+                </nav>
             </aside>
             <main className="app-content">
                 <Routes>

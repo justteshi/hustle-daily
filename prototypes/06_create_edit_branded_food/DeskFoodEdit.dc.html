@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Edit food · Hustle Daily</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+a{color:#24563F}a:hover{color:#17201B}
+:focus-visible{outline:2px solid #2F6B4F;outline-offset:2px}
+</style>
+</helmet>
+<div style="min-height: 1300px; background: #F5F3EE; color: #17201B; font-family: Inter, system-ui, sans-serif; font-variant-numeric: tabular-nums; display: flex; flex-wrap: wrap">
+
+  <nav aria-label="Main" style="flex: 1 1 232px; max-width: 272px; background: #FFFFFF; border-right: 1px solid #E3E0D7; padding: 20px 14px; display: flex; flex-direction: column; gap: 18px">
+    <a href="DeskToday.dc.html" style="display: flex; align-items: center; gap: 10px; padding: 4px 8px; text-decoration: none; color: #17201B"><svg width="30" height="30" viewBox="0 0 120 120" role="img" aria-label="Hustle Daily logo" style="flex: none; display: block"><rect width="120" height="120" rx="28" fill="#2F6B4F"></rect><path d="M60 26A34 34 0 1 1 46.99 28.59" fill="none" stroke="#F5F3EE" stroke-width="9" stroke-linecap="round"></path><circle cx="46.99" cy="28.59" r="6.5" fill="#E8C27A"></circle><path d="M46 61L56 71L75 51" fill="none" stroke="#F5F3EE" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"></path></svg><strong style="font-size: 16px">Hustle Daily</strong></a>
+    <a href="DeskAddFood.dc.html" style="height: 42px; border-radius: 10px; background: #2F6B4F; color: #FFFFFF; font-weight: 600; font-size: 14px; display: flex; align-items: center; justify-content: center; text-decoration: none">+ Add food</a>
+    <div style="display: flex; flex-direction: column; gap: 2px; font-size: 14px">
+      <a href="DeskToday.dc.html" style="padding: 9px 10px; border-radius: 9px; color: #2E3832; text-decoration: none">Today</a>
+      <a href="DeskHistory.dc.html" style="padding: 9px 10px; border-radius: 9px; color: #2E3832; text-decoration: none">History</a>
+      <a href="DeskFoods.dc.html" aria-current="page" style="padding: 9px 10px; border-radius: 9px; background: #E6EFE9; color: #24563F; font-weight: 600; text-decoration: none">Foods &amp; Recipes</a>
+      <a href="DeskTrends.dc.html" style="padding: 9px 10px; border-radius: 9px; color: #2E3832; text-decoration: none">Trends</a>
+      <a href="DeskTargets.dc.html" style="padding: 9px 10px; border-radius: 9px; color: #2E3832; text-decoration: none">Targets</a>
+      <a href="DeskSettings.dc.html" style="padding: 9px 10px; border-radius: 9px; color: #2E3832; text-decoration: none">Settings</a>
+    </div>
+  </nav>
+
+  <main style="flex: 999 1 560px; min-width: 0; padding: 28px 36px 48px; display: flex; flex-direction: column; gap: 18px">
+    <a href="DeskFoods.dc.html" style="font-size: 14px">← Foods &amp; Recipes</a>
+    <header style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 12px">
+      <div style="display: flex; flex-direction: column; gap: 6px"><h1 style="margin: 0; font-size: 30px; letter-spacing: -0.02em">Whey protein Vanilla</h1><span style="font-size: 14px; color: #4D5751">Core Nutrition · used in 1 recipe and 23 logged entries</span></div>
+      <div style="display: flex; gap: 10px"><button type="button" style="height: 42px; padding: 0 14px; border-radius: 10px; border: 1px solid #CFCAC0; background: #FFFFFF; font: 600 14px Inter, sans-serif">Archive</button><button type="button" onClick="{{save}}" style="height: 42px; padding: 0 18px; border: 0; border-radius: 10px; background: #2F6B4F; color: #FFFFFF; font: 600 14px Inter, sans-serif; cursor: pointer">Save food</button></div>
+    </header>
+
+    <sc-if value="{{saved}}" hint-placeholder-val="{{false}}"><div role="status" style="padding: 12px 16px; border-radius: 12px; background: #E6EFE9; color: #24563F; font-size: 14px; font-weight: 600">✓ Saved. New entries use these values. Past entries keep the values they were logged with.</div></sc-if>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 18px; align-items: flex-start">
+      <form style="flex: 999 1 520px; min-width: 0; display: flex; flex-direction: column; gap: 16px" onSubmit="{{noSubmit}}">
+        <section style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 16px; padding: 22px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px">
+          <h2 style="grid-column: 1 / -1; margin: 0; font-size: 16px">Product</h2>
+          <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600">Name<input value="Whey protein Vanilla" style="height: 40px; border: 1px solid #CFCAC0; border-radius: 8px; padding: 0 12px; font: 15px Inter, sans-serif"></label>
+          <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600">Brand <span style="font-weight: 400; color: #646D67; font-size: 12px; margin-top: -4px">Required: the same food from different brands is stored separately</span><input value="Core Nutrition" style="height: 40px; border: 1px solid #CFCAC0; border-radius: 8px; padding: 0 12px; font: 15px Inter, sans-serif"></label>
+          <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600">Barcode<input value="5060123400011" inputmode="numeric" style="height: 40px; border: 1px solid #CFCAC0; border-radius: 8px; padding: 0 12px; font: 15px Inter, sans-serif; letter-spacing: 0.04em"></label>
+          <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600">Usual meal (optional)<select style="height: 40px; border: 1px solid #CFCAC0; border-radius: 8px; padding: 0 10px; font: 15px Inter, sans-serif; background: #FFFFFF"><option>Post-workout</option><option>Breakfast</option><option>Snack</option><option>None</option></select></label>
+        </section>
+
+        <section style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 16px; padding: 22px; display: flex; flex-direction: column; gap: 14px">
+          <div style="display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 8px"><h2 style="margin: 0; font-size: 16px">Nutrition, copied from the label</h2><span style="font-size: 12px; color: #646D67">Pick the basis the label uses first</span></div>
+          <div role="radiogroup" aria-label="Nutrition basis" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); padding: 3px; background: #EFECE5; border-radius: 10px; gap: 3px; max-width: 520px">
+            <sc-for list="{{bases}}" as="b" hint-placeholder-count="3">
+              <button type="button" role="radio" aria-checked="{{b.on}}" onClick="{{b.pick}}" style="height: 36px; border: 0; border-radius: 8px; background: {{b.bg}}; font: 600 14px Inter, sans-serif; color: {{b.ink}}; box-shadow: {{b.shadow}}; cursor: pointer">{{b.label}}</button>
+            </sc-for>
+          </div>
+          <sc-if value="{{isServing}}" hint-placeholder-val="{{false}}">
+            <label style="display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600">One serving weighs<span style="display: flex; align-items: center; height: 40px; border: 1px solid #CFCAC0; border-radius: 8px; overflow: hidden; width: 140px"><input value="30" style="flex: 1; min-width: 0; border: 0; height: 100%; padding: 0 10px; font: 15px Inter, sans-serif"><span style="padding: 0 10px; background: #FAF9F6; height: 100%; display: grid; place-items: center; border-left: 1px solid #E3E0D7">g</span></span></label>
+          </sc-if>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px">
+            <sc-for list="{{fields}}" as="f" hint-placeholder-count="7">
+              <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600">{{f.label}}
+                <span style="display: flex; align-items: center; height: 40px; border: {{f.border}}; border-radius: 8px; overflow: hidden; background: #FFFFFF"><input value="{{f.value}}" onChange="{{f.set}}" inputmode="decimal" aria-invalid="{{f.invalid}}" style="flex: 1; min-width: 0; border: 0; height: 100%; padding: 0 10px; font: 500 15px Inter, sans-serif"><span style="padding: 0 10px; height: 100%; display: grid; place-items: center; background: #FAF9F6; border-left: 1px solid #E3E0D7; color: #4D5751; font-weight: 500; font-size: 13px; white-space: nowrap">{{f.unit}}</span></span>
+              </label>
+            </sc-for>
+          </div>
+          <sc-if value="{{hasError}}" hint-placeholder-val="{{false}}"><div role="alert" style="padding: 10px 12px; border-radius: 10px; background: #FBE9E7; color: #7D241F; font-size: 13px; line-height: 1.5">{{errorText}}</div></sc-if>
+          <sc-if value="{{hasWarn}}" hint-placeholder-val="{{false}}"><div style="padding: 10px 12px; border-radius: 10px; background: #FBF1DC; color: #6B4A12; font-size: 13px; line-height: 1.5">{{warnText}}</div></sc-if>
+          <span style="font-size: 12px; color: #646D67">Try typing 110 in Protein to see validation, or switch the basis to see the units change.</span>
+        </section>
+
+        <section style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 16px; padding: 22px; display: flex; flex-direction: column; gap: 12px">
+          <div style="display: flex; justify-content: space-between; align-items: baseline"><h2 style="margin: 0; font-size: 16px">Portions</h2><span style="font-size: 12px; color: #646D67">Lets you log “1 scoop” instead of grams</span></div>
+          <div style="display: grid; grid-template-columns: minmax(0, 1.4fr) 24px minmax(0, 1fr) 40px; gap: 10px; align-items: center; font-size: 14px">
+            <input aria-label="Portion name" value="1 scoop" style="height: 40px; border: 1px solid #CFCAC0; border-radius: 8px; padding: 0 10px; font: 15px Inter, sans-serif"><span style="text-align: center; color: #646D67">=</span>
+            <span style="display: flex; align-items: center; height: 40px; border: 1px solid #CFCAC0; border-radius: 8px; overflow: hidden"><input aria-label="Grams per scoop" value="{{scoop}}" onChange="{{setScoop}}" style="flex: 1; min-width: 0; border: 0; height: 100%; padding: 0 10px; font: 15px Inter, sans-serif"><span style="padding: 0 10px; background: #FAF9F6; height: 100%; display: grid; place-items: center; border-left: 1px solid #E3E0D7">g</span></span>
+            <button type="button" aria-label="Remove 1 scoop" style="width: 40px; height: 40px; border: 0; border-radius: 8px; background: #F1EFEA; font-size: 16px">×</button>
+            <input aria-label="Portion name" value="1 tbsp" style="height: 40px; border: 1px solid #CFCAC0; border-radius: 8px; padding: 0 10px; font: 15px Inter, sans-serif"><span style="text-align: center; color: #646D67">=</span>
+            <span style="display: flex; align-items: center; height: 40px; border: 1px solid #CFCAC0; border-radius: 8px; overflow: hidden"><input aria-label="Grams per tablespoon" value="8" style="flex: 1; min-width: 0; border: 0; height: 100%; padding: 0 10px; font: 15px Inter, sans-serif"><span style="padding: 0 10px; background: #FAF9F6; height: 100%; display: grid; place-items: center; border-left: 1px solid #E3E0D7">g</span></span>
+            <button type="button" aria-label="Remove 1 tbsp" style="width: 40px; height: 40px; border: 0; border-radius: 8px; background: #F1EFEA; font-size: 16px">×</button>
+          </div>
+          <button type="button" style="align-self: flex-start; border: 0; background: transparent; color: #24563F; font: 600 14px Inter, sans-serif; padding: 0">+ Add portion (pinch, slice, piece…)</button>
+        </section>
+      </form>
+
+      <aside style="flex: 1 1 320px; min-width: 0; background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 16px; padding: 22px; display: flex; flex-direction: column; gap: 14px">
+        <h2 style="margin: 0; font-size: 16px">Preview · = calculated</h2>
+        <sc-for list="{{previews}}" as="p" hint-placeholder-count="2">
+          <div style="border: 1px solid #E3E0D7; border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 10px">
+            <strong style="font-size: 14px">{{p.label}}</strong>
+            <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px">
+              <span><strong style="font-size: 20px">{{p.kcal}}</strong><br><span style="font-size: 12px; color: #4D5751">kcal</span></span>
+              <span><strong style="font-size: 20px">{{p.p}}</strong><br><span style="font-size: 12px; color: #4D5751">g protein</span></span>
+              <span><strong style="font-size: 20px">{{p.c}}</strong><br><span style="font-size: 12px; color: #4D5751">g carbs</span></span>
+              <span><strong style="font-size: 20px">{{p.f}}</strong><br><span style="font-size: 12px; color: #4D5751">g fat</span></span>
+            </div>
+          </div>
+        </sc-for>
+        <div style="font-size: 13px; line-height: 1.55; color: #4D5751; padding-top: 10px; border-top: 1px solid #ECE9E2">Source: <strong>Verified by you</strong> · 3 Sep 2026<br>Changes apply to new entries only. 23 past entries keep their logged values.</div>
+      </aside>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1300}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state;
+    const basis = s.basis ?? 'g';
+    const v = { kcal: s.kcal ?? '380', p: s.p ?? '78', c: s.c ?? '6', f: s.f ?? '5.4', fibre: s.fibre ?? '1.2', sugar: s.sugar ?? '4.8', salt: s.salt ?? '0.4' };
+    const num = (x) => parseFloat(String(x).replace(',', '.'));
+    const unitW = basis === 'ml' ? 'ml' : 'g';
+    const per = basis === 'serving' ? 'per serving' : 'per 100 ' + unitW;
+    const P = num(v.p), C = num(v.c), F = num(v.f), K = num(v.kcal);
+    let errorText = '';
+    if (basis !== 'serving' && P + C + F > 100) errorText = 'Protein, carbs and fat add up to more than 100 g per 100 ' + unitW + '. Check that the label really says “per 100 ' + unitW + '”. If it gives values per serving, switch the basis above.';
+    if (isNaN(K)) errorText = 'Enter calories. Use 0 if the label says 0.';
+    const est = Math.round(P * 4 + C * 4 + F * 9);
+    const warnText = !errorText && K && Math.abs(est - K) / K > 0.2 ? 'The calories don’t quite match the macros (about ' + est + ' kcal expected). Labels sometimes round values, but it’s worth a second look.' : '';
+    const mk = (key, label, unit) => ({ label, unit, value: v[key], invalid: key === 'p' && errorText && !errorText.startsWith('Enter') ? 'true' : 'false', border: key === 'p' && errorText && !errorText.startsWith('Enter') ? '1.5px solid #A0322B' : '1px solid #CFCAC0', set: (e) => this.setState({ [key]: e.target.value }) });
+    const scoop = num(s.scoop ?? '30') || 0;
+    const k = basis === 'serving' ? scoop / 30 : scoop / 100;
+    const r1 = (x) => (Math.round(x * 10) / 10).toString();
+    const ok = (x) => isNaN(x) ? '–' : x;
+    return {
+      bases: [['g', 'per 100 g'], ['ml', 'per 100 ml'], ['serving', 'per serving']].map(([id, label]) => ({ label, on: id === basis ? 'true' : 'false', bg: id === basis ? '#FFFFFF' : 'transparent', ink: id === basis ? '#17201B' : '#4D5751', shadow: id === basis ? '0 1px 2px rgba(23,32,27,.12)' : 'none', pick: () => this.setState({ basis: id }) })),
+      isServing: basis === 'serving',
+      fields: [mk('kcal', 'Calories', 'kcal ' + per), mk('p', 'Protein', 'g'), mk('c', 'Carbohydrates', 'g'), mk('f', 'Fat', 'g'), mk('fibre', 'Fibre (optional)', 'g'), mk('sugar', 'Sugar (optional)', 'g'), mk('salt', 'Salt (optional)', 'g')],
+      hasError: !!errorText, errorText, hasWarn: !!warnText, warnText,
+      scoop: s.scoop ?? '30', setScoop: (e) => this.setState({ scoop: e.target.value }),
+      previews: [
+        { label: basis === 'serving' ? 'Per serving (30 g)' : 'Per 100 ' + unitW, kcal: ok(Math.round(K)), p: ok(r1(P)), c: ok(r1(C)), f: ok(r1(F)) },
+        { label: '1 scoop (' + scoop + ' g)', kcal: ok(Math.round(K * k)), p: ok(r1(P * k)), c: ok(r1(C * k)), f: ok(r1(F * k)) }
+      ],
+      saved: !!s.saved, save: () => this.setState({ saved: !errorText }), noSubmit: (e) => e.preventDefault()
+    };
+  }
+}
+</script>
+</body>
+</html>

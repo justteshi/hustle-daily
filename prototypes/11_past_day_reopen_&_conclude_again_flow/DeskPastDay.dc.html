@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Tuesday 20 October · Hustle Daily</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+a{color:#24563F}a:hover{color:#17201B}
+:focus-visible{outline:2px solid #2F6B4F;outline-offset:2px}
+</style>
+</helmet>
+<div style="min-height: 1400px; background: #F5F3EE; color: #17201B; font-family: Inter, system-ui, sans-serif; font-variant-numeric: tabular-nums; display: flex; flex-wrap: wrap">
+
+  <nav aria-label="Main" style="flex: 1 1 232px; max-width: 272px; background: #FFFFFF; border-right: 1px solid #E3E0D7; padding: 20px 14px; display: flex; flex-direction: column; gap: 18px">
+    <a href="DeskToday.dc.html" style="display: flex; align-items: center; gap: 10px; padding: 4px 8px; text-decoration: none; color: #17201B"><svg width="30" height="30" viewBox="0 0 120 120" role="img" aria-label="Hustle Daily logo" style="flex: none; display: block"><rect width="120" height="120" rx="28" fill="#2F6B4F"></rect><path d="M60 26A34 34 0 1 1 46.99 28.59" fill="none" stroke="#F5F3EE" stroke-width="9" stroke-linecap="round"></path><circle cx="46.99" cy="28.59" r="6.5" fill="#E8C27A"></circle><path d="M46 61L56 71L75 51" fill="none" stroke="#F5F3EE" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"></path></svg><strong style="font-size: 16px">Hustle Daily</strong></a>
+    <a href="DeskAddFood.dc.html" style="height: 42px; border-radius: 10px; background: #2F6B4F; color: #FFFFFF; font-weight: 600; font-size: 14px; display: flex; align-items: center; justify-content: center; text-decoration: none">+ Add food</a>
+    <div style="display: flex; flex-direction: column; gap: 2px; font-size: 14px">
+      <a href="DeskToday.dc.html" style="padding: 9px 10px; border-radius: 9px; color: #2E3832; text-decoration: none">Today</a>
+      <a href="DeskHistory.dc.html" aria-current="page" style="padding: 9px 10px; border-radius: 9px; background: #E6EFE9; color: #24563F; font-weight: 600; text-decoration: none">History</a>
+      <a href="DeskFoods.dc.html" style="padding: 9px 10px; border-radius: 9px; color: #2E3832; text-decoration: none">Foods &amp; Recipes</a>
+      <a href="DeskTrends.dc.html" style="padding: 9px 10px; border-radius: 9px; color: #2E3832; text-decoration: none">Trends</a>
+      <a href="DeskTargets.dc.html" style="padding: 9px 10px; border-radius: 9px; color: #2E3832; text-decoration: none">Targets</a>
+      <a href="DeskSettings.dc.html" style="padding: 9px 10px; border-radius: 9px; color: #2E3832; text-decoration: none">Settings</a>
+    </div>
+  </nav>
+
+  <main style="flex: 999 1 560px; min-width: 0; padding: 28px 36px 48px; display: flex; flex-direction: column; gap: 18px">
+    <a href="DeskHistory.dc.html" style="font-size: 14px">← History</a>
+    <header style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 14px">
+      <div style="display: flex; flex-direction: column; gap: 8px">
+        <h1 style="margin: 0; font-size: 30px; letter-spacing: -0.02em">Tuesday, 20 October</h1>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: center">
+          <span style="font-size: 13px; font-weight: 600; padding: 5px 10px; border-radius: 999px; background: #F1EFEA">Training Day</span>
+          <span style="display: inline-flex; align-items: center; height: 28px; padding: 0 10px; border-radius: 999px; background: {{chipBg}}; color: {{chipInk}}; font-size: 13px; font-weight: 600">{{chip}}</span>
+          <span style="font-size: 13px; color: #646D67">{{audit}}</span>
+        </div>
+      </div>
+      <div style="display: flex; gap: 10px">
+        <sc-if value="{{isLocked}}" hint-placeholder-val="{{true}}"><button type="button" onClick="{{reopen}}" style="height: 42px; padding: 0 16px; border-radius: 10px; border: 1px solid #CFCAC0; background: #FFFFFF; font: 600 14px Inter, sans-serif; cursor: pointer">Reopen to edit</button></sc-if>
+        <sc-if value="{{isOpen}}" hint-placeholder-val="{{false}}"><button type="button" onClick="{{cancel}}" style="height: 42px; padding: 0 16px; border-radius: 10px; border: 1px solid #CFCAC0; background: #FFFFFF; font: 600 14px Inter, sans-serif; cursor: pointer">Discard changes</button><button type="button" onClick="{{conclude}}" style="height: 42px; padding: 0 18px; border: 0; border-radius: 10px; background: #2F6B4F; color: #FFFFFF; font: 600 14px Inter, sans-serif; cursor: pointer">Conclude again</button></sc-if>
+      </div>
+    </header>
+
+    <sc-if value="{{isOpen}}" hint-placeholder-val="{{false}}">
+      <div role="status" style="padding: 12px 16px; border-radius: 12px; background: #E4ECF5; color: #1F4470; font-size: 14px; line-height: 1.5">This day is reopened. Totals recalculate as you edit. Apple Health values stay as they were synced. Try changing the rice from 250 g to 180 g.</div>
+    </sc-if>
+    <sc-if value="{{again}}" hint-placeholder-val="{{false}}">
+      <div role="status" style="padding: 12px 16px; border-radius: 12px; background: #E6EFE9; color: #24563F; font-size: 14px; font-weight: 600">✓ Concluded again. The corrected totals are saved and the earlier conclusion is kept in the day’s log.</div>
+    </sc-if>
+
+    <section aria-label="Day totals" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px">
+      <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 4px"><span style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #646D67">Eaten · =</span><span><strong style="font-size: 26px">{{kcal}}</strong> / 2,000 kcal</span><span style="font-size: 12px; color: #4D5751">{{kcalDelta}}</span></div>
+      <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 4px"><span style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #646D67">Protein · =</span><span><strong style="font-size: 26px">{{protein}}</strong> / 160 g</span><span style="font-size: 12px; color: #4D5751">{{proteinNote}}</span></div>
+      <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 4px"><span style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #646D67">Burned · =</span><span><strong style="font-size: 26px">2,910</strong> kcal</span><span style="font-size: 12px; color: #4D5751">1,952 resting + 958 active (Apple Health)</span></div>
+      <div style="background: #E0EEED; border: 1px solid #C6DEDC; border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 4px; color: #1D6767"><span style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase">Balance · =</span><span><strong style="font-size: 26px">{{balance}}</strong> kcal deficit ↓</span><span style="font-size: 12px">{{balanceDelta}}</span></div>
+    </section>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start">
+      <section aria-labelledby="fH" style="flex: 999 1 600px; min-width: 0; background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 16px; padding: 8px 0 12px; overflow-x: auto">
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 20px"><h2 id="fH" style="margin: 0; font-size: 17px">Food</h2><span style="font-size: 12px; color: #646D67">{{foodHint}}</span></div>
+        <div style="min-width: 680px">
+          <div style="display: grid; grid-template-columns: 110px minmax(0, 1fr) 120px 64px 60px; gap: 8px; padding: 8px 20px; font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #646D67; border-bottom: 1px solid #ECE9E2"><span>Meal</span><span>Food</span><span style="text-align: right">Amount</span><span style="text-align: right">kcal</span><span style="text-align: right">Protein</span></div>
+          <sc-for list="{{rows}}" as="r" hint-placeholder-count="9">
+            <div style="display: grid; grid-template-columns: 110px minmax(0, 1fr) 120px 64px 60px; gap: 8px; padding: 8px 20px; align-items: center; font-size: 14px; background: {{r.bg}}">
+              <span style="font-size: 13px; color: #4D5751">{{r.meal}}</span>
+              <span style="min-width: 0"><span style="font-weight: 500">{{r.name}}</span><br><span style="font-size: 12px; color: {{r.subInk}}">{{r.sub}}</span></span>
+              <span style="text-align: right">
+                <sc-if value="{{r.editable}}" hint-placeholder-val="{{false}}"><span style="display: inline-flex; align-items: center; height: 34px; border: 1px solid #2D5C91; border-radius: 8px; overflow: hidden"><input aria-label="Quantity of {{r.name}}" value="{{r.qty}}" onChange="{{r.setQty}}" inputmode="decimal" style="width: 64px; border: 0; height: 100%; padding: 0 8px; font: 500 14px Inter, sans-serif; text-align: right"><span style="padding: 0 8px; background: #FAF9F6; height: 100%; display: grid; place-items: center; border-left: 1px solid #E3E0D7">{{r.unit}}</span></span></sc-if>
+                <sc-if value="{{r.fixed}}" hint-placeholder-val="{{true}}">{{r.qtyLabel}}</sc-if>
+              </span>
+              <span style="text-align: right">{{r.kcal}}</span><span style="text-align: right">{{r.p}} g</span>
+            </div>
+          </sc-for>
+        </div>
+      </section>
+
+      <aside style="flex: 1 1 300px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+        <section style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 16px; padding: 18px 20px; display: flex; flex-direction: column; gap: 10px; font-size: 14px">
+          <div style="display: flex; justify-content: space-between"><h2 style="margin: 0; font-size: 16px">Workout</h2><span style="font-size: 12px; color: #646D67">Apple Health</span></div>
+          <span><strong>Outdoor Run</strong> · 18:05–18:41 · 36 min</span>
+          <span style="color: #4D5751">402 kcal, which is part of the 958 kcal active energy</span>
+        </section>
+        <section style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 16px; padding: 18px 20px; display: grid; grid-template-columns: 1fr auto; gap: 8px; font-size: 14px">
+          <h2 style="grid-column: 1 / -1; margin: 0 0 4px; font-size: 16px">Activity &amp; body <span style="font-weight: 400; font-size: 12px; color: #646D67">· Apple Health, read-only</span></h2>
+          <span>Steps</span><strong>10,412 ✓</strong>
+          <span>Resting energy</span><strong>1,952 kcal</strong>
+          <span>Active energy</span><strong>958 kcal</strong>
+          <span>Sleep</span><strong>6 h 52 min</strong>
+          <span>Weight</span><strong>104.4 kg</strong>
+          <span style="grid-column: 1 / -1; font-size: 12px; color: #646D67">Last synced 20 Oct 23:58 from iPhone</span>
+        </section>
+        <section style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 16px; padding: 18px 20px; display: flex; flex-direction: column; gap: 8px">
+          <label for="pn" style="font-size: 16px; font-weight: 700">Notes ✎</label>
+          <textarea id="pn" rows="3" disabled="{{isLocked}}" style="border: 1px solid #CFCAC0; border-radius: 10px; padding: 10px 12px; font: 14px Inter, sans-serif; background: {{notesBg}}">Long day at work, late run.</textarea>
+        </section>
+      </aside>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1400}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state;
+    const mode = s.mode ?? 'concluded';
+    const rice = s.rice ?? '250';
+    const riceQ = parseFloat(rice) || 0;
+    const fmt = (n) => Math.round(n).toLocaleString('en-US');
+    const fixed = [
+      ['Breakfast', 'Breakfast bowl', 'My recipe', '1 serving', 485, 46],
+      ['Lunch', 'Chicken breast, grilled', 'Fresh Poultry Co.', '120 g', 198, 37.2],
+      ['Snack', 'Cottage cheese 2%', 'Balkan Farm', '200 g', 176, 25.6],
+      ['Post-workout', 'Whey protein Vanilla', 'Core Nutrition', '1 scoop (30 g)', 114, 23.4],
+      ['Post-workout', 'Milk 1.5%', 'Balkan Farm', '250 ml', 117.5, 8.5],
+      ['Cooking', 'Extra virgin olive oil', 'Terra Verde', '1 tbsp (14 g)', 124, 0],
+      ['Dinner', 'Banana', 'Fresh produce', '130 g', 115.7, 1.4],
+      ['Dinner', 'Dark chocolate 85%', 'Cacao Lab', '37 g', 225, 3.1]
+    ];
+    const riceK = riceQ * 1.3, riceP = riceQ * 0.027;
+    const open = mode === 'reopened';
+    const changed = riceQ !== 250;
+    const rows = [];
+    fixed.forEach((f, i) => {
+      rows.push({ meal: f[0], name: f[1], sub: f[2], subInk: '#646D67', qtyLabel: f[3], kcal: fmt(f[4]), p: (Math.round(f[5] * 10) / 10), editable: false, fixed: true, bg: 'transparent', unit: '', qty: '', setQty: () => {} });
+      if (i === 1) rows.push({ meal: 'Lunch', name: 'Basmati rice, cooked', sub: changed ? 'Alpen Mill · was 250 g, 325 kcal' : 'Alpen Mill', subInk: changed ? '#2D5C91' : '#646D67', qtyLabel: riceQ + ' g', kcal: fmt(riceK), p: Math.round(riceP * 10) / 10, editable: open, fixed: !open, bg: changed ? '#F3F7FC' : 'transparent', unit: 'g', qty: rice, setQty: (e) => this.setState({ rice: e.target.value }) });
+    });
+    const kcal = fixed.reduce((a, f) => a + f[4], 0) + riceK;
+    const prot = fixed.reduce((a, f) => a + f[5], 0) + riceP;
+    const baseK = fixed.reduce((a, f) => a + f[4], 0) + 325;
+    const bal = 2910 - kcal;
+    return {
+      isLocked: !open, isOpen: open, again: mode === 'again',
+      chip: mode === 'concluded' ? '✓ Concluded' : mode === 'reopened' ? '↺ Reopened · editing' : '✓ Concluded again',
+      chipBg: open ? '#E4ECF5' : '#E6EFE9', chipInk: open ? '#2D5C91' : '#24563F',
+      audit: mode === 'again' ? 'Concluded 20 Oct 22:41 · corrected and concluded again 22 Oct 10:12' : 'Concluded 20 Oct 22:41',
+      reopen: () => this.setState({ mode: 'reopened' }),
+      cancel: () => this.setState({ mode: 'concluded', rice: '250' }),
+      conclude: () => this.setState({ mode: 'again' }),
+      rows,
+      kcal: fmt(kcal), protein: fmt(prot),
+      kcalDelta: changed ? 'Was ' + fmt(baseK) + ' kcal before the correction' : '120 kcal left in budget',
+      proteinNote: prot >= 160 ? '✓ Minimum met' : fmt(160 - prot) + ' g below minimum',
+      balance: fmt(bal), balanceDelta: changed ? 'Was ' + fmt(2910 - baseK) + ' kcal deficit' : '2,910 burned − ' + fmt(kcal) + ' eaten',
+      foodHint: open ? '✎ Quantities are editable while the day is reopened' : 'Reopen the day to edit',
+      notesBg: open ? '#FFFFFF' : '#FAF9F6'
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,446 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Today · Hustle Daily</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+a{color:#24563F}a:hover{color:#17201B}
+:focus-visible{outline:2px solid #2F6B4F;outline-offset:2px}
+</style>
+</helmet>
+<div style="position: relative; min-height: 1400px; background: #F5F3EE; color: #17201B; font-family: Inter, system-ui, sans-serif; font-variant-numeric: tabular-nums; display: flex; flex-wrap: wrap; align-items: stretch">
+
+  <nav aria-label="Main" style="flex: 1 1 232px; max-width: 272px; background: #FFFFFF; border-right: 1px solid #E3E0D7; padding: 20px 14px; display: flex; flex-direction: column; gap: 18px">
+    <a href="DeskToday.dc.html" style="display: flex; align-items: center; gap: 10px; padding: 4px 8px; text-decoration: none; color: #17201B"><svg width="30" height="30" viewBox="0 0 120 120" role="img" aria-label="Hustle Daily logo" style="flex: none; display: block"><rect width="120" height="120" rx="28" fill="#2F6B4F"></rect><path d="M60 26A34 34 0 1 1 46.99 28.59" fill="none" stroke="#F5F3EE" stroke-width="9" stroke-linecap="round"></path><circle cx="46.99" cy="28.59" r="6.5" fill="#E8C27A"></circle><path d="M46 61L56 71L75 51" fill="none" stroke="#F5F3EE" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"></path></svg><strong style="font-size: 16px">Hustle Daily</strong></a>
+    <button type="button" onClick="{{openDrawer}}" style="height: 42px; border: 0; border-radius: 10px; background: #2F6B4F; color: #FFFFFF; font: 600 14px Inter, sans-serif; display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Add food</button>
+    <div style="display: flex; flex-direction: column; gap: 2px; font-size: 14px">
+      <a href="DeskToday.dc.html" aria-current="page" style="display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 9px; background: #E6EFE9; color: #24563F; font-weight: 600; text-decoration: none"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>Today</a>
+      <a href="DeskHistory.dc.html" style="display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 9px; color: #2E3832; text-decoration: none"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"></rect><path d="M3 10h18M8 3v4M16 3v4"></path></svg>History</a>
+      <a href="DeskFoods.dc.html" style="display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 9px; color: #2E3832; text-decoration: none"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M3 11h18a9 9 0 0 1-18 0Z"></path><path d="M9 7c0-2 1-3 2-3M14 7c0-2 1-3 2-3"></path></svg>Foods &amp; Recipes</a>
+      <a href="DeskTrends.dc.html" style="display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 9px; color: #2E3832; text-decoration: none"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8"></path><path d="M15 7h6v6"></path></svg>Trends</a>
+      <a href="DeskTargets.dc.html" style="display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 9px; color: #2E3832; text-decoration: none"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="5"></circle><circle cx="12" cy="12" r="1"></circle></svg>Targets</a>
+      <a href="DeskSettings.dc.html" style="display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 9px; color: #2E3832; text-decoration: none"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12"></path><circle cx="16" cy="6" r="2"></circle><circle cx="10" cy="12" r="2"></circle><circle cx="18" cy="18" r="2"></circle></svg>Settings</a>
+    </div>
+    <div style="margin-top: auto; border: 1px solid #E3E0D7; border-radius: 12px; padding: 12px; display: flex; flex-direction: column; gap: 4px; font-size: 12px; line-height: 1.45">
+      <span style="display: flex; align-items: center; gap: 6px; font-weight: 600; color: #2E3832"><span style="width: 8px; height: 8px; border-radius: 50%; background: {{syncDot}}"></span>Apple Health via iPhone</span>
+      <span style="color: #4D5751">Last sync: {{syncText}}</span>
+    </div>
+  </nav>
+
+  <main style="flex: 999 1 560px; min-width: 0; padding: 28px 36px 48px; display: flex; flex-direction: column; gap: 22px">
+
+    <header style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px">
+      <div style="display: flex; flex-direction: column; gap: 10px">
+        <span style="font-size: 14px; color: #4D5751">Today · day in progress</span>
+        <h1 style="margin: 0; font-size: 30px; letter-spacing: -0.02em">Thursday, 22 October</h1>
+        <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px">
+          <label style="display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: #4D5751">Day type
+            <select value="{{dayType}}" onChange="{{setDayType}}" style="height: 34px; border: 1px solid #CFCAC0; border-radius: 8px; padding: 0 10px; font: 600 14px Inter, sans-serif; color: #17201B; background: #FFFFFF">
+              <option value="training">Training Day</option>
+              <option value="rest">Rest Day</option>
+            </select>
+          </label>
+          <span style="display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 10px; border-radius: 999px; border: 1px solid #CFCAC0; color: #4D5751; font-size: 13px; font-weight: 600"><span style="width: 8px; height: 8px; border-radius: 50%; border: 1.5px solid #646D67"></span>Open</span>
+          <sc-if value="{{showSuggest}}" hint-placeholder-val="{{false}}"><span style="font-size: 13px; color: #2D5C91">A workout was recorded today, so Training Day is suggested. Your choice stays as set.</span></sc-if>
+        </div>
+      </div>
+      <div style="display: flex; gap: 10px">
+        <a href="DeskReview.dc.html" style="height: 42px; padding: 0 16px; border-radius: 10px; border: 1px solid #CFCAC0; background: #FFFFFF; color: #17201B; font-weight: 600; font-size: 14px; display: inline-flex; align-items: center; text-decoration: none">Review &amp; conclude</a>
+        <button type="button" onClick="{{openDrawer}}" style="height: 42px; padding: 0 16px; border: 0; border-radius: 10px; background: #2F6B4F; color: #FFFFFF; font: 600 14px Inter, sans-serif; cursor: pointer">+ Add food</button>
+      </div>
+    </header>
+
+    <sc-if value="{{partial}}" hint-placeholder-val="{{false}}">
+      <div role="status" style="display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; padding: 14px 18px; border-radius: 14px; background: #FBF1DC; border: 1px solid #E7C98A; color: #4A3A1A; font-size: 14px; line-height: 1.5">
+        <strong style="color: #6B4A12">Apple Health data is incomplete</strong>
+        <span style="flex: 1 1 400px">Last iPhone sync was at 09:05, more than 9 hours ago. Resting energy and sleep haven’t arrived, and steps only include the iPhone. <strong>Open Hustle Daily on your iPhone to refresh Apple Health data.</strong></span>
+      </div>
+    </sc-if>
+
+    <section aria-label="Summary" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px">
+
+      <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 16px; padding: 20px 22px; display: flex; flex-direction: column; gap: 14px">
+        <div style="display: flex; justify-content: space-between; align-items: center"><h2 style="margin: 0; font-size: 15px">Food</h2><span style="font-size: 12px; color: #646D67">= from {{entryCount}} entries</span></div>
+        <div style="display: flex; align-items: baseline; gap: 8px"><strong style="font-size: 40px; letter-spacing: -0.03em">{{kcal}}</strong><span style="color: #4D5751">/ {{kcalTarget}} kcal budget</span></div>
+        <div style="height: 8px; border-radius: 4px; background: #ECE9E2; overflow: hidden"><div style="height: 100%; width: {{kcalPct}}; background: #17201B"></div></div>
+        <span style="font-size: 13px; color: #4D5751; margin-top: -6px">{{kcalLeftText}}</span>
+        <div style="display: flex; flex-direction: column; gap: 10px; padding-top: 12px; border-top: 1px solid #ECE9E2">
+          <div style="display: flex; flex-direction: column; gap: 6px">
+            <div style="display: flex; justify-content: space-between; font-size: 14px"><span><span style="display: inline-block; width: 8px; height: 8px; border-radius: 2px; background: #2F6B4F; margin-right: 8px"></span>Protein <span style="color: #646D67">· min</span></span><span><strong>{{protein}}</strong> / {{proteinTarget}} g</span></div>
+            <div style="height: 6px; border-radius: 3px; background: #ECE9E2; overflow: hidden"><div style="height: 100%; width: {{proteinPct}}; background: #2F6B4F"></div></div>
+            <span style="font-size: 12px; color: #4D5751">{{proteinText}}</span>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; font-size: 14px">
+            <span><span style="display: inline-block; width: 8px; height: 8px; border-radius: 2px; background: #9A5B13; margin-right: 8px"></span>Carbs <strong>{{carbs}} g</strong></span>
+            <span><span style="display: inline-block; width: 8px; height: 8px; border-radius: 2px; background: #8A4569; margin-right: 8px"></span>Fat <strong>{{fat}} g</strong></span>
+          </div>
+        </div>
+      </div>
+
+      <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 16px; padding: 20px 22px; display: flex; flex-direction: column; gap: 12px">
+        <div style="display: flex; justify-content: space-between; align-items: center"><h2 style="margin: 0; font-size: 15px">Energy so far</h2><span style="font-size: 12px; color: #646D67">Will change until the day ends</span></div>
+        <div style="display: grid; grid-template-columns: 1fr auto; row-gap: 8px; column-gap: 12px; font-size: 14px; align-items: baseline">
+          <span>Resting energy <span style="font-size: 12px; color: #646D67">· Apple Health</span></span>
+          <sc-if value="{{restingOk}}" hint-placeholder-val="{{true}}"><strong>1,960 kcal</strong></sc-if>
+          <sc-if value="{{partial}}" hint-placeholder-val="{{false}}"><span style="display: inline-flex; height: 22px; padding: 0 8px; align-items: center; border-radius: 6px; border: 1px dashed #C99A3E; background: #FBF1DC; color: #8A5300; font-size: 12px; font-weight: 600">Missing</span></sc-if>
+          <span>+ Active energy <span style="font-size: 12px; color: #646D67">· Apple Health</span></span>
+          <strong>{{activeText}}</strong>
+          <span style="padding-top: 8px; border-top: 1px solid #ECE9E2">= Total burned</span>
+          <strong style="padding-top: 8px; border-top: 1px solid #ECE9E2">{{burnedText}}</strong>
+          <span>− Consumed</span>
+          <strong>{{kcal}} kcal</strong>
+        </div>
+        <sc-if value="{{restingOk}}" hint-placeholder-val="{{true}}">
+          <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 8px; padding: 12px 14px; border-radius: 12px; background: {{balanceBg}}; color: {{balanceInk}}">
+            <span style="font-size: 13px; font-weight: 600">Energy balance</span>
+            <span><strong style="font-size: 26px; letter-spacing: -0.02em">{{balanceAbs}}</strong> kcal {{balanceWord}} {{balanceArrow}}</span>
+          </div>
+        </sc-if>
+        <sc-if value="{{partial}}" hint-placeholder-val="{{false}}">
+          <div style="padding: 12px 14px; border-radius: 12px; border: 1.5px dashed #C99A3E; background: #FFFBF2; color: #6B4A12; font-size: 13px; line-height: 1.5"><strong>Energy balance can’t be calculated yet.</strong> It needs Resting energy from Apple Health. Hustle Daily won’t guess.</div>
+        </sc-if>
+      </div>
+
+      <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 16px; padding: 20px 22px; display: flex; flex-direction: column; gap: 14px">
+        <div style="display: flex; justify-content: space-between; align-items: center"><h2 style="margin: 0; font-size: 15px">Activity &amp; body</h2><span style="font-size: 12px; color: #646D67">Apple Health</span></div>
+        <div style="display: flex; flex-direction: column; gap: 6px">
+          <div style="display: flex; justify-content: space-between; font-size: 14px"><span><span style="display: inline-block; width: 8px; height: 8px; border-radius: 2px; background: #2D5C91; margin-right: 8px"></span>Steps <span style="color: #646D67">{{stepsTargetLabel}}</span></span><span><strong>{{steps}}</strong>{{stepsTargetText}}</span></div>
+          <div style="height: 6px; border-radius: 3px; background: #ECE9E2; overflow: hidden"><div style="height: 100%; width: {{stepsPct}}; background: #2D5C91"></div></div>
+          <span style="font-size: 12px; color: {{stepsNoteInk}}">{{stepsNote}}</span>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding-top: 12px; border-top: 1px solid #ECE9E2">
+          <div style="display: flex; flex-direction: column; gap: 4px">
+            <span style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #646D67">Sleep</span>
+            <sc-if value="{{restingOk}}" hint-placeholder-val="{{true}}"><span><strong style="font-size: 22px">7 h 14 min</strong></span><span style="font-size: 12px; color: #646D67">Asleep 23:38–07:02</span></sc-if>
+            <sc-if value="{{partial}}" hint-placeholder-val="{{false}}"><span style="font-size: 18px; font-weight: 700; color: #8A5300">Missing</span><span style="font-size: 12px; color: #6B4A12">No sleep recorded. Was the watch worn overnight?</span></sc-if>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 4px">
+            <span style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #646D67">Weight</span>
+            <span><strong style="font-size: 22px">104.0</strong> kg</span>
+            <span style="font-size: 12px; color: #646D67">Scale · 06:58</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start">
+      <section aria-labelledby="foodH" style="flex: 999 1 560px; min-width: 0; background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 16px; padding: 8px 0 12px">
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 22px"><h2 id="foodH" style="margin: 0; font-size: 17px">Today’s food</h2><span style="font-size: 12px; color: #646D67">✎ Select a row to edit quantity, meal or time</span></div>
+        <div style="overflow-x: auto">
+          <div style="min-width: 640px">
+            <div style="display: grid; grid-template-columns: minmax(0, 1fr) 110px 64px 52px 52px 52px 76px; gap: 8px; padding: 8px 22px; font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #646D67; border-bottom: 1px solid #ECE9E2"><span>Food</span><span style="text-align: right">Amount</span><span style="text-align: right">kcal</span><span style="text-align: right">Prot.</span><span style="text-align: right">Carbs</span><span style="text-align: right">Fat</span><span></span></div>
+            <sc-for list="{{groups}}" as="g" hint-placeholder-count="4">
+              <div style="display: grid; grid-template-columns: minmax(0, 1fr) 110px 64px 52px 52px 52px 76px; gap: 8px; padding: 14px 22px 6px; font-size: 13px; align-items: baseline">
+                <strong style="font-size: 14px">{{g.name}} <span style="font-weight: 400; color: #646D67">· {{g.time}}</span></strong><span></span><strong style="text-align: right">{{g.kcal}}</strong><span style="text-align: right; color: #4D5751">{{g.p}} g</span><span style="text-align: right; color: #4D5751">{{g.c}} g</span><span style="text-align: right; color: #4D5751">{{g.f}} g</span><span></span>
+              </div>
+              <sc-for list="{{g.items}}" as="e" hint-placeholder-count="2">
+                <div style="display: grid; grid-template-columns: minmax(0, 1fr) 110px 64px 52px 52px 52px 76px; gap: 8px; padding: 8px 22px; font-size: 14px; align-items: center; background: {{e.bg}}">
+                  <span style="min-width: 0"><span style="font-weight: 500">{{e.name}}</span><br><span style="font-size: 12px; color: #646D67">{{e.brand}}</span></span>
+                  <span style="text-align: right">{{e.qty}}</span><span style="text-align: right">{{e.kcal}}</span><span style="text-align: right">{{e.p}}</span><span style="text-align: right">{{e.c}}</span><span style="text-align: right">{{e.f}}</span>
+                  <span style="display: flex; justify-content: flex-end; gap: 2px">
+                    <button type="button" aria-label="Edit {{e.name}}" style="width: 32px; height: 32px; border: 0; border-radius: 8px; background: transparent; color: #4D5751; display: grid; place-items: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4Z"></path></svg></button>
+                    <button type="button" aria-label="Delete {{e.name}}" style="width: 32px; height: 32px; border: 0; border-radius: 8px; background: transparent; color: #4D5751; display: grid; place-items: center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"></path></svg></button>
+                  </span>
+                </div>
+              </sc-for>
+            </sc-for>
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 14px 22px 6px; font-size: 14px">
+              <span><strong>Dinner</strong> <span style="color: #646D67">· nothing logged yet</span></span>
+              <button type="button" onClick="{{openDrawer}}" style="border: 0; background: transparent; color: #24563F; font: 600 14px Inter, sans-serif; cursor: pointer">+ Add to Dinner</button>
+            </div>
+            <p style="margin: 6px 22px 0; font-size: 12px; color: #646D67">Pre-workout, Post-workout and Drinks have no entries today.</p>
+          </div>
+        </div>
+      </section>
+
+      <aside style="flex: 1 1 300px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+        <section aria-labelledby="wH" style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 16px; padding: 20px 22px; display: flex; flex-direction: column; gap: 12px">
+          <div style="display: flex; justify-content: space-between; align-items: center"><h2 id="wH" style="margin: 0; font-size: 17px">Workouts</h2><span style="font-size: 12px; color: #646D67">Apple Health</span></div>
+          <sc-if value="{{restingOk}}" hint-placeholder-val="{{true}}">
+            <div style="border: 1px solid #E3E0D7; border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 10px">
+              <div style="display: flex; justify-content: space-between; gap: 10px"><strong style="font-size: 15px">Functional Strength Training</strong><span style="font-size: 13px; color: #4D5751; white-space: nowrap">07:18–08:02</span></div>
+              <div style="display: flex; gap: 18px; font-size: 14px"><span><strong>44</strong> min</span><span><strong>438</strong> kcal active</span></div>
+              <div style="display: flex; flex-direction: column; gap: 6px">
+                <div style="height: 10px; border-radius: 5px; background: #E0EEED; overflow: hidden; display: flex"><div style="width: 49%; height: 100%; background: #1D6767"></div></div>
+                <span style="font-size: 12px; line-height: 1.5; color: #4D5751">These 438 kcal are <strong>part of</strong> today’s 892 kcal Active energy. They aren’t added to Total burned a second time.</span>
+              </div>
+            </div>
+          </sc-if>
+          <sc-if value="{{partial}}" hint-placeholder-val="{{false}}">
+            <p style="margin: 0; font-size: 14px; line-height: 1.5; color: #4D5751">No workouts have arrived from Apple Health yet. A workout recorded without the watch only shows up if another app saved it to Apple Health.</p>
+          </sc-if>
+        </section>
+        <section aria-labelledby="sH" style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 16px; padding: 20px 22px; display: flex; flex-direction: column; gap: 10px; font-size: 14px; line-height: 1.5">
+          <h2 id="sH" style="margin: 0; font-size: 17px">Data sources</h2>
+          <span><strong>Apple Health</strong>, synced by your iPhone<br><span style="color: #4D5751">Last sync: {{syncText}}</span></span>
+          <span style="color: #4D5751">This browser can’t read Apple Health. Open Hustle Daily on your iPhone to refresh it.</span>
+          <span style="padding-top: 8px; border-top: 1px solid #ECE9E2"><strong>Food</strong>, entered in Hustle Daily<br><span style="color: #4D5751">Last change: 17:40</span></span>
+        </section>
+        <section style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 16px; padding: 20px 22px; display: flex; flex-direction: column; gap: 8px">
+          <label for="notes" style="font-size: 17px; font-weight: 700">Notes</label>
+          <textarea id="notes" rows="3" placeholder="Anything worth remembering about today" style="border: 1px solid #CFCAC0; border-radius: 10px; padding: 10px 12px; font: 14px Inter, sans-serif; resize: vertical"></textarea>
+        </section>
+      </aside>
+    </div>
+  </main>
+
+  <sc-if value="{{toast}}" hint-placeholder-val="{{false}}">
+    <div role="status" style="position: fixed; left: 50%; bottom: 32px; transform: translateX(-50%); display: flex; align-items: center; gap: 14px; padding: 12px 16px; border-radius: 12px; background: #17201B; color: #FFFFFF; font-size: 14px; box-shadow: 0 12px 32px rgba(23,32,27,.2)"><span style="color: #9FD3B5">✓</span><span>{{toast}}</span><button type="button" onClick="{{undo}}" style="border: 0; background: transparent; color: #9FD3B5; font: 600 14px Inter, sans-serif; cursor: pointer">Undo</button></div>
+  </sc-if>
+
+  <sc-if value="{{drawer}}" hint-placeholder-val="{{false}}">
+    <div style="position: fixed; inset: 0; background: rgba(23,32,27,.28)" onClick="{{closeDrawer}}"></div>
+    <div role="dialog" aria-modal="true" aria-labelledby="afH" style="position: fixed; top: 0; right: 0; bottom: 0; width: min(520px, 100%); background: #FFFFFF; box-shadow: -12px 0 32px rgba(23,32,27,.14); display: flex; flex-direction: column">
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: 20px 24px 12px"><h2 id="afH" style="margin: 0; font-size: 20px">Add food</h2><button type="button" onClick="{{closeDrawer}}" aria-label="Close" style="width: 36px; height: 36px; border: 0; border-radius: 9px; background: #F1EFEA; font-size: 18px; cursor: pointer">×</button></div>
+      <div style="padding: 0 24px 12px; display: flex; flex-direction: column; gap: 10px">
+        <label style="display: flex; align-items: center; gap: 10px; height: 44px; border: 1.5px solid #2F6B4F; border-radius: 10px; padding: 0 12px"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Search foods</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4D5751" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg><input value="{{q}}" onChange="{{setQ}}" placeholder="Search name, brand or barcode" style="flex: 1; border: 0; outline: none; font: 15px Inter, sans-serif; min-width: 0"></label>
+        <div style="display: flex; gap: 14px; font-size: 13px"><a href="DeskFoodEdit.dc.html">+ Create new food</a><button type="button" onClick="{{toggleBarcode}}" style="border: 0; background: transparent; padding: 0; color: #24563F; font: 500 13px Inter, sans-serif; text-decoration: underline; cursor: pointer">Enter barcode</button></div>
+      </div>
+      <div style="flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; padding: 0 24px 16px; display: flex; flex-direction: column; gap: 14px">
+
+        <sc-if value="{{barcodeOpen}}" hint-placeholder-val="{{false}}">
+          <div style="border: 1px solid #E3E0D7; border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 10px">
+            <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600">Barcode (EAN/UPC)
+              <span style="display: flex; gap: 8px"><input value="{{barcode}}" onChange="{{setBarcode}}" inputmode="numeric" style="flex: 1; height: 40px; border: 1px solid #CFCAC0; border-radius: 8px; padding: 0 12px; font: 15px Inter, sans-serif; letter-spacing: 0.04em"><button type="button" onClick="{{lookup}}" style="height: 40px; padding: 0 14px; border: 0; border-radius: 8px; background: #17201B; color: #FFFFFF; font: 600 14px Inter, sans-serif">Look up</button></span>
+            </label>
+            <span style="font-size: 12px; color: #646D67">Try 3800123456789 (found) or 3800987654321 (not found).</span>
+            <sc-if value="{{offFound}}" hint-placeholder-val="{{false}}">
+              <div style="border-radius: 10px; background: #F5F8FC; border: 1px solid #C9D7E8; padding: 12px; display: flex; flex-direction: column; gap: 8px; font-size: 14px">
+                <span style="align-self: flex-start; font-size: 12px; font-weight: 600; color: #2D5C91; background: #E4ECF5; padding: 3px 8px; border-radius: 6px">Open Food Facts · community data · check against the label</span>
+                <strong>Protein Pudding Chocolate · Lumi</strong>
+                <span style="color: #4D5751">Per 100 g: 73 kcal · protein 10 g · carbs 6.1 g · fat 1.0 g · portion 1 cup = 200 g</span>
+                <div style="display: flex; gap: 8px"><button type="button" onClick="{{confirmOff}}" style="height: 36px; padding: 0 12px; border: 0; border-radius: 8px; background: #2F6B4F; color: #FFFFFF; font: 600 13px Inter, sans-serif">Confirm &amp; save to my foods</button><a href="DeskFoodEdit.dc.html" style="height: 36px; padding: 0 12px; border-radius: 8px; border: 1px solid #CFCAC0; display: inline-flex; align-items: center; font-size: 13px; font-weight: 600; text-decoration: none; color: #17201B">Correct values</a></div>
+              </div>
+            </sc-if>
+            <sc-if value="{{offMissing}}" hint-placeholder-val="{{false}}">
+              <div style="border-radius: 10px; background: #FAF9F6; border: 1px solid #E3E0D7; padding: 12px; font-size: 14px; line-height: 1.5">Barcode {{barcode}} isn’t in your foods or in Open Food Facts. <a href="DeskFoodEdit.dc.html">Create a food with this barcode →</a></div>
+            </sc-if>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{noSel}}" hint-placeholder-val="{{true}}">
+          <sc-if value="{{showLists}}" hint-placeholder-val="{{true}}">
+            <div style="display: flex; flex-direction: column; gap: 6px">
+              <h3 style="margin: 4px 0; font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #646D67">Recent</h3>
+              <sc-for list="{{recent}}" as="r" hint-placeholder-count="4">
+                <button type="button" onClick="{{r.pick}}" style="display: flex; justify-content: space-between; align-items: center; gap: 10px; text-align: left; padding: 10px 12px; border: 1px solid #E3E0D7; border-radius: 10px; background: #FFFFFF; font: 14px Inter, sans-serif; color: #17201B; cursor: pointer"><span><strong style="font-weight: 600">{{r.name}}</strong> · {{r.brand}}<br><span style="font-size: 12px; color: #646D67">{{r.meta}}</span></span><span style="font-size: 12px; color: #4D5751">{{r.last}}</span></button>
+              </sc-for>
+              <h3 style="margin: 10px 0 4px; font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #646D67">Favourites</h3>
+              <sc-for list="{{favs}}" as="r" hint-placeholder-count="3">
+                <button type="button" onClick="{{r.pick}}" style="display: flex; justify-content: space-between; align-items: center; gap: 10px; text-align: left; padding: 10px 12px; border: 1px solid #E3E0D7; border-radius: 10px; background: #FFFFFF; font: 14px Inter, sans-serif; color: #17201B; cursor: pointer"><span><strong style="font-weight: 600">{{r.name}}</strong> · {{r.brand}}<br><span style="font-size: 12px; color: #646D67">{{r.meta}}</span></span><span style="color: #9A5B13" aria-label="Favourite">★</span></button>
+              </sc-for>
+            </div>
+          </sc-if>
+          <sc-if value="{{showResults}}" hint-placeholder-val="{{false}}">
+            <div role="listbox" aria-label="Search results" style="display: flex; flex-direction: column; gap: 6px">
+              <span style="font-size: 12px; color: #646D67">{{resultCount}} matches in your foods. The brand is shown in bold so similar products are easy to tell apart.</span>
+              <sc-for list="{{results}}" as="r" hint-placeholder-count="3">
+                <button type="button" role="option" aria-selected="false" onClick="{{r.pick}}" style="display: flex; justify-content: space-between; align-items: center; gap: 10px; text-align: left; padding: 10px 12px; border: 1px solid #E3E0D7; border-radius: 10px; background: #FFFFFF; font: 14px Inter, sans-serif; color: #17201B; cursor: pointer"><span>{{r.name}} · <strong>{{r.brand}}</strong><br><span style="font-size: 12px; color: #646D67">{{r.meta}}</span></span><span style="font-size: 11px; font-weight: 600; padding: 3px 7px; border-radius: 6px; background: {{r.badgeBg}}; color: {{r.badgeInk}}; white-space: nowrap">{{r.badge}}</span></button>
+              </sc-for>
+            </div>
+          </sc-if>
+          <sc-if value="{{noResults}}" hint-placeholder-val="{{false}}">
+            <div style="padding: 18px; border: 1px dashed #CFCAC0; border-radius: 12px; display: flex; flex-direction: column; gap: 8px; font-size: 14px"><strong>No foods match “{{q}}”</strong><span style="color: #4D5751">Check the spelling, search by brand, or add it yourself.</span><a href="DeskFoodEdit.dc.html" style="font-weight: 600">Create “{{q}}” →</a></div>
+          </sc-if>
+        </sc-if>
+
+        <sc-if value="{{hasSel}}" hint-placeholder-val="{{false}}">
+          <div style="display: flex; flex-direction: column; gap: 14px">
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; padding: 12px 14px; border-radius: 12px; background: #F7FAF8; border: 1px solid #CFE0D5">
+              <span style="font-size: 15px"><strong>{{sel.name}}</strong><br><span style="font-size: 13px; color: #4D5751">{{sel.brand}} · {{sel.meta}}</span></span>
+              <button type="button" onClick="{{clearSel}}" style="border: 0; background: transparent; color: #24563F; font: 600 13px Inter, sans-serif; cursor: pointer">Change</button>
+            </div>
+            <fieldset style="border: 0; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px">
+              <legend style="font-size: 13px; font-weight: 600; margin-bottom: 8px">Meal</legend>
+              <div style="display: flex; flex-wrap: wrap; gap: 6px">
+                <sc-for list="{{meals}}" as="m" hint-placeholder-count="8">
+                  <button type="button" aria-pressed="{{m.on}}" onClick="{{m.pick}}" style="height: 32px; padding: 0 12px; border-radius: 999px; border: 1px solid {{m.border}}; background: {{m.bg}}; color: {{m.ink}}; font: 600 13px Inter, sans-serif; cursor: pointer">{{m.label}}</button>
+                </sc-for>
+              </div>
+            </fieldset>
+            <div style="display: grid; grid-template-columns: 1fr 1.4fr 1fr; gap: 10px">
+              <label style="min-width: 0; display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600">Quantity<input type="number" min="0" step="any" value="{{qty}}" onChange="{{setQty}}" style="width: 100%; min-width: 0; height: 40px; border: 1px solid #CFCAC0; border-radius: 8px; padding: 0 10px; font: 500 15px Inter, sans-serif"></label>
+              <label style="min-width: 0; display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600">Unit / portion
+                <select value="{{unit}}" onChange="{{setUnit}}" style="width: 100%; min-width: 0; height: 40px; border: 1px solid #CFCAC0; border-radius: 8px; padding: 0 8px; font: 500 14px Inter, sans-serif; background: #FFFFFF">
+                  <sc-for list="{{sel.units}}" as="u" hint-placeholder-count="2"><option value="{{u.id}}">{{u.label}}</option></sc-for>
+                </select>
+              </label>
+              <label style="min-width: 0; display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600">Time<input type="time" value="18:44" style="width: 100%; min-width: 0; height: 40px; border: 1px solid #CFCAC0; border-radius: 8px; padding: 0 8px; font: 500 14px Inter, sans-serif"></label>
+            </div>
+            <div style="border: 1px solid #E3E0D7; border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 10px">
+              <span style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #646D67">This entry · = calculated</span>
+              <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px">
+                <span><strong style="font-size: 22px">{{prev.kcal}}</strong><br><span style="font-size: 12px; color: #4D5751">kcal</span></span>
+                <span><strong style="font-size: 22px">{{prev.p}}</strong><br><span style="font-size: 12px; color: #4D5751">g protein</span></span>
+                <span><strong style="font-size: 22px">{{prev.c}}</strong><br><span style="font-size: 12px; color: #4D5751">g carbs</span></span>
+                <span><strong style="font-size: 22px">{{prev.f}}</strong><br><span style="font-size: 12px; color: #4D5751">g fat</span></span>
+              </div>
+              <span style="font-size: 13px; color: #4D5751; padding-top: 8px; border-top: 1px solid #ECE9E2">Today after adding: <strong>{{after.kcal}} / {{kcalTarget}} kcal</strong> · protein <strong>{{after.p}} / {{proteinTarget}} g</strong></span>
+            </div>
+          </div>
+        </sc-if>
+      </div>
+      <div style="padding: 14px 24px; border-top: 1px solid #E3E0D7; display: flex; justify-content: flex-end; gap: 10px">
+        <button type="button" onClick="{{closeDrawer}}" style="height: 42px; padding: 0 16px; border-radius: 10px; border: 1px solid #CFCAC0; background: #FFFFFF; font: 600 14px Inter, sans-serif; cursor: pointer">Cancel</button>
+        <button type="button" onClick="{{save}}" disabled="{{saveDisabled}}" style="height: 42px; padding: 0 18px; border: 0; border-radius: 10px; background: {{saveBg}}; color: #FFFFFF; font: 600 14px Inter, sans-serif; cursor: pointer">{{saveLabel}}</button>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"scenario":{"editor":"enum","options":["populated","partial"],"default":"populated"},"openDrawer":{"editor":"boolean","default":false},"initialQuery":{"editor":"text","default":""},"$preview":{"width":1440,"height":1400}}'>
+class Component extends DCLogic {
+  foods() {
+    const g = (extra) => [{ id: 'g', label: 'g', k: 0.01 }].concat(extra || []);
+    const ml = (extra) => [{ id: 'ml', label: 'ml', k: 0.01 }].concat(extra || []);
+    const list = [
+      { id: 'f1', name: 'Skyr Natural', brand: 'Nordic Dairy', basis: 'per 100 g', n: [63, 11, 4, 0.2], units: g([{ id: 'cup', label: '1 cup (150 g)', k: 1.5 }]), badge: 'Verified', def: 100 },
+      { id: 'f2', name: 'Skyr Natural', brand: 'Balkan Farm', basis: 'per 100 g', n: [66, 10, 4.1, 0.5], units: g(), badge: 'Verified', def: 100 },
+      { id: 'f3', name: 'Skyr Vanilla', brand: 'Nordic Dairy', basis: 'per 100 g', n: [79, 9.5, 9.8, 0.2], units: g(), badge: 'Open Food Facts · confirmed', def: 100 },
+      { id: 'f4', name: 'Milk 1.5%', brand: 'Balkan Farm', basis: 'per 100 ml', n: [47, 3.4, 4.8, 1.5], units: ml([{ id: 'glass', label: '1 glass (250 ml)', k: 2.5 }]), badge: 'Verified', def: 250 },
+      { id: 'f5', name: 'Milk 3.6%', brand: 'Alpen Dairy', basis: 'per 100 ml', n: [64, 3.3, 4.7, 3.6], units: ml(), badge: 'Verified', def: 250 },
+      { id: 'f6', name: 'Rolled oats', brand: 'Alpen Mill', basis: 'per 100 g', n: [372, 13.5, 58.7, 7], units: g([{ id: 'tbsp', label: '1 tbsp (10 g)', k: 0.1 }]), badge: 'Verified', def: 40 },
+      { id: 'f7', name: 'Chia seeds', brand: 'Green Origin', basis: 'per 100 g', n: [486, 16.5, 8, 30.7], units: g([{ id: 'tbsp', label: '1 tbsp (12 g)', k: 0.12 }, { id: 'tsp', label: '1 tsp (4 g)', k: 0.04 }]), badge: 'Verified', def: 12 },
+      { id: 'f9', name: 'Whey protein Vanilla', brand: 'Core Nutrition', basis: 'per 100 g', n: [380, 78, 6, 5.4], units: g([{ id: 'scoop', label: '1 scoop (30 g)', k: 0.3 }]), badge: 'Verified', def: 30 },
+      { id: 'f10', name: 'Cottage cheese 2%', brand: 'Balkan Farm', basis: 'per 100 g', n: [88, 12.8, 5, 3.3], units: g(), badge: 'Verified', def: 180 },
+      { id: 'f11', name: 'Almonds', brand: 'Green Origin', basis: 'per 100 g', n: [579, 21, 13, 50], units: g(), badge: 'Verified', def: 30 },
+      { id: 'f13', name: 'Chicken breast, grilled', brand: 'Fresh Poultry Co.', basis: 'per 100 g', n: [165, 31, 0, 3.6], units: g(), badge: 'Verified', def: 150 },
+      { id: 'r1', name: 'Breakfast bowl', brand: 'My recipe', basis: 'per serving', n: [485, 45.6, 48.1, 9.7], units: [{ id: 'srv', label: 'serving', k: 1 }], badge: 'Recipe', def: 1 }
+    ];
+    if (this.state.offSaved) list.unshift({ id: 'off1', name: 'Protein Pudding Chocolate', brand: 'Lumi', basis: 'per 100 g', n: [73, 10, 6.1, 1], units: g([{ id: 'cup', label: '1 cup (200 g)', k: 2 }]), badge: 'Open Food Facts · confirmed', def: 200 });
+    return list;
+  }
+  renderVals() {
+    const s = this.state;
+    const scenario = this.props.scenario ?? 'populated';
+    const partial = scenario === 'partial';
+    const fmt = (n) => Math.round(n).toLocaleString('en-US');
+    const one = (n) => (Math.round(n * 10) / 10).toString();
+    const dayType = s.dayType ?? 'training';
+    const T = dayType === 'training' ? { kcal: 2000, p: 160, steps: 10000 } : { kcal: 3000, p: 120, steps: null };
+    const base = [
+      { id: 'e1', meal: 'Breakfast', time: '08:25', name: 'Breakfast bowl', brand: 'My recipe · 6 ingredients', qty: '1 serving', n: [485, 46, 48, 10] },
+      { id: 'e2', meal: 'Lunch', time: '13:10', name: 'Chicken breast, grilled', brand: 'Fresh Poultry Co.', qty: '150 g', n: [248, 47, 0, 5] },
+      { id: 'e3', meal: 'Lunch', time: '13:10', name: 'Basmati rice, cooked', brand: 'Alpen Mill', qty: '180 g', n: [234, 5, 50, 1] },
+      { id: 'e5', meal: 'Snack', time: '16:10', name: 'Almonds', brand: 'Green Origin', qty: '30 g', n: [174, 6, 4, 15] },
+      { id: 'e6', meal: 'Snack', time: '16:10', name: 'Banana', brand: 'Fresh produce', qty: '130 g', n: [116, 1, 31, 0] },
+      { id: 'e7', meal: 'Snack', time: '17:40', name: 'Cottage cheese 2%', brand: 'Balkan Farm', qty: '180 g', n: [159, 23, 9, 6] },
+      { id: 'e4', meal: 'Cooking', time: '13:00', name: 'Extra virgin olive oil', brand: 'Terra Verde · used for lunch', qty: '1 tbsp (14 g)', n: [124, 0, 0, 14] }
+    ];
+    const entries = base.concat(s.added || []);
+    const tot = entries.reduce((a, e) => a.map((v, i) => v + e.n[i]), [0, 0, 0, 0]);
+    const order = ['Breakfast', 'Lunch', 'Snack', 'Cooking', 'Pre-workout', 'Post-workout', 'Drinks'];
+    const groups = order.map((name) => {
+      const items = entries.filter((e) => e.meal === name);
+      if (!items.length) return null;
+      const t = items.reduce((a, e) => a.map((v, i) => v + e.n[i]), [0, 0, 0, 0]);
+      return {
+        name, time: items.map((e) => e.time).sort()[0], kcal: fmt(t[0]), p: fmt(t[1]), c: fmt(t[2]), f: fmt(t[3]),
+        items: items.map((e) => ({ name: e.name, brand: e.brand, qty: e.qty, kcal: fmt(e.n[0]), p: fmt(e.n[1]) + ' g', c: fmt(e.n[2]) + ' g', f: fmt(e.n[3]) + ' g', bg: e.isNew ? '#F2F8F4' : 'transparent' }))
+      };
+    }).filter(Boolean);
+
+    const kcal = tot[0];
+    const burned = 1960 + 892;
+    const bal = burned - kcal;
+    const left = T.kcal - kcal;
+    const steps = partial ? 3120 : 8420;
+
+    // drawer
+    const drawer = s.drawer ?? !!this.props.openDrawer;
+    const q = s.q ?? (this.props.initialQuery || '');
+    const foods = this.foods();
+    const meta = (f) => f.basis + ' · ' + f.n[0] + ' kcal · ' + f.n[1] + ' g protein';
+    const pick = (f) => () => this.setState({ selId: f.id, unit: f.units[0].id, qty: f.def, meal: s.meal ?? 'Breakfast' });
+    const ql = q.trim().toLowerCase();
+    const matches = ql ? foods.filter((f) => (f.name + ' ' + f.brand).toLowerCase().includes(ql)) : [];
+    const sel = foods.find((f) => f.id === s.selId);
+    let prev = { kcal: 0, p: 0, c: 0, f: 0 }, after = { kcal: fmt(kcal), p: fmt(tot[1]) };
+    let selView = { name: '', brand: '', meta: '', units: [] };
+    if (sel) {
+      const u = sel.units.find((x) => x.id === s.unit) || sel.units[0];
+      const qty = parseFloat(s.qty) || 0;
+      const k = u.k * qty;
+      const n = sel.n.map((v) => v * k);
+      prev = { kcal: fmt(n[0]), p: one(n[1]), c: one(n[2]), f: one(n[3]) };
+      after = { kcal: fmt(kcal + n[0]), p: fmt(tot[1] + n[1]) };
+      selView = { name: sel.name, brand: sel.brand, meta: meta(sel), units: sel.units };
+    }
+    const recentIds = ['f1', 'f10', 'f11', 'r1'];
+    const lastUsed = { f1: 'Yesterday', f10: 'Today', f11: 'Today', r1: 'Today' };
+    const favIds = ['f9', 'f6', 'f13'];
+    const mealNames = ['Breakfast', 'Lunch', 'Dinner', 'Snack', 'Pre-workout', 'Post-workout', 'Drinks', 'Cooking'];
+    const meal = s.meal ?? 'Breakfast';
+    const qtyOk = sel && (parseFloat(s.qty) || 0) > 0;
+
+    return {
+      partial, restingOk: !partial,
+      syncText: partial ? 'Today, 09:05 from iPhone' : 'Today, 18:42 from iPhone',
+      syncDot: partial ? '#B07A1E' : '#2F6B4F',
+      dayType, setDayType: (e) => this.setState({ dayType: e.target.value }),
+      showSuggest: dayType === 'rest' && !partial,
+      entryCount: entries.length,
+      kcal: fmt(kcal), kcalTarget: fmt(T.kcal), kcalPct: Math.min(100, kcal / T.kcal * 100) + '%',
+      kcalLeftText: left >= 0 ? fmt(left) + ' kcal left in budget' : fmt(-left) + ' kcal over budget',
+      protein: fmt(tot[1]), proteinTarget: T.p, proteinPct: Math.min(100, tot[1] / T.p * 100) + '%',
+      proteinText: tot[1] >= T.p ? '✓ Minimum met' : fmt(T.p - tot[1]) + ' g to go',
+      carbs: fmt(tot[2]), fat: fmt(tot[3]),
+      activeText: partial ? '214 kcal · incomplete' : '892 kcal',
+      burnedText: partial ? 'Waiting for resting energy' : fmt(burned) + ' kcal',
+      balanceAbs: fmt(Math.abs(bal)), balanceWord: bal >= 0 ? 'deficit' : 'surplus', balanceArrow: bal >= 0 ? '↓' : '↑',
+      balanceBg: bal >= 0 ? '#E0EEED' : '#F6ECDD', balanceInk: bal >= 0 ? '#1D6767' : '#8A5300',
+      steps: fmt(steps),
+      stepsTargetLabel: T.steps ? '· min' : '· no target on Rest Day',
+      stepsTargetText: T.steps ? ' / ' + fmt(T.steps) : '',
+      stepsPct: T.steps ? Math.min(100, steps / T.steps * 100) + '%' : '0%',
+      stepsNote: partial ? 'Incomplete: iPhone only, the watch may not have been worn' : (T.steps ? (steps >= T.steps ? '✓ Minimum met' : fmt(T.steps - steps) + ' to go') : 'Shown for reference'),
+      stepsNoteInk: partial ? '#8A5300' : '#4D5751',
+      groups,
+      drawer, openDrawer: () => this.setState({ drawer: true }),
+      closeDrawer: () => this.setState({ drawer: false }),
+      q, setQ: (e) => this.setState({ q: e.target.value, selId: null }),
+      showLists: !ql, showResults: !!ql && matches.length > 0, noResults: !!ql && matches.length === 0,
+      resultCount: matches.length,
+      results: matches.map((f) => ({ name: f.name, brand: f.brand, meta: meta(f), badge: f.badge, badgeBg: f.badge.startsWith('Open') ? '#E4ECF5' : (f.badge === 'Recipe' ? '#F6ECDD' : '#E6EFE9'), badgeInk: f.badge.startsWith('Open') ? '#2D5C91' : (f.badge === 'Recipe' ? '#8A5300' : '#24563F'), pick: pick(f) })),
+      recent: recentIds.map((id) => foods.find((f) => f.id === id)).map((f) => ({ name: f.name, brand: f.brand, meta: meta(f), last: lastUsed[f.id], pick: pick(f) })),
+      favs: favIds.map((id) => foods.find((f) => f.id === id)).map((f) => ({ name: f.name, brand: f.brand, meta: meta(f), pick: pick(f) })),
+      noSel: !sel, hasSel: !!sel, sel: selView, clearSel: () => this.setState({ selId: null }),
+      meals: mealNames.map((m) => ({ label: m, on: m === meal ? 'true' : 'false', bg: m === meal ? '#17201B' : '#FFFFFF', ink: m === meal ? '#FFFFFF' : '#2E3832', border: m === meal ? '#17201B' : '#CFCAC0', pick: () => this.setState({ meal: m }) })),
+      qty: s.qty ?? '', setQty: (e) => this.setState({ qty: e.target.value }),
+      unit: s.unit ?? '', setUnit: (e) => this.setState({ unit: e.target.value }),
+      prev, after,
+      saveDisabled: !qtyOk, saveBg: qtyOk ? '#2F6B4F' : '#B9BFBA',
+      saveLabel: 'Add to ' + meal,
+      save: () => {
+        if (!qtyOk) return;
+        const u = sel.units.find((x) => x.id === s.unit) || sel.units[0];
+        const qty = parseFloat(s.qty);
+        const n = sel.n.map((v) => v * u.k * qty);
+        const qtyLabel = u.id === 'g' || u.id === 'ml' ? qty + ' ' + u.id : qty + ' × ' + u.label;
+        const entry = { id: 'n' + Date.now(), meal, time: '18:44', name: sel.name, brand: sel.brand, qty: qtyLabel, n, isNew: true };
+        this.setState({ added: (s.added || []).concat([entry]), drawer: false, selId: null, q: '', toast: 'Added ' + sel.name + ' · ' + qtyLabel + ' to ' + meal + '. Today is now ' + fmt(kcal + n[0]) + ' kcal and ' + fmt(tot[1] + n[1]) + ' g protein.' });
+      },
+      toast: s.toast || '',
+      undo: () => this.setState({ added: (s.added || []).slice(0, -1), toast: '' }),
+      barcodeOpen: !!s.barcodeOpen, toggleBarcode: () => this.setState({ barcodeOpen: !s.barcodeOpen, lookedUp: null }),
+      barcode: s.barcode ?? '3800123456789', setBarcode: (e) => this.setState({ barcode: e.target.value, lookedUp: null }),
+      lookup: () => this.setState({ lookedUp: (s.barcode ?? '3800123456789').trim() }),
+      offFound: s.lookedUp === '3800123456789' && !s.offSaved,
+      offMissing: !!s.lookedUp && s.lookedUp !== '3800123456789',
+      confirmOff: () => this.setState({ offSaved: true, barcodeOpen: false, selId: 'off1', unit: 'cup', qty: 1 })
+    };
+  }
+}
+</script>
+</body>
+</html>

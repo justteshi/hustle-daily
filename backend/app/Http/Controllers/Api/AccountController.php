@@ -26,6 +26,8 @@ class AccountController extends Controller
             'foods' => $user->foods()->with(['nutrition', 'portions'])->get()->toArray(),
             'recipes' => $user->recipes()->with('ingredients')->get()->toArray(),
             'consumptions' => $user->consumptions()->withTrashed()->with(['items', 'revisions'])->orderBy('eaten_at')->get()->toArray(),
+            'day_types' => $user->dayTypes()->with('targetProfile.values')->orderBy('sort_order')->get()->toArray(),
+            'day_assignments' => $user->dayAssignments()->orderBy('local_date')->get()->toArray(),
         ]])->header('Cache-Control', 'private, no-store')
             ->header('Content-Disposition', 'attachment; filename="hustle-daily-data.json"');
     }

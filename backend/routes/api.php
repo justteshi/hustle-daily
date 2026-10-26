@@ -3,6 +3,8 @@
 use App\Http\Controllers\Api\AccountController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ConsumptionController;
+use App\Http\Controllers\Api\DayController;
+use App\Http\Controllers\Api\DayTypeController;
 use App\Http\Controllers\Api\DeviceController;
 use App\Http\Controllers\Api\FoodController;
 use App\Http\Controllers\Api\MealCategoryController;
@@ -20,6 +22,9 @@ Route::prefix('v1')->group(function () {
         Route::post('/auth/logout', [AuthController::class, 'logout']);
         Route::get('/devices/{device}', [DeviceController::class, 'show']);
         Route::get('/dashboard/today', TodayController::class);
+        Route::get('/day-types', [DayTypeController::class, 'index']);
+        Route::put('/day-types/{dayType}', [DayTypeController::class, 'update']);
+        Route::patch('/days/{date}', [DayController::class, 'update']);
         Route::get('/meal-categories', [MealCategoryController::class, 'index']);
         Route::get('/foods', [FoodController::class, 'index']);
         Route::post('/foods', [FoodController::class, 'store']);

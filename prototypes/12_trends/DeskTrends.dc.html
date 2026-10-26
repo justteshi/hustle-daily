@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Trends · Hustle Daily</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+a{color:#24563F}a:hover{color:#17201B}
+:focus-visible{outline:2px solid #2F6B4F;outline-offset:2px}
+</style>
+</helmet>
+<div style="min-height: 1400px; background: #F5F3EE; color: #17201B; font-family: Inter, system-ui, sans-serif; font-variant-numeric: tabular-nums; display: flex; flex-wrap: wrap">
+
+  <nav aria-label="Main" style="flex: 1 1 232px; max-width: 272px; background: #FFFFFF; border-right: 1px solid #E3E0D7; padding: 20px 14px; display: flex; flex-direction: column; gap: 18px">
+    <a href="DeskToday.dc.html" style="display: flex; align-items: center; gap: 10px; padding: 4px 8px; text-decoration: none; color: #17201B"><svg width="30" height="30" viewBox="0 0 120 120" role="img" aria-label="Hustle Daily logo" style="flex: none; display: block"><rect width="120" height="120" rx="28" fill="#2F6B4F"></rect><path d="M60 26A34 34 0 1 1 46.99 28.59" fill="none" stroke="#F5F3EE" stroke-width="9" stroke-linecap="round"></path><circle cx="46.99" cy="28.59" r="6.5" fill="#E8C27A"></circle><path d="M46 61L56 71L75 51" fill="none" stroke="#F5F3EE" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"></path></svg><strong style="font-size: 16px">Hustle Daily</strong></a>
+    <a href="DeskAddFood.dc.html" style="height: 42px; border-radius: 10px; background: #2F6B4F; color: #FFFFFF; font-weight: 600; font-size: 14px; display: flex; align-items: center; justify-content: center; text-decoration: none">+ Add food</a>
+    <div style="display: flex; flex-direction: column; gap: 2px; font-size: 14px">
+      <a href="DeskToday.dc.html" style="padding: 9px 10px; border-radius: 9px; color: #2E3832; text-decoration: none">Today</a>
+      <a href="DeskHistory.dc.html" style="padding: 9px 10px; border-radius: 9px; color: #2E3832; text-decoration: none">History</a>
+      <a href="DeskFoods.dc.html" style="padding: 9px 10px; border-radius: 9px; color: #2E3832; text-decoration: none">Foods &amp; Recipes</a>
+      <a href="DeskTrends.dc.html" aria-current="page" style="padding: 9px 10px; border-radius: 9px; background: #E6EFE9; color: #24563F; font-weight: 600; text-decoration: none">Trends</a>
+      <a href="DeskTargets.dc.html" style="padding: 9px 10px; border-radius: 9px; color: #2E3832; text-decoration: none">Targets</a>
+      <a href="DeskSettings.dc.html" style="padding: 9px 10px; border-radius: 9px; color: #2E3832; text-decoration: none">Settings</a>
+    </div>
+  </nav>
+
+  <main style="flex: 999 1 560px; min-width: 0; padding: 28px 36px 48px; display: flex; flex-direction: column; gap: 18px">
+    <header style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 14px">
+      <div style="display: flex; flex-direction: column; gap: 6px"><h1 style="margin: 0; font-size: 30px; letter-spacing: -0.02em">Trends</h1><span style="font-size: 14px; color: #4D5751">Concluded days only. Today joins once it’s concluded.</span></div>
+      <div role="radiogroup" aria-label="Period" style="display: flex; padding: 3px; background: #EAE7E0; border-radius: 10px; gap: 3px">
+        <sc-for list="{{periods}}" as="p" hint-placeholder-count="3">
+          <button type="button" role="radio" aria-checked="{{p.on}}" onClick="{{p.pick}}" style="height: 34px; padding: 0 14px; border: 0; border-radius: 8px; background: {{p.bg}}; color: {{p.ink}}; box-shadow: {{p.shadow}}; font: 600 13px Inter, sans-serif; cursor: pointer">{{p.label}}</button>
+        </sc-for>
+      </div>
+    </header>
+
+    <section aria-label="Period summary" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px">
+      <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 4px"><span style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #646D67">Weight change</span><span><strong style="font-size: 26px">{{wChange}}</strong> kg</span><span style="font-size: 12px; color: #4D5751">{{wFrom}} → 104.0 kg (7-day average)</span></div>
+      <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 4px"><span style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #646D67">Avg eaten / day</span><span><strong style="font-size: 26px">{{avgEat}}</strong> kcal</span><span style="font-size: 12px; color: #4D5751">Within budget on {{budgetDays}} of {{n}} days</span></div>
+      <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 4px"><span style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #646D67">Avg burned / day</span><span><strong style="font-size: 26px">{{avgBurn}}</strong> kcal</span><span style="font-size: 12px; color: #4D5751">Resting + active, from Apple Health</span></div>
+      <div style="background: #E0EEED; border: 1px solid #C6DEDC; border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 4px; color: #1D6767"><span style="font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase">Avg balance / day</span><span><strong style="font-size: 26px">{{avgBal}}</strong> kcal deficit</span><span style="font-size: 12px">{{incNote}}</span></div>
+    </section>
+
+    <section aria-labelledby="wT" style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 16px; padding: 20px 22px; display: flex; flex-direction: column; gap: 10px">
+      <div style="display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 8px"><h2 id="wT" style="margin: 0; font-size: 17px">Weight</h2><span style="display: flex; gap: 16px; font-size: 12px; color: #4D5751"><span><span style="display: inline-block; width: 16px; height: 2px; background: #9DBFAE; vertical-align: middle; margin-right: 6px"></span>Daily reading</span><span><span style="display: inline-block; width: 16px; height: 3px; background: #2F6B4F; vertical-align: middle; margin-right: 6px"></span>7-day average</span></span></div>
+      <svg viewBox="0 0 800 220" width="100%" role="img" aria-label="{{wAria}}">
+        <g stroke="#ECE9E2" stroke-width="1"><line x1="44" y1="20" x2="790" y2="20"></line><line x1="44" y1="105" x2="790" y2="105"></line><line x1="44" y1="190" x2="790" y2="190"></line></g>
+        <g font-size="11" fill="#646D67" font-family="Inter, sans-serif"><text x="0" y="24">{{wTop}} kg</text><text x="0" y="109">{{wMid}}</text><text x="0" y="194">{{wBot}}</text><text x="44" y="212">{{startLabel}}</text><text x="740" y="212">22 Oct</text></g>
+        <path d="{{wDaily}}" fill="none" stroke="#9DBFAE" stroke-width="1.5"></path>
+        <path d="{{wAvg}}" fill="none" stroke="#2F6B4F" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"></path>
+        <circle cx="{{wEndX}}" cy="{{wEndY}}" r="5" fill="#2F6B4F"></circle>
+        <text x="{{wLabelX}}" y="{{wLabelY}}" font-size="12" font-weight="700" fill="#17201B" font-family="Inter, sans-serif">104.0 kg</text>
+      </svg>
+    </section>
+
+    <section aria-labelledby="eT" style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 16px; padding: 20px 22px; display: flex; flex-direction: column; gap: 10px">
+      <div style="display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 8px"><h2 id="eT" style="margin: 0; font-size: 17px">Eaten vs burned</h2><span style="display: flex; gap: 16px; font-size: 12px; color: #4D5751"><span><span style="display: inline-block; width: 10px; height: 10px; background: #B9D9D6; margin-right: 6px; vertical-align: middle"></span>Burned (resting + active)</span><span><span style="display: inline-block; width: 10px; height: 10px; background: #17201B; margin-right: 6px; vertical-align: middle"></span>Eaten</span><span>The gap is the deficit</span></span></div>
+      <svg viewBox="0 0 800 240" width="100%" role="img" aria-label="Daily eaten and burned calories. Average {{avgBal}} kilocalorie deficit.">
+        <g stroke="#ECE9E2" stroke-width="1"><line x1="44" y1="20" x2="790" y2="20"></line><line x1="44" y1="77" x2="790" y2="77"></line><line x1="44" y1="133" x2="790" y2="133"></line><line x1="44" y1="190" x2="790" y2="190"></line></g>
+        <g font-size="11" fill="#646D67" font-family="Inter, sans-serif"><text x="0" y="24">3,600</text><text x="0" y="81">2,400</text><text x="0" y="137">1,200</text><text x="0" y="194">0 kcal</text><text x="44" y="212">{{startLabel}}</text><text x="740" y="212">21 Oct</text></g>
+        <path d="{{burnBars}}" fill="#B9D9D6"></path>
+        <path d="{{incBars}}" fill="#FBF1DC" stroke="#C99A3E" stroke-dasharray="3 2"></path>
+        <path d="{{eatBars}}" fill="#17201B"></path>
+        <text x="44" y="232" font-size="11" fill="#8A5300" font-family="Inter, sans-serif">{{incLegend}}</text>
+      </svg>
+    </section>
+
+    <section style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px">
+      <sc-for list="{{smalls}}" as="m" hint-placeholder-count="3">
+        <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 16px; padding: 18px 20px; display: flex; flex-direction: column; gap: 6px">
+          <div style="display: flex; justify-content: space-between; align-items: baseline"><h2 style="margin: 0; font-size: 16px">{{m.title}}</h2><span style="font-size: 13px"><strong>{{m.avg}}</strong> avg</span></div>
+          <span style="font-size: 12px; color: #4D5751">{{m.note}}</span>
+          <svg viewBox="0 0 360 130" width="100%" role="img" aria-label="{{m.aria}}">
+            <line x1="0" y1="110" x2="360" y2="110" stroke="#ECE9E2"></line>
+            <path d="{{m.bars}}" fill="{{m.color}}"></path>
+            <line x1="0" y1="{{m.targetY}}" x2="360" y2="{{m.targetY}}" stroke="#17201B" stroke-dasharray="4 3" stroke-width="1"></line>
+            <text x="360" y="{{m.targetLabelY}}" text-anchor="end" font-size="11" fill="#17201B" font-family="Inter, sans-serif">{{m.targetLabel}}</text>
+          </svg>
+        </div>
+      </sc-for>
+    </section>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1400}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const period = this.state.period ?? 30;
+    const n = period;
+    const noise = (i, s) => ((Math.sin((i + 1) * 12.9898 + s * 78.233) * 43758.5453) % 1 + 1) % 1 - 0.5;
+    const fmt = (v) => Math.round(v).toLocaleString('en-US');
+    const startW = period === 7 ? 104.6 : period === 30 ? 106.4 : 109.1;
+    const days = [];
+    for (let i = 0; i < n; i++) {
+      const dayIdx = 22 - n + i; // ends 21 Oct for energy
+      const dow = ((dayIdx % 7) + 7 + 2) % 7;
+      const training = dow !== 5 && dow !== 6 && dow !== 2;
+      const w = startW + (104.0 - startW) * (i / (n - 1)) + noise(i, 1) * 0.9;
+      const eat = training ? 1950 + noise(i, 2) * 400 : 2850 + noise(i, 2) * 500;
+      const burn = training ? 3000 + noise(i, 3) * 400 : 2600 + noise(i, 3) * 260;
+      const protein = training ? 155 + noise(i, 4) * 34 : 125 + noise(i, 4) * 30;
+      const steps = training ? 10400 + noise(i, 5) * 4600 : 6000 + noise(i, 5) * 3800;
+      const sleep = 7.1 + noise(i, 6) * 1.6;
+      const inc = n >= 30 && i === n - 11;
+      days.push({ w, eat, burn, protein, steps, sleep, training, inc });
+    }
+    days[n - 1].w = 104.0;
+    const X0 = 44, X1 = 790;
+    const xs = (i) => X0 + (X1 - X0) * (n === 1 ? 0 : i / (n - 1));
+    const ws = days.map((d) => d.w);
+    const avg = ws.map((_, i) => { const a = ws.slice(Math.max(0, i - 6), i + 1); return a.reduce((p, c) => p + c, 0) / a.length; });
+    avg[n - 1] = 104.0;
+    const lo = Math.floor(Math.min(...ws) - 0.5), hi = Math.ceil(Math.max(...ws) + 0.5);
+    const yw = (v) => 190 - (v - lo) / (hi - lo) * 170;
+    const line = (arr) => arr.map((v, i) => (i ? 'L' : 'M') + xs(i).toFixed(1) + ' ' + yw(v).toFixed(1)).join(' ');
+    const slot = (X1 - X0) / n;
+    const bw = Math.max(2, slot * 0.7), ew = Math.max(1.5, slot * 0.38);
+    const ye = (v) => 190 - v / 3600 * 170;
+    const rect = (x, y, w, h) => 'M' + x.toFixed(1) + ' ' + y.toFixed(1) + 'h' + w.toFixed(1) + 'v' + h.toFixed(1) + 'h' + (-w).toFixed(1) + 'Z';
+    let burnBars = '', incBars = '', eatBars = '';
+    days.forEach((d, i) => {
+      const cx = X0 + slot * i + slot / 2;
+      const r = rect(cx - bw / 2, ye(d.burn), bw, 190 - ye(d.burn));
+      if (d.inc) incBars += r; else burnBars += r;
+      eatBars += rect(cx - ew / 2, ye(d.eat), ew, 190 - ye(d.eat));
+    });
+    const small = (key, max, color, target, label, title, unit, note, f) => {
+      const sw = 360 / n;
+      let bars = '';
+      days.forEach((d, i) => { const h = Math.min(100, d[key] / max * 100); bars += rect(sw * i + sw * 0.15, 110 - h, Math.max(1, sw * 0.7), h); });
+      const ty = 110 - target / max * 100;
+      const a = days.reduce((p, d) => p + d[key], 0) / n;
+      return { title, avg: f(a) + unit, note, bars, color, targetY: ty.toFixed(1), targetLabelY: (ty - 5).toFixed(1), targetLabel: label, aria: title + ', average ' + f(a) + unit };
+    };
+    const full = days.filter((d) => !d.inc);
+    const avgEat = days.reduce((p, d) => p + d.eat, 0) / n;
+    const avgBurn = full.reduce((p, d) => p + d.burn, 0) / full.length;
+    const budgetDays = days.filter((d) => d.eat <= (d.training ? 2000 : 3000)).length;
+    const startLabel = period === 7 ? '15 Oct' : period === 30 ? '22 Sep' : '24 Jul';
+    return {
+      periods: [[7, '7 days'], [30, '30 days'], [90, '90 days']].map(([v, l]) => ({ label: l, on: v === period ? 'true' : 'false', bg: v === period ? '#FFFFFF' : 'transparent', ink: v === period ? '#17201B' : '#4D5751', shadow: v === period ? '0 1px 2px rgba(23,32,27,.12)' : 'none', pick: () => this.setState({ period: v }) })),
+      n, startLabel,
+      wChange: (104.0 - avg[0] >= 0 ? '+' : '−') + Math.abs(104.0 - avg[0]).toFixed(1), wFrom: avg[0].toFixed(1),
+      wTop: hi, wMid: ((hi + lo) / 2).toFixed(1), wBot: lo,
+      wDaily: line(ws), wAvg: line(avg), wEndX: xs(n - 1), wEndY: yw(104.0), wLabelX: xs(n - 1) - 64, wLabelY: yw(104.0) - 12,
+      wAria: 'Weight over ' + period + ' days, 7-day average from ' + avg[0].toFixed(1) + ' to 104.0 kilograms',
+      burnBars, incBars, eatBars,
+      incLegend: days.some((d) => d.inc) ? 'Dashed bar: Apple Health data incomplete that day (watch not worn), excluded from averages' : '',
+      avgEat: fmt(avgEat), avgBurn: fmt(avgBurn), avgBal: fmt(avgBurn - avgEat), budgetDays,
+      incNote: days.some((d) => d.inc) ? '1 incomplete day excluded from burned' : 'All days complete',
+      smalls: [
+        small('protein', 200, '#2F6B4F', 160, '160 g training minimum', 'Protein', ' g', 'Minimum 160 g on Training Days, 120 g on Rest Days', (v) => Math.round(v)),
+        small('steps', 16000, '#2D5C91', 10000, '10,000 training minimum', 'Steps', '', 'No steps target on Rest Days', (v) => fmt(v)),
+        small('sleep', 10, '#5B4D93', 7, '7 h reference', 'Sleep', ' h', 'Shown for context. Sleep has no target', (v) => v.toFixed(1))
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

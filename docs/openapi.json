@@ -94,6 +94,14 @@
                                                 },
                                                 "consumptions": {
                                                     "type": "string"
+                                                },
+                                                "day_types": {
+                                                    "type": "array",
+                                                    "items": {}
+                                                },
+                                                "day_assignments": {
+                                                    "type": "array",
+                                                    "items": {}
                                                 }
                                             },
                                             "required": [
@@ -104,7 +112,9 @@
                                                 "meal_categories",
                                                 "foods",
                                                 "recipes",
-                                                "consumptions"
+                                                "consumptions",
+                                                "day_types",
+                                                "day_assignments"
                                             ]
                                         }
                                     },
@@ -774,6 +784,351 @@
                 "responses": {
                     "204": {
                         "description": "No content"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    }
+                }
+            }
+        },
+        "/v1/days/{date}": {
+            "patch": {
+                "operationId": "day.update",
+                "tags": [
+                    "Day"
+                ],
+                "parameters": [
+                    {
+                        "name": "date",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "day_type_id": {
+                                        "type": "string",
+                                        "format": "uuid"
+                                    }
+                                },
+                                "required": [
+                                    "day_type_id"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "local_date": {
+                                                    "type": "string"
+                                                },
+                                                "source": {
+                                                    "type": "string"
+                                                },
+                                                "day_type": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "string"
+                                                        },
+                                                        "key": {
+                                                            "type": "string"
+                                                        },
+                                                        "name": {
+                                                            "type": "string"
+                                                        },
+                                                        "color": {
+                                                            "type": "string"
+                                                        },
+                                                        "is_active": {
+                                                            "type": "string"
+                                                        },
+                                                        "targets": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "type": "object",
+                                                                "properties": {
+                                                                    "value": {
+                                                                        "type": "number"
+                                                                    },
+                                                                    "unit": {
+                                                                        "type": "string"
+                                                                    },
+                                                                    "comparison_rule": {
+                                                                        "type": "string"
+                                                                    }
+                                                                },
+                                                                "required": [
+                                                                    "value",
+                                                                    "unit",
+                                                                    "comparison_rule"
+                                                                ]
+                                                            }
+                                                        }
+                                                    },
+                                                    "required": [
+                                                        "id",
+                                                        "key",
+                                                        "name",
+                                                        "color",
+                                                        "is_active",
+                                                        "targets"
+                                                    ]
+                                                }
+                                            },
+                                            "required": [
+                                                "local_date",
+                                                "source",
+                                                "day_type"
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "data"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/ModelNotFoundException"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    }
+                }
+            }
+        },
+        "/v1/day-types": {
+            "get": {
+                "operationId": "dayType.index",
+                "tags": [
+                    "DayType"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "string"
+                                                    },
+                                                    "key": {
+                                                        "type": "string"
+                                                    },
+                                                    "name": {
+                                                        "type": "string"
+                                                    },
+                                                    "color": {
+                                                        "type": "string"
+                                                    },
+                                                    "is_active": {
+                                                        "type": "string"
+                                                    },
+                                                    "targets": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "type": "object",
+                                                            "properties": {
+                                                                "value": {
+                                                                    "type": "number"
+                                                                },
+                                                                "unit": {
+                                                                    "type": "string"
+                                                                },
+                                                                "comparison_rule": {
+                                                                    "type": "string"
+                                                                }
+                                                            },
+                                                            "required": [
+                                                                "value",
+                                                                "unit",
+                                                                "comparison_rule"
+                                                            ]
+                                                        }
+                                                    }
+                                                },
+                                                "required": [
+                                                    "id",
+                                                    "key",
+                                                    "name",
+                                                    "color",
+                                                    "is_active",
+                                                    "targets"
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "required": [
+                                        "data"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/AuthenticationException"
+                    }
+                }
+            }
+        },
+        "/v1/day-types/{dayType}": {
+            "put": {
+                "operationId": "dayType.update",
+                "tags": [
+                    "DayType"
+                ],
+                "parameters": [
+                    {
+                        "name": "dayType",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "maxLength": 100
+                                    },
+                                    "color": {
+                                        "type": "string",
+                                        "pattern": "^#[0-9A-Fa-f]{6}$"
+                                    },
+                                    "targets": {
+                                        "type": "object",
+                                        "properties": {
+                                            "consumed_calories": {
+                                                "type": "number"
+                                            },
+                                            "protein_g": {
+                                                "type": "number"
+                                            },
+                                            "steps": {
+                                                "type": [
+                                                    "integer",
+                                                    "null"
+                                                ]
+                                            }
+                                        },
+                                        "required": [
+                                            "consumed_calories",
+                                            "protein_g"
+                                        ]
+                                    }
+                                },
+                                "required": [
+                                    "targets"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "string"
+                                                },
+                                                "key": {
+                                                    "type": "string"
+                                                },
+                                                "name": {
+                                                    "type": "string"
+                                                },
+                                                "color": {
+                                                    "type": "string"
+                                                },
+                                                "is_active": {
+                                                    "type": "string"
+                                                },
+                                                "targets": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "object",
+                                                        "properties": {
+                                                            "value": {
+                                                                "type": "number"
+                                                            },
+                                                            "unit": {
+                                                                "type": "string"
+                                                            },
+                                                            "comparison_rule": {
+                                                                "type": "string"
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "value",
+                                                            "unit",
+                                                            "comparison_rule"
+                                                        ]
+                                                    }
+                                                }
+                                            },
+                                            "required": [
+                                                "id",
+                                                "key",
+                                                "name",
+                                                "color",
+                                                "is_active",
+                                                "targets"
+                                            ]
+                                        }
+                                    },
+                                    "required": [
+                                        "data"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
                     },
                     "401": {
                         "$ref": "#/components/responses/AuthenticationException"
@@ -1658,6 +2013,56 @@
                                                 "time_zone": {
                                                     "type": "string"
                                                 },
+                                                "day_type": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "string"
+                                                        },
+                                                        "key": {
+                                                            "type": "string"
+                                                        },
+                                                        "name": {
+                                                            "type": "string"
+                                                        },
+                                                        "color": {
+                                                            "type": "string"
+                                                        },
+                                                        "is_active": {
+                                                            "type": "string"
+                                                        },
+                                                        "targets": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "type": "object",
+                                                                "properties": {
+                                                                    "value": {
+                                                                        "type": "number"
+                                                                    },
+                                                                    "unit": {
+                                                                        "type": "string"
+                                                                    },
+                                                                    "comparison_rule": {
+                                                                        "type": "string"
+                                                                    }
+                                                                },
+                                                                "required": [
+                                                                    "value",
+                                                                    "unit",
+                                                                    "comparison_rule"
+                                                                ]
+                                                            }
+                                                        }
+                                                    },
+                                                    "required": [
+                                                        "id",
+                                                        "key",
+                                                        "name",
+                                                        "color",
+                                                        "is_active",
+                                                        "targets"
+                                                    ]
+                                                },
                                                 "consumed": {
                                                     "type": "string"
                                                 },
@@ -1674,6 +2079,7 @@
                                             "required": [
                                                 "local_date",
                                                 "time_zone",
+                                                "day_type",
                                                 "consumed",
                                                 "consumptions",
                                                 "health"
@@ -1804,6 +2210,19 @@
                             "string",
                             "null"
                         ]
+                    },
+                    "deleted_at": {
+                        "type": [
+                            "string",
+                            "null"
+                        ],
+                        "format": "date-time"
+                    },
+                    "deletion_idempotency_key": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
                     }
                 },
                 "required": [
@@ -1828,7 +2247,9 @@
                     "source_id",
                     "source_name",
                     "source_quantity",
-                    "source_unit"
+                    "source_unit",
+                    "deleted_at",
+                    "deletion_idempotency_key"
                 ],
                 "title": "Consumption"
             },
@@ -2056,6 +2477,25 @@
             },
             "AuthorizationException": {
                 "description": "Authorization error",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "description": "Error overview."
+                                }
+                            },
+                            "required": [
+                                "message"
+                            ]
+                        }
+                    }
+                }
+            },
+            "ModelNotFoundException": {
+                "description": "Not found",
                 "content": {
                     "application/json": {
                         "schema": {

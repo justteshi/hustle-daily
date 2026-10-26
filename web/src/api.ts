@@ -46,6 +46,14 @@ export type Today = {
     local_date: string;
     consumed: { calories: number; protein: number };
     consumptions: Meal[];
+    day_type: DayType;
+};
+export type DayType = {
+    id: string;
+    key: string;
+    name: string;
+    color: string;
+    targets: Record<string, { value: number; unit: string; comparison_rule: string }>;
 };
 export type Recipe = {
     id: string;

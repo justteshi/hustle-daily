@@ -1,0 +1,32 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('target_profiles', function (Blueprint $table) {
+            $table->uuid('id')->primary();
+            $table->foreignUuid('day_type_id')->constrained()->cascadeOnDelete();
+            $table->date('effective_from')->nullable();
+            $table->date('effective_to')->nullable();
+            $table->text('notes')->nullable();
+            $table->timestamps();
+            $table->unique('day_type_id');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('target_profiles');
+    }
+};

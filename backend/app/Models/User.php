@@ -57,6 +57,16 @@ class User extends Authenticatable implements FilamentUser
         return $this->hasMany(Recipe::class);
     }
 
+    public function dayTypes(): HasMany
+    {
+        return $this->hasMany(DayType::class);
+    }
+
+    public function dayAssignments(): HasMany
+    {
+        return $this->hasMany(DayAssignment::class);
+    }
+
     /**
      * Get the attributes that should be cast.
      *

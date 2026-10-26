@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Foods and recipes · Hustle Daily</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+a{color:#24563F}a:hover{color:#17201B}
+:focus-visible{outline:2px solid #2F6B4F;outline-offset:2px}
+</style>
+</helmet>
+<div style="min-height: 1100px; background: #F5F3EE; color: #17201B; font-family: Inter, system-ui, sans-serif; font-variant-numeric: tabular-nums; display: flex; flex-wrap: wrap">
+
+  <nav aria-label="Main" style="flex: 1 1 232px; max-width: 272px; background: #FFFFFF; border-right: 1px solid #E3E0D7; padding: 20px 14px; display: flex; flex-direction: column; gap: 18px">
+    <a href="DeskToday.dc.html" style="display: flex; align-items: center; gap: 10px; padding: 4px 8px; text-decoration: none; color: #17201B"><svg width="30" height="30" viewBox="0 0 120 120" role="img" aria-label="Hustle Daily logo" style="flex: none; display: block"><rect width="120" height="120" rx="28" fill="#2F6B4F"></rect><path d="M60 26A34 34 0 1 1 46.99 28.59" fill="none" stroke="#F5F3EE" stroke-width="9" stroke-linecap="round"></path><circle cx="46.99" cy="28.59" r="6.5" fill="#E8C27A"></circle><path d="M46 61L56 71L75 51" fill="none" stroke="#F5F3EE" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"></path></svg><strong style="font-size: 16px">Hustle Daily</strong></a>
+    <a href="DeskAddFood.dc.html" style="height: 42px; border-radius: 10px; background: #2F6B4F; color: #FFFFFF; font-weight: 600; font-size: 14px; display: flex; align-items: center; justify-content: center; text-decoration: none">+ Add food</a>
+    <div style="display: flex; flex-direction: column; gap: 2px; font-size: 14px">
+      <a href="DeskToday.dc.html" style="padding: 9px 10px; border-radius: 9px; color: #2E3832; text-decoration: none">Today</a>
+      <a href="DeskHistory.dc.html" style="padding: 9px 10px; border-radius: 9px; color: #2E3832; text-decoration: none">History</a>
+      <a href="DeskFoods.dc.html" aria-current="page" style="padding: 9px 10px; border-radius: 9px; background: #E6EFE9; color: #24563F; font-weight: 600; text-decoration: none">Foods &amp; Recipes</a>
+      <a href="DeskTrends.dc.html" style="padding: 9px 10px; border-radius: 9px; color: #2E3832; text-decoration: none">Trends</a>
+      <a href="DeskTargets.dc.html" style="padding: 9px 10px; border-radius: 9px; color: #2E3832; text-decoration: none">Targets</a>
+      <a href="DeskSettings.dc.html" style="padding: 9px 10px; border-radius: 9px; color: #2E3832; text-decoration: none">Settings</a>
+    </div>
+  </nav>
+
+  <main style="flex: 999 1 560px; min-width: 0; padding: 28px 36px 48px; display: flex; flex-direction: column; gap: 18px">
+    <header style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px">
+      <div style="display: flex; flex-direction: column; gap: 6px"><h1 style="margin: 0; font-size: 30px; letter-spacing: -0.02em">Foods &amp; Recipes</h1><span style="font-size: 14px; color: #4D5751">Your private catalogue: 148 foods and 9 recipes. Every food belongs to one brand.</span></div>
+      <div style="display: flex; gap: 10px"><a href="DeskRecipe.dc.html" style="height: 42px; padding: 0 16px; border-radius: 10px; border: 1px solid #CFCAC0; background: #FFFFFF; color: #17201B; font-weight: 600; font-size: 14px; display: inline-flex; align-items: center; text-decoration: none">New recipe</a><a href="DeskFoodEdit.dc.html" style="height: 42px; padding: 0 16px; border-radius: 10px; background: #17201B; color: #FFFFFF; font-weight: 600; font-size: 14px; display: inline-flex; align-items: center; text-decoration: none">New food</a></div>
+    </header>
+
+    <div role="tablist" aria-label="Catalogue" style="display: flex; gap: 4px; border-bottom: 1px solid #E3E0D7">
+      <sc-for list="{{tabs}}" as="t" hint-placeholder-count="2">
+        <button type="button" role="tab" aria-selected="{{t.on}}" onClick="{{t.pick}}" style="height: 40px; padding: 0 14px; border: 0; border-bottom: 2px solid {{t.line}}; background: transparent; font: {{t.weight}} 14px Inter, sans-serif; color: {{t.ink}}; cursor: pointer">{{t.label}}</button>
+      </sc-for>
+    </div>
+
+    <sc-if value="{{isFoods}}" hint-placeholder-val="{{true}}">
+    <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center">
+      <label style="flex: 1 1 320px; display: flex; align-items: center; gap: 10px; height: 42px; border: 1px solid #CFCAC0; border-radius: 10px; padding: 0 12px; background: #FFFFFF"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Search by name, brand or barcode</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4D5751" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg><input value="{{q}}" onChange="{{setQ}}" placeholder="Search by name, brand or barcode" style="flex: 1; border: 0; outline: none; font: 15px Inter, sans-serif; min-width: 0"></label>
+      <div role="group" aria-label="Source filter" style="display: flex; gap: 6px; flex-wrap: wrap">
+        <sc-for list="{{filters}}" as="f" hint-placeholder-count="4">
+          <button type="button" aria-pressed="{{f.on}}" onClick="{{f.pick}}" style="height: 34px; padding: 0 12px; border-radius: 999px; border: 1px solid {{f.border}}; background: {{f.bg}}; color: {{f.ink}}; font: 600 13px Inter, sans-serif; cursor: pointer">{{f.label}}</button>
+        </sc-for>
+      </div>
+    </div>
+
+    <div style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 16px; overflow-x: auto">
+      <table style="width: 100%; min-width: 1080px; border-collapse: collapse; font-size: 14px">
+        <thead>
+          <tr style="text-align: left; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: #646D67">
+            <th scope="col" style="padding: 12px 18px; font-weight: 600; min-width: 280px">Food · brand</th>
+            <th scope="col" style="padding: 12px 8px; font-weight: 600">Basis</th>
+            <th scope="col" style="padding: 12px 8px; font-weight: 600; text-align: right">kcal</th>
+            <th scope="col" style="padding: 12px 8px; font-weight: 600; text-align: right">Protein</th>
+            <th scope="col" style="padding: 12px 8px; font-weight: 600; text-align: right">Carbs</th>
+            <th scope="col" style="padding: 12px 8px; font-weight: 600; text-align: right">Fat</th>
+            <th scope="col" style="padding: 12px 8px; font-weight: 600">Portions</th>
+            <th scope="col" style="padding: 12px 8px; font-weight: 600">Barcode</th>
+            <th scope="col" style="padding: 12px 18px; font-weight: 600">Source</th>
+          </tr>
+        </thead>
+        <tbody>
+          <sc-for list="{{rows}}" as="r" hint-placeholder-count="8">
+            <tr style="border-top: 1px solid #ECE9E2; opacity: {{r.opacity}}">
+              <td style="padding: 12px 18px"><a href="DeskFoodEdit.dc.html" style="color: #17201B; text-decoration: none; font-weight: 500">{{r.name}}</a> <span style="color: #646D67">·</span> <strong>{{r.brand}}</strong><sc-if value="{{r.twin}}" hint-placeholder-val="{{false}}"><br><span style="font-size: 12px; color: #2D5C91">Same name, other brand</span></sc-if></td>
+              <td style="padding: 12px 8px; color: #4D5751; white-space: nowrap">{{r.basis}}</td>
+              <td style="padding: 12px 8px; text-align: right; white-space: nowrap">{{r.kcal}}</td>
+              <td style="padding: 12px 8px; text-align: right; white-space: nowrap">{{r.p}} g</td>
+              <td style="padding: 12px 8px; text-align: right; white-space: nowrap">{{r.c}} g</td>
+              <td style="padding: 12px 8px; text-align: right; white-space: nowrap">{{r.f}} g</td>
+              <td style="padding: 12px 8px; color: #4D5751; font-size: 13px">{{r.portions}}</td>
+              <td style="padding: 12px 8px; color: #4D5751; font-size: 13px; letter-spacing: 0.02em">{{r.barcode}}</td>
+              <td style="padding: 12px 18px"><span style="font-size: 12px; font-weight: 600; padding: 3px 8px; border-radius: 6px; white-space: nowrap; background: {{r.badgeBg}}; color: {{r.badgeInk}}; border: 1px {{r.badgeLine}} {{r.badgeBorder}}">{{r.source}}</span></td>
+            </tr>
+          </sc-for>
+        </tbody>
+      </table>
+      <sc-if value="{{empty}}" hint-placeholder-val="{{false}}">
+        <div style="padding: 32px; text-align: center; display: flex; flex-direction: column; gap: 8px; align-items: center; font-size: 14px"><strong>No foods match “{{q}}”</strong><span style="color: #4D5751">Try a brand name or a barcode.</span><a href="DeskFoodEdit.dc.html" style="font-weight: 600">Create a new food →</a></div>
+      </sc-if>
+    </div>
+    <span style="font-size: 12px; color: #646D67">Values are per the basis shown. Archived foods stay linked to past days but don’t appear in search when logging.</span>
+    </sc-if>
+    <sc-if value="{{isRecipes}}" hint-placeholder-val="{{false}}">
+      <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center">
+        <label style="flex: 1 1 280px; display: flex; align-items: center; gap: 10px; height: 42px; border: 1px solid #CFCAC0; border-radius: 10px; padding: 0 12px; background: #FFFFFF"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Search recipes or ingredients</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4D5751" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg><input value="{{rq}}" onChange="{{setRq}}" placeholder="Search recipes or ingredients" style="flex: 1; border: 0; outline: none; font: 15px Inter, sans-serif; min-width: 0"></label>
+        <div role="group" aria-label="Category filter" style="display: flex; gap: 6px; flex-wrap: wrap">
+          <sc-for list="{{cats}}" as="c" hint-placeholder-count="6">
+            <button type="button" aria-pressed="{{c.on}}" onClick="{{c.pick}}" style="height: 34px; padding: 0 12px; border-radius: 999px; border: 1px solid {{c.border}}; background: {{c.bg}}; color: {{c.ink}}; font: 600 13px Inter, sans-serif; cursor: pointer">{{c.label}}</button>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 18px; align-items: flex-start">
+        <section aria-label="Recipes" style="flex: 999 1 520px; min-width: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 12px">
+          <sc-for list="{{rlist}}" as="r" hint-placeholder-count="9">
+            <button type="button" aria-pressed="{{r.on}}" onClick="{{r.pick}}" style="text-align: left; background: #FFFFFF; border: {{r.border}}; border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 10px; font: 14px Inter, sans-serif; color: #17201B; cursor: pointer">
+              <span style="display: flex; justify-content: space-between; gap: 8px; align-items: flex-start"><strong style="font-size: 15px; line-height: 1.3">{{r.name}}</strong><span style="flex: none; font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 6px; background: {{r.catBg}}; color: {{r.catInk}}">{{r.cat}}</span></span>
+              <span><strong style="font-size: 24px; letter-spacing: -0.02em">{{r.perKcal}}</strong> <span style="color: #4D5751">kcal / serving</span></span>
+              <span style="display: flex; gap: 12px; font-size: 13px; color: #2E3832"><span>P <strong>{{r.perP}} g</strong></span><span>C <strong>{{r.perC}} g</strong></span><span>F <strong>{{r.perF}} g</strong></span></span>
+              <span style="font-size: 12px; color: #646D67; padding-top: 8px; border-top: 1px solid #F1EFEA">{{r.servingsLabel}} · {{r.time}} · logged {{r.times}}× · last {{r.last}}</span>
+            </button>
+          </sc-for>
+          <sc-if value="{{noRecipes}}" hint-placeholder-val="{{false}}">
+            <div style="grid-column: 1 / -1; padding: 28px; background: #FFFFFF; border: 1px dashed #CFCAC0; border-radius: 14px; text-align: center; font-size: 14px"><strong>No recipes match</strong><br><span style="color: #4D5751">Try another word or category, or </span><a href="DeskRecipe.dc.html">build a new recipe</a>.</div>
+          </sc-if>
+        </section>
+
+        <aside aria-label="Recipe detail" style="flex: 1 1 360px; min-width: 0; background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 16px; padding: 20px 22px; display: flex; flex-direction: column; gap: 14px">
+          <div style="display: flex; justify-content: space-between; gap: 10px; align-items: flex-start">
+            <div style="display: flex; flex-direction: column; gap: 4px"><h2 style="margin: 0; font-size: 20px; letter-spacing: -0.01em">{{sel.name}}</h2><span style="font-size: 13px; color: #4D5751">{{sel.cat}} · {{sel.servingsLabel}} · about {{sel.weight}} g per serving</span></div>
+            <a href="DeskRecipe.dc.html" style="flex: none; font-size: 13px; font-weight: 600">Edit in builder</a>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; padding: 12px 14px; border-radius: 12px; background: #F7F5F0">
+            <span><strong style="font-size: 22px">{{sel.perKcal}}</strong><br><span style="font-size: 12px; color: #4D5751">kcal</span></span>
+            <span><strong style="font-size: 22px">{{sel.perP}}</strong><br><span style="font-size: 12px; color: #4D5751">g protein</span></span>
+            <span><strong style="font-size: 22px">{{sel.perC}}</strong><br><span style="font-size: 12px; color: #4D5751">g carbs</span></span>
+            <span><strong style="font-size: 22px">{{sel.perF}}</strong><br><span style="font-size: 12px; color: #4D5751">g fat</span></span>
+            <span style="grid-column: 1 / -1; font-size: 12px; color: #646D67">Per serving · = calculated from the ingredients</span>
+          </div>
+          <div style="display: flex; flex-direction: column">
+            <div style="display: grid; grid-template-columns: minmax(0, 1fr) auto 56px; gap: 10px; padding: 0 0 6px; font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #646D67; border-bottom: 1px solid #ECE9E2"><span>Ingredient · brand</span><span style="text-align: right">Amount</span><span style="text-align: right">kcal</span></div>
+            <sc-for list="{{sel.ing}}" as="i" hint-placeholder-count="5">
+              <div style="display: grid; grid-template-columns: minmax(0, 1fr) auto 56px; gap: 10px; padding: 8px 0; font-size: 14px; align-items: center; border-bottom: 1px solid #F1EFEA"><span style="min-width: 0">{{i.name}} <span style="color: #646D67">· {{i.brand}}</span></span><span style="text-align: right; white-space: nowrap; color: #2E3832">{{i.qty}}</span><span style="text-align: right">{{i.kcal}}</span></div>
+            </sc-for>
+            <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 12px; padding-top: 8px; font-size: 13px; color: #4D5751"><span>Whole recipe</span><span><strong style="color: #17201B">{{sel.totKcal}} kcal</strong> · P {{sel.totP}} g · C {{sel.totC}} g · F {{sel.totF}} g</span></div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 10px; padding-top: 12px; border-top: 1px solid #ECE9E2">
+            <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end">
+              <div style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600">Servings
+                <span style="display: flex; align-items: center; gap: 8px"><button type="button" onClick="{{dec}}" aria-label="Fewer servings" style="width: 36px; height: 36px; border: 1px solid #CFCAC0; border-radius: 9px; background: #FFFFFF; font-size: 16px; cursor: pointer">−</button><strong style="min-width: 32px; text-align: center; font-size: 16px">{{sv}}</strong><button type="button" onClick="{{inc}}" aria-label="More servings" style="width: 36px; height: 36px; border: 1px solid #CFCAC0; border-radius: 9px; background: #FFFFFF; font-size: 16px; cursor: pointer">+</button></span>
+              </div>
+              <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 600">Meal
+                <select value="{{meal}}" onChange="{{setMeal}}" style="height: 36px; border: 1px solid #CFCAC0; border-radius: 9px; padding: 0 10px; font: 500 14px Inter, sans-serif; background: #FFFFFF"><option>Breakfast</option><option>Lunch</option><option>Dinner</option><option>Snack</option><option>Pre-workout</option><option>Post-workout</option></select>
+              </label>
+              <button type="button" onClick="{{log}}" style="margin-left: auto; height: 40px; padding: 0 16px; border: 0; border-radius: 10px; background: #2F6B4F; color: #FFFFFF; font: 600 14px Inter, sans-serif; cursor: pointer">Log {{sv}} {{svWord}} · {{entryKcal}} kcal</button>
+            </div>
+            <span style="font-size: 13px; color: #4D5751">Today after: <strong>{{afterKcal}} / 2,000 kcal</strong> · protein <strong>{{afterP}} / 160 g</strong></span>
+            <sc-if value="{{logged}}" hint-placeholder-val="{{false}}"><span role="status" style="padding: 10px 12px; border-radius: 10px; background: #E6EFE9; color: #24563F; font-size: 14px; font-weight: 600">✓ {{loggedText}}</span></sc-if>
+          </div>
+        </aside>
+      </div>
+    </sc-if>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"initialTab":{"editor":"enum","options":["foods","recipes"],"default":"foods"},"$preview":{"width":1440,"height":1100}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state;
+    const q = s.q ?? '';
+    const filter = s.filter ?? 'all';
+    const data = [
+      ['Skyr Natural', 'Nordic Dairy', 'per 100 g', 63, 11, 4, 0.2, '1 cup = 150 g', '5701234500012', 'verified', true],
+      ['Skyr Natural', 'Balkan Farm', 'per 100 g', 66, 10, 4.1, 0.5, '—', '3800456700101', 'verified', true],
+      ['Skyr Vanilla', 'Nordic Dairy', 'per 100 g', 79, 9.5, 9.8, 0.2, '1 cup = 150 g', '5701234500029', 'off-ok', false],
+      ['Milk 1.5%', 'Balkan Farm', 'per 100 ml', 47, 3.4, 4.8, 1.5, '1 glass = 250 ml', '3800456700200', 'verified', true],
+      ['Milk 1.5%', 'Alpen Dairy', 'per 100 ml', 46, 3.5, 4.9, 1.5, '1 glass = 250 ml', '9001234000017', 'verified', true],
+      ['Rolled oats', 'Alpen Mill', 'per 100 g', 372, 13.5, 58.7, 7, '1 tbsp = 10 g', '9001234100014', 'verified', false],
+      ['Chia seeds', 'Green Origin', 'per 100 g', 486, 16.5, 8, 30.7, '1 tbsp = 12 g · 1 tsp = 4 g', '3800999100019', 'verified', false],
+      ['Frozen cherries', 'Polar Harvest', 'per 100 g', 63, 1.1, 14, 0.2, '—', '6401234000016', 'verified', false],
+      ['Whey protein Vanilla', 'Core Nutrition', 'per 100 g', 380, 78, 6, 5.4, '1 scoop = 30 g', '5060123400011', 'verified', false],
+      ['Protein Pudding Chocolate', 'Lumi', 'per 100 g', 73, 10, 6.1, 1, '1 cup = 200 g', '3800123456789', 'off', false],
+      ['Protein bar Peanut', 'Core Nutrition', 'per serving (60 g)', 214, 20, 18, 7.5, '1 bar = 60 g', '5060123400028', 'verified', false],
+      ['Milk 3.2%', 'Old Farm', 'per 100 ml', 60, 3.2, 4.7, 3.2, '—', '3800111000010', 'archived', false]
+    ];
+    const src = {
+      verified: ['✓ Verified by you', '#E6EFE9', '#24563F', 'solid', '#E6EFE9'],
+      'off-ok': ['Open Food Facts · confirmed', '#E4ECF5', '#2D5C91', 'solid', '#E4ECF5'],
+      off: ['Open Food Facts · needs check', '#FFFFFF', '#2D5C91', 'dashed', '#7FA0C8'],
+      archived: ['Archived', '#EFECE5', '#646D67', 'solid', '#EFECE5']
+    };
+    const ql = q.trim().toLowerCase();
+    const rows = data.filter((d) => {
+      if (filter === 'verified' && d[9] !== 'verified') return false;
+      if (filter === 'off' && !d[9].startsWith('off')) return false;
+      if (filter === 'archived' && d[9] !== 'archived') return false;
+      if (filter === 'all' && d[9] === 'archived') return false;
+      return !ql || (d[0] + ' ' + d[1] + ' ' + d[8]).toLowerCase().includes(ql);
+    }).map((d) => ({ name: d[0], brand: d[1], basis: d[2], kcal: d[3], p: d[4], c: d[5], f: d[6], portions: d[7], barcode: d[8], source: src[d[9]][0], badgeBg: src[d[9]][1], badgeInk: src[d[9]][2], badgeLine: src[d[9]][3], badgeBorder: src[d[9]][4], twin: d[10], opacity: d[9] === 'archived' ? '0.75' : '1' }));
+    const fl = [['all', 'All active'], ['verified', 'Verified'], ['off', 'Open Food Facts'], ['archived', 'Archived']];
+    // Recipe library (shared by DeskFoods and PhFoods). Values per 100 g / 100 ml.
+    const L = {
+      milk: ['Milk 1.5%', 'Balkan Farm', [47, 3.4, 4.8, 1.5]], skyr: ['Skyr Natural', 'Nordic Dairy', [63, 11, 4, 0.2]],
+      oats: ['Rolled oats', 'Alpen Mill', [372, 13.5, 58.7, 7]], chia: ['Chia seeds', 'Green Origin', [486, 16.5, 8, 30.7]],
+      cherries: ['Frozen cherries', 'Polar Harvest', [63, 1.1, 14, 0.2]], whey: ['Whey protein Vanilla', 'Core Nutrition', [380, 78, 6, 5.4]],
+      banana: ['Banana', 'Fresh produce', [89, 1.1, 23.8, 0.3]], egg: ['Eggs, size M', 'Balkan Farm', [143, 12.6, 0.7, 9.5]],
+      chicken: ['Chicken breast, raw', 'Fresh Poultry Co.', [110, 23, 0, 1.5]], rice: ['Basmati rice, dry', 'Alpen Mill', [356, 8, 78, 0.9]],
+      broccoli: ['Broccoli, frozen', 'Polar Harvest', [34, 2.8, 7, 0.4]], oil: ['Extra virgin olive oil', 'Terra Verde', [884, 0, 0, 100]],
+      soy: ['Soy sauce, reduced salt', 'Umami House', [60, 6, 8, 0]], beef: ['Beef mince 5% fat', 'Balkan Meat', [137, 21, 0, 5.5]],
+      kidney: ['Red kidney beans, drained', 'Terra Verde', [105, 7.5, 14, 0.5]], tomato: ['Chopped tomatoes', 'Terra Verde', [21, 1.1, 3.5, 0.2]],
+      onion: ['Onion', 'Fresh produce', [40, 1.1, 9.3, 0.1]], salmon: ['Salmon fillet', 'Nordic Sea', [208, 20, 0, 13]],
+      potato: ['Potatoes', 'Fresh produce', [77, 2, 17, 0.1]], gbeans: ['Green beans, frozen', 'Polar Harvest', [31, 1.8, 7, 0.2]],
+      tortilla: ['Wholewheat tortilla', 'Alpen Mill', [300, 9, 48, 7]], turkey: ['Turkey breast slices', 'Fresh Poultry Co.', [104, 22, 1.5, 1.2]],
+      cheese: ['Light cheese slices', 'Balkan Farm', [270, 30, 0.5, 16]], salad: ['Lettuce & tomato', 'Fresh produce', [18, 1, 3, 0.2]],
+      cottage: ['Cottage cheese 2%', 'Balkan Farm', [88, 12.8, 5, 3.3]], almonds: ['Almonds', 'Green Origin', [579, 21, 13, 50]]
+    };
+    const R = [
+      ['bowl', 'Breakfast bowl', 'Breakfast', 1, '5 min', 23, 'Today', [['milk', 80, '80 ml'], ['skyr', 100, '100 g'], ['oats', 40, '40 g'], ['chia', 12, '1 tbsp (12 g)'], ['cherries', 100, '100 g'], ['whey', 30, '1 scoop (30 g)']]],
+      ['oats', 'Overnight protein oats', 'Breakfast', 2, '5 min + overnight', 9, '3 days ago', [['oats', 100, '100 g'], ['milk', 300, '300 ml'], ['whey', 30, '1 scoop (30 g)'], ['chia', 24, '2 tbsp (24 g)'], ['banana', 120, '1 banana (120 g)']]],
+      ['pancakes', 'Skyr protein pancakes', 'Breakfast', 2, '20 min', 6, 'Sun 18 Oct', [['oats', 60, '60 g'], ['skyr', 150, '150 g'], ['egg', 100, '2 eggs (100 g)'], ['whey', 30, '1 scoop (30 g)'], ['oil', 5, '1 tsp (5 g)']]],
+      ['shake', 'Post-workout shake', 'Post-workout', 1, '2 min', 31, 'Yesterday', [['whey', 30, '1 scoop (30 g)'], ['milk', 300, '300 ml'], ['banana', 120, '1 banana (120 g)'], ['oats', 30, '30 g']]],
+      ['chickenrice', 'Chicken, rice & broccoli', 'Lunch', 3, '30 min', 14, 'Tue 20 Oct', [['chicken', 450, '450 g'], ['rice', 180, '180 g dry'], ['broccoli', 300, '300 g'], ['oil', 14, '1 tbsp (14 g)'], ['soy', 30, '2 tbsp (30 ml)']]],
+      ['wrap', 'Turkey & cheese wrap', 'Lunch', 1, '5 min', 11, 'Mon 19 Oct', [['tortilla', 60, '1 tortilla (60 g)'], ['turkey', 100, '100 g'], ['cheese', 30, '2 slices (30 g)'], ['salad', 80, '80 g']]],
+      ['snackbowl', 'Cottage cheese & cherries', 'Snack', 1, '2 min', 17, 'Yesterday', [['cottage', 200, '200 g'], ['cherries', 100, '100 g'], ['almonds', 15, '15 g']]],
+      ['chili', 'Lean beef chili', 'Dinner', 4, '45 min', 5, 'Sat 17 Oct', [['beef', 500, '500 g'], ['kidney', 400, '1 can, drained (400 g)'], ['tomato', 400, '1 can (400 g)'], ['onion', 150, '1 onion (150 g)'], ['oil', 14, '1 tbsp (14 g)']]],
+      ['salmon', 'Salmon, potatoes & green beans', 'Dinner', 2, '35 min', 4, 'Thu 15 Oct', [['salmon', 300, '2 fillets (300 g)'], ['potato', 500, '500 g'], ['gbeans', 250, '250 g'], ['oil', 14, '1 tbsp (14 g)']]]
+    ];
+    const r1 = (x) => (Math.round(x * 10) / 10).toString();
+    const recipes = R.map(([id, name, cat, servings, time, times, last, lines]) => {
+      let tot = [0, 0, 0, 0], weight = 0;
+      const ing = lines.map(([k, g, qty]) => {
+        const n = L[k][2].map((v) => v * g / 100);
+        tot = tot.map((v, i) => v + n[i]); weight += g;
+        return { name: L[k][0], brand: L[k][1], qty, kcal: Math.round(n[0]), p: r1(n[1]) };
+      });
+      const per = tot.map((v) => v / servings);
+      return { id, name, cat, servings, time, times, last, ing, weight: Math.round(weight / servings), tot, per,
+        perKcal: Math.round(per[0]), perP: r1(per[1]), perC: r1(per[2]), perF: r1(per[3]),
+        totKcal: Math.round(tot[0]), totP: r1(tot[1]), totC: r1(tot[2]), totF: r1(tot[3]) };
+    });
+    const tab = s.tab ?? this.props.initialTab ?? 'foods';
+    const cat = s.cat ?? 'All';
+    const rql = (s.rq ?? '').trim().toLowerCase();
+    const catStyle = { Breakfast: ['#F6ECDD', '#8A5300'], Lunch: ['#E6EFE9', '#24563F'], Dinner: ['#ECE9F5', '#5B4D93'], Snack: ['#F3E6EC', '#8A4569'], 'Post-workout': ['#E4ECF5', '#2D5C91'] };
+    const shown = recipes.filter((r) => (cat === 'All' || r.cat === cat) && (!rql || (r.name + ' ' + r.ing.map((i) => i.name + ' ' + i.brand).join(' ')).toLowerCase().includes(rql)));
+    const selId = s.sel ?? 'chili';
+    const selR = recipes.find((r) => r.id === selId);
+    const sv = s.sv ?? 1;
+    const meal = s.meal ?? selR.cat;
+    const fmt = (v) => Math.round(v).toLocaleString('en-US');
+    const servingsLabel = (n) => n === 1 ? '1 serving' : n + ' servings';
+    return {
+      tabs: [['foods', 'Foods · 148'], ['recipes', 'Recipes · ' + recipes.length]].map(([id, label]) => ({ label, on: id === tab ? 'true' : 'false', line: id === tab ? '#2F6B4F' : 'transparent', weight: id === tab ? '600' : '500', ink: id === tab ? '#17201B' : '#4D5751', pick: () => this.setState({ tab: id }) })),
+      isFoods: tab === 'foods', isRecipes: tab === 'recipes',
+      rq: s.rq ?? '', setRq: (e) => this.setState({ rq: e.target.value }),
+      cats: ['All', 'Breakfast', 'Lunch', 'Dinner', 'Snack', 'Post-workout'].map((c) => ({ label: c, on: c === cat ? 'true' : 'false', bg: c === cat ? '#17201B' : '#FFFFFF', ink: c === cat ? '#FFFFFF' : '#2E3832', border: c === cat ? '#17201B' : '#CFCAC0', pick: () => this.setState({ cat: c }) })),
+      rlist: shown.map((r) => Object.assign({}, r, { servingsLabel: servingsLabel(r.servings), on: r.id === selId ? 'true' : 'false', border: r.id === selId ? '2px solid #17201B' : '1px solid #E3E0D7', catBg: catStyle[r.cat][0], catInk: catStyle[r.cat][1], pick: () => this.setState({ sel: r.id, sv: 1, meal: r.cat, logged: false }) })),
+      noRecipes: shown.length === 0,
+      sel: Object.assign({}, selR, { servingsLabel: servingsLabel(selR.servings) }),
+      sv, svWord: sv === 1 ? 'serving' : 'servings',
+      inc: () => this.setState({ sv: sv + 0.5, logged: false }), dec: () => this.setState({ sv: Math.max(0.5, sv - 0.5), logged: false }),
+      meal, setMeal: (e) => this.setState({ meal: e.target.value, logged: false }),
+      entryKcal: fmt(selR.per[0] * sv), afterKcal: fmt(1540 + selR.per[0] * sv), afterP: fmt(128 + selR.per[1] * sv),
+      logged: !!s.logged, loggedText: 'Added ' + sv + ' ' + (sv === 1 ? 'serving' : 'servings') + ' of ' + selR.name + ' to ' + meal + '. Today is now ' + fmt(1540 + selR.per[0] * sv) + ' kcal.',
+      log: () => this.setState({ logged: true }),
+      q, setQ: (e) => this.setState({ q: e.target.value }),
+      filters: fl.map(([id, label]) => ({ label, on: id === filter ? 'true' : 'false', bg: id === filter ? '#17201B' : '#FFFFFF', ink: id === filter ? '#FFFFFF' : '#2E3832', border: id === filter ? '#17201B' : '#CFCAC0', pick: () => this.setState({ filter: id }) })),
+      rows, empty: rows.length === 0
+    };
+  }
+}
+</script>
+</body>
+</html>

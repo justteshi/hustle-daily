@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Recipe builder · Hustle Daily</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+a{color:#24563F}a:hover{color:#17201B}
+:focus-visible{outline:2px solid #2F6B4F;outline-offset:2px}
+</style>
+</helmet>
+<div style="min-height: 1300px; background: #F5F3EE; color: #17201B; font-family: Inter, system-ui, sans-serif; font-variant-numeric: tabular-nums; display: flex; flex-wrap: wrap">
+
+  <nav aria-label="Main" style="flex: 1 1 232px; max-width: 272px; background: #FFFFFF; border-right: 1px solid #E3E0D7; padding: 20px 14px; display: flex; flex-direction: column; gap: 18px">
+    <a href="DeskToday.dc.html" style="display: flex; align-items: center; gap: 10px; padding: 4px 8px; text-decoration: none; color: #17201B"><svg width="30" height="30" viewBox="0 0 120 120" role="img" aria-label="Hustle Daily logo" style="flex: none; display: block"><rect width="120" height="120" rx="28" fill="#2F6B4F"></rect><path d="M60 26A34 34 0 1 1 46.99 28.59" fill="none" stroke="#F5F3EE" stroke-width="9" stroke-linecap="round"></path><circle cx="46.99" cy="28.59" r="6.5" fill="#E8C27A"></circle><path d="M46 61L56 71L75 51" fill="none" stroke="#F5F3EE" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"></path></svg><strong style="font-size: 16px">Hustle Daily</strong></a>
+    <a href="DeskAddFood.dc.html" style="height: 42px; border-radius: 10px; background: #2F6B4F; color: #FFFFFF; font-weight: 600; font-size: 14px; display: flex; align-items: center; justify-content: center; text-decoration: none">+ Add food</a>
+    <div style="display: flex; flex-direction: column; gap: 2px; font-size: 14px">
+      <a href="DeskToday.dc.html" style="padding: 9px 10px; border-radius: 9px; color: #2E3832; text-decoration: none">Today</a>
+      <a href="DeskHistory.dc.html" style="padding: 9px 10px; border-radius: 9px; color: #2E3832; text-decoration: none">History</a>
+      <a href="DeskFoods.dc.html" aria-current="page" style="padding: 9px 10px; border-radius: 9px; background: #E6EFE9; color: #24563F; font-weight: 600; text-decoration: none">Foods &amp; Recipes</a>
+      <a href="DeskTrends.dc.html" style="padding: 9px 10px; border-radius: 9px; color: #2E3832; text-decoration: none">Trends</a>
+      <a href="DeskTargets.dc.html" style="padding: 9px 10px; border-radius: 9px; color: #2E3832; text-decoration: none">Targets</a>
+      <a href="DeskSettings.dc.html" style="padding: 9px 10px; border-radius: 9px; color: #2E3832; text-decoration: none">Settings</a>
+    </div>
+  </nav>
+
+  <main style="flex: 999 1 560px; min-width: 0; padding: 28px 36px 48px; display: flex; flex-direction: column; gap: 18px">
+    <a href="DeskFoods.dc.html" style="font-size: 14px">← Foods &amp; Recipes</a>
+    <header style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 12px">
+      <div style="display: flex; flex-direction: column; gap: 8px">
+        <span style="font-size: 13px; color: #646D67">{{headerHint}}</span>
+        <label style="display: flex; flex-direction: column; gap: 4px"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Recipe name</span><input value="Breakfast bowl" style="font: 700 30px Inter, sans-serif; letter-spacing: -0.02em; border: 0; border-bottom: 1px dashed #CFCAC0; background: transparent; padding: 2px 0; width: 420px; max-width: 100%"></label>
+      </div>
+      <div style="display: flex; gap: 10px; align-items: center">
+        <label style="display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: #4D5751">Category<select style="height: 38px; border: 1px solid #CFCAC0; border-radius: 8px; padding: 0 10px; font: 600 14px Inter, sans-serif; background: #FFFFFF"><option>Breakfast</option><option>Lunch</option><option>Dinner</option><option>Snack</option></select></label>
+        <button type="button" onClick="{{save}}" style="height: 42px; padding: 0 18px; border: 0; border-radius: 10px; background: {{saveBg}}; color: {{saveInk}}; font: 600 14px Inter, sans-serif; cursor: pointer">{{saveLabel}}</button>
+      </div>
+    </header>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 18px; align-items: flex-start">
+      <section aria-labelledby="ingH" style="flex: 999 1 640px; min-width: 0; background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 16px; padding: 8px 0 16px">
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 20px"><h2 id="ingH" style="margin: 0; font-size: 17px">Ingredients · {{count}}</h2><span style="font-size: 12px; color: #646D67">Use ↑ ↓ to reorder; quantities can be in any unit</span></div>
+        <div style="overflow-x: auto">
+          <div style="min-width: 780px">
+            <div style="display: grid; grid-template-columns: 56px minmax(0, 1fr) 84px 150px 60px 52px 52px 52px 40px; gap: 8px; padding: 8px 20px; font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #646D67; border-bottom: 1px solid #ECE9E2"><span>Order</span><span>Food · brand</span><span>Qty</span><span>Unit</span><span style="text-align: right">kcal</span><span style="text-align: right">Prot.</span><span style="text-align: right">Carbs</span><span style="text-align: right">Fat</span><span></span></div>
+            <sc-for list="{{rows}}" as="r" hint-placeholder-count="6">
+              <div style="display: grid; grid-template-columns: 56px minmax(0, 1fr) 84px 150px 60px 52px 52px 52px 40px; gap: 8px; padding: 8px 20px; align-items: center; font-size: 14px; border-bottom: 1px solid #F1EFEA">
+                <span style="display: flex; gap: 2px"><button type="button" onClick="{{r.up}}" aria-label="Move {{r.name}} up" style="width: 24px; height: 28px; border: 0; border-radius: 6px; background: #F1EFEA; font-size: 12px; cursor: pointer">↑</button><button type="button" onClick="{{r.down}}" aria-label="Move {{r.name}} down" style="width: 24px; height: 28px; border: 0; border-radius: 6px; background: #F1EFEA; font-size: 12px; cursor: pointer">↓</button></span>
+                <span style="min-width: 0"><span style="font-weight: 500">{{r.name}}</span><br><span style="font-size: 12px; color: #646D67">{{r.brand}} · {{r.basis}}</span></span>
+                <input aria-label="Quantity of {{r.name}}" value="{{r.qty}}" onChange="{{r.setQty}}" inputmode="decimal" style="height: 36px; border: 1px solid #CFCAC0; border-radius: 8px; padding: 0 8px; font: 500 14px Inter, sans-serif; width: 100%">
+                <select aria-label="Unit for {{r.name}}" value="{{r.unit}}" onChange="{{r.setUnit}}" style="height: 36px; border: 1px solid #CFCAC0; border-radius: 8px; padding: 0 6px; font: 500 13px Inter, sans-serif; background: #FFFFFF; width: 100%">
+                  <sc-for list="{{r.units}}" as="u" hint-placeholder-count="2"><option value="{{u.id}}">{{u.label}}</option></sc-for>
+                </select>
+                <span style="text-align: right">{{r.kcal}}</span><span style="text-align: right">{{r.p}}</span><span style="text-align: right">{{r.c}}</span><span style="text-align: right">{{r.f}}</span>
+                <button type="button" onClick="{{r.remove}}" aria-label="Remove {{r.name}}" style="width: 32px; height: 32px; border: 0; border-radius: 8px; background: transparent; color: #4D5751; font-size: 18px; cursor: pointer">×</button>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <div style="padding: 14px 20px 0; display: flex; flex-direction: column; gap: 10px">
+          <label style="display: flex; align-items: center; gap: 10px; height: 42px; border: 1px dashed #CFCAC0; border-radius: 10px; padding: 0 12px; background: #FAF9F6"><span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Add ingredient</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4D5751" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg><input placeholder="Add ingredient: search your foods" style="flex: 1; border: 0; outline: none; background: transparent; font: 15px Inter, sans-serif"></label>
+          <sc-if value="{{hasSuggest}}" hint-placeholder-val="{{true}}">
+            <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 13px"><span style="color: #646D67">Suggested:</span>
+              <sc-for list="{{suggest}}" as="g" hint-placeholder-count="3">
+                <button type="button" onClick="{{g.add}}" style="height: 32px; padding: 0 12px; border-radius: 999px; border: 1px solid #CFCAC0; background: #FFFFFF; font: 500 13px Inter, sans-serif; cursor: pointer">+ {{g.label}}</button>
+              </sc-for>
+            </div>
+          </sc-if>
+        </div>
+      </section>
+
+      <aside style="flex: 1 1 320px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+        <section style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 16px; padding: 20px 22px; display: flex; flex-direction: column; gap: 14px">
+          <h2 style="margin: 0; font-size: 16px">Yield</h2>
+          <div style="display: flex; align-items: center; gap: 10px">
+            <button type="button" onClick="{{dec}}" aria-label="Fewer servings" style="width: 40px; height: 40px; border: 1px solid #CFCAC0; border-radius: 10px; background: #FFFFFF; font-size: 18px; cursor: pointer">−</button>
+            <span style="min-width: 110px; text-align: center"><strong style="font-size: 22px">{{servings}}</strong> {{servingWord}}</span>
+            <button type="button" onClick="{{inc}}" aria-label="More servings" style="width: 40px; height: 40px; border: 1px solid #CFCAC0; border-radius: 10px; background: #FFFFFF; font-size: 18px; cursor: pointer">+</button>
+          </div>
+          <span style="font-size: 13px; color: #4D5751">Total weight about {{weight}} g, so one serving is about {{servingWeight}} g.</span>
+        </section>
+        <section style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 16px; padding: 20px 22px; display: flex; flex-direction: column; gap: 12px">
+          <h2 style="margin: 0; font-size: 16px">Totals · = calculated live</h2>
+          <div style="display: grid; grid-template-columns: 1fr repeat(4, auto); gap: 8px 14px; font-size: 14px; align-items: baseline">
+            <span></span><span style="font-size: 11px; color: #646D67; text-transform: uppercase; letter-spacing: 0.05em">kcal</span><span style="font-size: 11px; color: #646D67; text-transform: uppercase; letter-spacing: 0.05em">P</span><span style="font-size: 11px; color: #646D67; text-transform: uppercase; letter-spacing: 0.05em">C</span><span style="font-size: 11px; color: #646D67; text-transform: uppercase; letter-spacing: 0.05em">F</span>
+            <span>Whole recipe</span><span>{{tot.kcal}}</span><span>{{tot.p}} g</span><span>{{tot.c}} g</span><span>{{tot.f}} g</span>
+            <strong>Per serving</strong><strong style="font-size: 20px">{{per.kcal}}</strong><strong>{{per.p}} g</strong><strong>{{per.c}} g</strong><strong>{{per.f}} g</strong>
+          </div>
+        </section>
+        <sc-if value="{{saved}}" hint-placeholder-val="{{false}}">
+          <section style="background: #FFFFFF; border: 1px solid #CFE0D5; border-radius: 16px; padding: 20px 22px; display: flex; flex-direction: column; gap: 12px">
+            <h2 style="margin: 0; font-size: 16px">Log to today</h2>
+            <sc-if value="{{notLogged}}" hint-placeholder-val="{{true}}">
+              <span style="font-size: 14px; color: #4D5751">1 serving to Breakfast, Thu 22 Oct</span>
+              <button type="button" onClick="{{log}}" style="height: 44px; border: 0; border-radius: 10px; background: #2F6B4F; color: #FFFFFF; font: 600 15px Inter, sans-serif; cursor: pointer">Log 1 serving · {{per.kcal}} kcal</button>
+            </sc-if>
+            <sc-if value="{{logged}}" hint-placeholder-val="{{false}}">
+              <div role="status" style="display: flex; flex-direction: column; gap: 8px; font-size: 14px; line-height: 1.5">
+                <strong style="color: #24563F">✓ Logged to Breakfast</strong>
+                <span>Calories <strong>1,055 → {{after.kcal}}</strong> / 2,000 kcal</span>
+                <span>Protein <strong>82 → {{after.p}}</strong> / 160 g</span>
+                <a href="DeskToday.dc.html" style="font-weight: 600">Open Today →</a>
+              </div>
+            </sc-if>
+          </section>
+        </sc-if>
+      </aside>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1300}}'>
+class Component extends DCLogic {
+  lib() {
+    return {
+      milk: { name: 'Milk 1.5%', brand: 'Balkan Farm', basis: 'per 100 ml', n: [47, 3.4, 4.8, 1.5], units: [{ id: 'ml', label: 'ml', k: 0.01, w: 1 }, { id: 'glass', label: 'glass (250 ml)', k: 2.5, w: 250 }], qty: 80, unit: 'ml' },
+      skyr: { name: 'Skyr Natural', brand: 'Nordic Dairy', basis: 'per 100 g', n: [63, 11, 4, 0.2], units: [{ id: 'g', label: 'g', k: 0.01, w: 1 }, { id: 'cup', label: 'cup (150 g)', k: 1.5, w: 150 }], qty: 100, unit: 'g' },
+      oats: { name: 'Rolled oats', brand: 'Alpen Mill', basis: 'per 100 g', n: [372, 13.5, 58.7, 7], units: [{ id: 'g', label: 'g', k: 0.01, w: 1 }, { id: 'tbsp', label: 'tbsp (10 g)', k: 0.1, w: 10 }], qty: 40, unit: 'g' },
+      chia: { name: 'Chia seeds', brand: 'Green Origin', basis: 'per 100 g', n: [486, 16.5, 8, 30.7], units: [{ id: 'tbsp', label: 'tbsp (12 g)', k: 0.12, w: 12 }, { id: 'tsp', label: 'tsp (4 g)', k: 0.04, w: 4 }, { id: 'g', label: 'g', k: 0.01, w: 1 }], qty: 1, unit: 'tbsp' },
+      cherries: { name: 'Frozen cherries', brand: 'Polar Harvest', basis: 'per 100 g', n: [63, 1.1, 14, 0.2], units: [{ id: 'g', label: 'g', k: 0.01, w: 1 }], qty: 100, unit: 'g' },
+      whey: { name: 'Whey protein Vanilla', brand: 'Core Nutrition', basis: 'per 100 g', n: [380, 78, 6, 5.4], units: [{ id: 'scoop', label: 'scoop (30 g)', k: 0.3, w: 30 }, { id: 'g', label: 'g', k: 0.01, w: 1 }], qty: 1, unit: 'scoop' }
+    };
+  }
+  renderVals() {
+    const s = this.state;
+    const L = this.lib();
+    const items = s.items ?? [{ key: 'milk', qty: 80, unit: 'ml' }, { key: 'skyr', qty: 100, unit: 'g' }, { key: 'oats', qty: 40, unit: 'g' }];
+    const servings = s.servings ?? 1;
+    const set = (next) => this.setState({ items: next, saved: false, logged: false });
+    const r1 = (x) => (Math.round(x * 10) / 10).toString();
+    let tot = [0, 0, 0, 0], weight = 0;
+    const rows = items.map((it, i) => {
+      const f = L[it.key];
+      const u = f.units.find((x) => x.id === it.unit) || f.units[0];
+      const q = parseFloat(it.qty) || 0;
+      const n = f.n.map((v) => v * u.k * q);
+      tot = tot.map((v, j) => v + n[j]);
+      weight += u.w * q;
+      const upd = (patch) => set(items.map((x, j) => j === i ? Object.assign({}, x, patch) : x));
+      const swap = (a, b) => { if (b < 0 || b >= items.length) return; const c = items.slice(); const t = c[a]; c[a] = c[b]; c[b] = t; set(c); };
+      return {
+        name: f.name, brand: f.brand, basis: f.basis, qty: it.qty, unit: it.unit, units: f.units,
+        kcal: Math.round(n[0]), p: r1(n[1]), c: r1(n[2]), f: r1(n[3]),
+        setQty: (e) => upd({ qty: e.target.value }), setUnit: (e) => upd({ unit: e.target.value }),
+        up: () => swap(i, i - 1), down: () => swap(i, i + 1),
+        remove: () => set(items.filter((_, j) => j !== i))
+      };
+    });
+    const used = items.map((x) => x.key);
+    const suggest = ['chia', 'cherries', 'whey', 'milk', 'skyr', 'oats'].filter((k) => !used.includes(k)).map((k) => ({ label: L[k].name + ' · ' + L[k].qty + ' ' + (L[k].units.find((u) => u.id === L[k].unit).label.split(' ')[0]), add: () => set(items.concat([{ key: k, qty: L[k].qty, unit: L[k].unit }])) }));
+    const per = tot.map((v) => v / servings);
+    return {
+      rows, count: items.length, suggest, hasSuggest: suggest.length > 0,
+      servings, servingWord: servings === 1 ? 'serving' : 'servings',
+      inc: () => this.setState({ servings: servings + 1, saved: false, logged: false }),
+      dec: () => this.setState({ servings: Math.max(1, servings - 1), saved: false, logged: false }),
+      weight: Math.round(weight), servingWeight: Math.round(weight / servings),
+      tot: { kcal: Math.round(tot[0]), p: r1(tot[1]), c: r1(tot[2]), f: r1(tot[3]) },
+      per: { kcal: Math.round(per[0]), p: r1(per[1]), c: r1(per[2]), f: r1(per[3]) },
+      headerHint: s.saved ? 'Recipe · saved to Foods & Recipes' : 'New recipe · not saved yet',
+      saved: !!s.saved, save: () => this.setState({ saved: true }),
+      saveLabel: s.saved ? '✓ Saved' : 'Save recipe', saveBg: s.saved ? '#E6EFE9' : '#2F6B4F', saveInk: s.saved ? '#24563F' : '#FFFFFF',
+      notLogged: !s.logged, logged: !!s.logged, log: () => this.setState({ logged: true }),
+      after: { kcal: Math.round(1055 + per[0]).toLocaleString('en-US'), p: Math.round(82 + per[1]) }
+    };
+  }
+}
+</script>
+</body>
+</html>

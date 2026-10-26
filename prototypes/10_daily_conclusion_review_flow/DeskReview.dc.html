@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Daily review · Hustle Daily</title>
+<script src="./vendor/react.js"></script>
+<script src="./vendor/react-dom.js"></script>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+*{box-sizing:border-box}
+a{color:#24563F}a:hover{color:#17201B}
+:focus-visible{outline:2px solid #2F6B4F;outline-offset:2px}
+</style>
+</helmet>
+<div style="min-height: 1300px; background: #F5F3EE; color: #17201B; font-family: Inter, system-ui, sans-serif; font-variant-numeric: tabular-nums; display: flex; flex-wrap: wrap">
+
+  <nav aria-label="Main" style="flex: 1 1 232px; max-width: 272px; background: #FFFFFF; border-right: 1px solid #E3E0D7; padding: 20px 14px; display: flex; flex-direction: column; gap: 18px">
+    <a href="DeskToday.dc.html" style="display: flex; align-items: center; gap: 10px; padding: 4px 8px; text-decoration: none; color: #17201B"><svg width="30" height="30" viewBox="0 0 120 120" role="img" aria-label="Hustle Daily logo" style="flex: none; display: block"><rect width="120" height="120" rx="28" fill="#2F6B4F"></rect><path d="M60 26A34 34 0 1 1 46.99 28.59" fill="none" stroke="#F5F3EE" stroke-width="9" stroke-linecap="round"></path><circle cx="46.99" cy="28.59" r="6.5" fill="#E8C27A"></circle><path d="M46 61L56 71L75 51" fill="none" stroke="#F5F3EE" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"></path></svg><strong style="font-size: 16px">Hustle Daily</strong></a>
+    <a href="DeskAddFood.dc.html" style="height: 42px; border-radius: 10px; background: #2F6B4F; color: #FFFFFF; font-weight: 600; font-size: 14px; display: flex; align-items: center; justify-content: center; text-decoration: none">+ Add food</a>
+    <div style="display: flex; flex-direction: column; gap: 2px; font-size: 14px">
+      <a href="DeskToday.dc.html" aria-current="page" style="padding: 9px 10px; border-radius: 9px; background: #E6EFE9; color: #24563F; font-weight: 600; text-decoration: none">Today</a>
+      <a href="DeskHistory.dc.html" style="padding: 9px 10px; border-radius: 9px; color: #2E3832; text-decoration: none">History</a>
+      <a href="DeskFoods.dc.html" style="padding: 9px 10px; border-radius: 9px; color: #2E3832; text-decoration: none">Foods &amp; Recipes</a>
+      <a href="DeskTrends.dc.html" style="padding: 9px 10px; border-radius: 9px; color: #2E3832; text-decoration: none">Trends</a>
+      <a href="DeskTargets.dc.html" style="padding: 9px 10px; border-radius: 9px; color: #2E3832; text-decoration: none">Targets</a>
+      <a href="DeskSettings.dc.html" style="padding: 9px 10px; border-radius: 9px; color: #2E3832; text-decoration: none">Settings</a>
+    </div>
+  </nav>
+
+  <main style="flex: 999 1 560px; min-width: 0; padding: 28px 36px 48px; display: flex; flex-direction: column; gap: 20px; max-width: 1180px">
+    <a href="DeskToday.dc.html" style="font-size: 14px">← Today</a>
+
+    <sc-if value="{{notDone}}" hint-placeholder-val="{{true}}">
+      <header style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px">
+        <div style="display: flex; flex-direction: column; gap: 8px">
+          <h1 style="margin: 0; font-size: 30px; letter-spacing: -0.02em">Let’s conclude the day</h1>
+          <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center; font-size: 14px; color: #4D5751">Thursday, 22 October · Training Day
+            <span style="display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 10px; border-radius: 999px; background: #FBF1DC; color: #8A5300; font-size: 13px; font-weight: 600"><span style="width: 8px; height: 8px; border-radius: 50%; background: #B07A1E"></span>Review due</span>
+          </div>
+        </div>
+        <span style="font-size: 13px; color: #646D67">Takes about a minute. You can reopen the day later.</span>
+      </header>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 16px">
+        <section aria-labelledby="c1" style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 16px; padding: 20px 22px; display: flex; flex-direction: column; gap: 12px">
+          <h2 id="c1" style="margin: 0; font-size: 16px">1 · Apple Health freshness</h2>
+          <div style="display: flex; gap: 12px; align-items: flex-start; padding: 12px 14px; border-radius: 12px; background: {{freshBg}}; border: 1px solid {{freshBorder}}">
+            <strong style="font-size: 16px; color: {{freshInk}}">{{freshIcon}}</strong>
+            <span style="font-size: 14px; line-height: 1.5"><strong>{{freshTitle}}</strong><br><span style="color: #4D5751">{{freshBody}}</span></span>
+          </div>
+          <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap">
+            <button type="button" onClick="{{check}}" style="height: 38px; padding: 0 14px; border-radius: 10px; border: 1px solid #CFCAC0; background: #FFFFFF; font: 600 14px Inter, sans-serif; cursor: pointer">{{checkLabel}}</button>
+            <span style="font-size: 12px; color: #646D67">Checks the server for a newer iPhone sync. This browser can’t read Apple Health itself.</span>
+          </div>
+        </section>
+
+        <section aria-labelledby="c2" style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 16px; padding: 20px 22px; display: flex; flex-direction: column; gap: 10px">
+          <h2 id="c2" style="margin: 0; font-size: 16px">2 · Anything missing?</h2>
+          <div style="display: flex; flex-direction: column; gap: 8px; font-size: 14px">
+            <span>✓ Weight · 104.0 kg <span style="color: #646D67">(Apple Health, 06:58)</span></span>
+            <span>✓ Sleep · 7 h 14 min <span style="color: #646D67">(Apple Health)</span></span>
+            <span>✓ Resting &amp; active energy received</span>
+            <div style="display: flex; flex-direction: column; gap: 8px; padding: 12px 14px; border-radius: 12px; border: 1.5px dashed #C99A3E; background: #FFFBF2">
+              <span><strong style="color: #6B4A12">Dinner has no entries.</strong> <span style="color: #4A3A1A">Did you skip it, or forget to log it?</span></span>
+              <div style="display: flex; gap: 14px; flex-wrap: wrap; align-items: center">
+                <label style="display: inline-flex; gap: 8px; align-items: center"><input type="checkbox" checked="{{skipDinner}}" onChange="{{toggleSkip}}" style="width: 18px; height: 18px; accent-color: #2F6B4F">No dinner today</label>
+                <a href="DeskAddFood.dc.html" style="font-weight: 600">+ Add dinner</a>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <section aria-labelledby="c3" style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 16px; padding: 20px 22px; display: flex; flex-direction: column; gap: 14px">
+        <div style="display: flex; justify-content: space-between; align-items: baseline"><h2 id="c3" style="margin: 0; font-size: 16px">3 · Targets for a Training Day</h2><span style="font-size: 12px; color: #646D67">Results only, no judgement</span></div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px">
+          <div style="border: 1px solid #E3E0D7; border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 6px"><span style="font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: #646D67">Calories · budget</span><span><strong style="font-size: 22px">1,540</strong> / 2,000 kcal</span><span style="font-size: 13px; color: #24563F; font-weight: 600">Within budget · 460 kcal left</span></div>
+          <div style="border: 1px solid #E3E0D7; border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 6px"><span style="font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: #646D67">Protein · minimum</span><span><strong style="font-size: 22px">128</strong> / 160 g</span><span style="font-size: 13px; color: #4D5751; font-weight: 600">Below minimum · 32 g short</span></div>
+          <div style="border: 1px solid #E3E0D7; border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 6px"><span style="font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: #646D67">Steps · minimum</span><span><strong style="font-size: 22px">{{steps}}</strong> / 10,000</span><span style="font-size: 13px; color: #4D5751; font-weight: 600">{{stepsText}}</span></div>
+          <div style="border: 1px solid #E3E0D7; border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 6px; background: #E0EEED"><span style="font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: #1D6767">Energy balance · =</span><span style="color: #1D6767"><strong style="font-size: 22px">{{balance}}</strong> kcal deficit ↓</span><span style="font-size: 13px; color: #1D6767">{{burned}} burned − 1,540 eaten</span></div>
+        </div>
+      </section>
+
+      <section aria-labelledby="c4" style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 16px; padding: 20px 22px; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px">
+        <div style="display: flex; flex-direction: column; gap: 8px"><h2 id="c4" style="margin: 0; font-size: 16px">4 · Meals</h2>
+          <div style="display: grid; grid-template-columns: 1fr auto; gap: 6px 12px; font-size: 14px"><span>Breakfast</span><span>485 kcal</span><span>Lunch</span><span>482 kcal</span><span>Snack</span><span>449 kcal</span><span>Cooking</span><span>124 kcal</span><span style="color: #646D67">Dinner</span><span style="color: #646D67">{{dinnerText}}</span></div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px"><h3 style="margin: 0; font-size: 16px">Workouts</h3><span style="font-size: 14px">Functional Strength Training<br><span style="color: #4D5751">07:18–08:02 · 44 min · 438 kcal (part of Active energy)</span></span></div>
+        <div style="display: flex; flex-direction: column; gap: 8px"><label for="rn" style="font-size: 16px; font-weight: 700">Notes</label><textarea id="rn" rows="3" placeholder="Optional" style="border: 1px solid #CFCAC0; border-radius: 10px; padding: 10px 12px; font: 14px Inter, sans-serif"></textarea></div>
+      </section>
+
+      <div style="display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: center; gap: 14px; padding-top: 4px">
+        <span style="font-size: 13px; color: #4D5751">{{footNote}}</span>
+        <button type="button" onClick="{{conclude}}" style="height: 46px; padding: 0 22px; border: 0; border-radius: 10px; background: #2F6B4F; color: #FFFFFF; font: 600 15px Inter, sans-serif; cursor: pointer">Conclude day</button>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{done}}" hint-placeholder-val="{{false}}">
+      <section role="status" style="background: #FFFFFF; border: 1px solid #E3E0D7; border-radius: 20px; padding: 48px; display: flex; flex-direction: column; gap: 18px; align-items: flex-start; max-width: 720px">
+        <span style="width: 56px; height: 56px; border-radius: 50%; background: #E6EFE9; color: #24563F; display: grid; place-items: center; font-size: 26px">✓</span>
+        <h1 style="margin: 0; font-size: 30px; letter-spacing: -0.02em">Thursday is concluded</h1>
+        <span style="display: inline-flex; align-items: center; height: 28px; padding: 0 10px; border-radius: 999px; background: #E6EFE9; color: #24563F; font-size: 13px; font-weight: 600">✓ Concluded 22:34 · Training Day</span>
+        <p style="margin: 0; font-size: 16px; line-height: 1.6; color: #4D5751">1,540 kcal eaten, {{burned}} kcal burned, <strong style="color: #1D6767">{{balance}} kcal deficit</strong>. Protein 128 g, steps {{steps}}. If Apple Health sends more data later, the day will show “Updated after conclusion” so you can review it.</p>
+        <div style="display: flex; gap: 10px"><a href="DeskHistory.dc.html" style="height: 42px; padding: 0 16px; border-radius: 10px; background: #17201B; color: #FFFFFF; font-weight: 600; font-size: 14px; display: inline-flex; align-items: center; text-decoration: none">View in History</a><button type="button" onClick="{{reopen}}" style="height: 42px; padding: 0 16px; border-radius: 10px; border: 1px solid #CFCAC0; background: #FFFFFF; font: 600 14px Inter, sans-serif; cursor: pointer">Reopen</button></div>
+      </section>
+    </sc-if>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1300}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state;
+    const fresh = !!s.fresh;
+    const checking = !!s.checking;
+    const burned = fresh ? 3240 : 2852;
+    const steps = fresh ? 9870 : 8420;
+    const fmt = (n) => n.toLocaleString('en-US');
+    return {
+      notDone: !s.done, done: !!s.done,
+      freshBg: fresh ? '#F2F8F4' : '#FBF1DC', freshBorder: fresh ? '#CFE0D5' : '#E7C98A', freshInk: fresh ? '#24563F' : '#8A5300', freshIcon: fresh ? '✓' : '!',
+      freshTitle: fresh ? 'Up to date: synced 22:31 from iPhone' : 'Last iPhone sync was at 18:42, almost 4 hours ago',
+      freshBody: fresh ? 'Resting energy, active energy and steps now cover the evening.' : 'Evening energy and steps may be missing. Open Hustle Daily on your iPhone, then check again.',
+      checkLabel: checking ? 'Checking…' : (fresh ? 'Checked just now' : 'Check for a newer sync'),
+      check: () => { this.setState({ checking: true }); setTimeout(() => this.setState({ checking: false, fresh: true }), 900); },
+      steps: fmt(steps), stepsText: 'Below minimum · ' + fmt(10000 - steps) + ' short',
+      burned: fmt(burned), balance: fmt(burned - 1540),
+      skipDinner: !!s.skipDinner, toggleSkip: () => this.setState({ skipDinner: !s.skipDinner }),
+      dinnerText: s.skipDinner ? 'skipped' : 'no entries',
+      footNote: fresh ? 'Everything is ready to conclude.' : 'You can conclude with older data. It will be marked as such.',
+      conclude: () => this.setState({ done: true }),
+      reopen: () => this.setState({ done: false })
+    };
+  }
+}
+</script>
+</body>
+</html>

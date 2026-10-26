@@ -295,7 +295,8 @@ textarea[aria-invalid='true'] {
     gap: 2px;
 }
 
-.sidebar-nav a {
+.sidebar-nav a,
+.sidebar-bottom-item {
     padding: 10px 12px;
     border-radius: 9px;
     color: #2e3832;
@@ -304,32 +305,44 @@ textarea[aria-invalid='true'] {
 }
 
 .sidebar-nav a:hover,
-.sidebar-nav a.active {
+.sidebar-nav a.active,
+.sidebar-bottom-item:hover,
+.sidebar-bottom-item.active {
     background: #e6efe9;
     color: #24563f;
 }
 
-.sidebar-nav a.active {
+.sidebar-nav a.active,
+.sidebar-bottom-item.active {
     font-weight: 600;
 }
 
 .sidebar-bottom {
     margin-top: auto;
-    padding: 14px 12px;
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    border: 1px solid #e3e0d7;
-    border-radius: 12px;
-    color: #4d5751;
-    font-size: 13px;
+    gap: 2px;
 }
 
-.sidebar-bottom a,
 .sidebar-bottom button {
+    width: 100%;
+    border: 0;
+    background: transparent;
+    text-align: left;
+    font-family: inherit;
+    cursor: pointer;
+}
+
+.sidebar-api-link {
     align-self: flex-start;
+    margin: 10px 12px 0;
     color: #24563f;
+    font-size: 13px;
     text-decoration: underline;
+}
+
+.sidebar-api-link:hover {
+    color: var(--hd-green);
 }
 
 .app-content {
@@ -370,6 +383,39 @@ textarea[aria-invalid='true'] {
     margin: 0;
     color: #4d5751;
     font-size: 14px;
+}
+
+.today-day-type {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+    color: var(--hd-ink-secondary);
+    font-size: 13px;
+}
+
+.today-day-type select {
+    min-height: 36px;
+    padding: 0 10px;
+    border: 1px solid var(--hd-border-strong);
+    border-radius: 8px;
+    background: var(--hd-surface);
+    font-weight: 600;
+}
+
+.today-progress {
+    width: 100%;
+    height: 8px;
+    accent-color: var(--hd-ink);
+}
+
+.today-progress-protein {
+    height: 6px;
+    accent-color: var(--hd-green);
+}
+
+.today-target-note {
+    color: var(--hd-ink-secondary);
 }
 
 .today-summary {
@@ -571,7 +617,15 @@ textarea[aria-invalid='true'] {
         margin-top: 0;
         flex-direction: row;
         flex-wrap: wrap;
-        gap: 16px;
+        align-items: center;
+        gap: 4px 8px;
+    }
+    .sidebar-bottom-item,
+    .sidebar-bottom button {
+        width: auto;
+    }
+    .sidebar-api-link {
+        margin: 0 12px;
     }
     .app-content {
         padding: 24px;
@@ -602,8 +656,6 @@ textarea[aria-invalid='true'] {
     .sidebar-bottom {
         width: 100%;
         padding: 4px 0;
-        border: 0;
-        font-size: 12px;
     }
     .sidebar-nav {
         position: fixed;
@@ -612,7 +664,7 @@ textarea[aria-invalid='true'] {
         left: 0;
         right: 0;
         display: grid;
-        grid-template-columns: repeat(5, minmax(0, 1fr));
+        grid-template-columns: repeat(4, minmax(0, 1fr));
         gap: 2px;
         padding: 8px 6px max(8px, env(safe-area-inset-bottom));
         border-top: 1px solid var(--hd-border);

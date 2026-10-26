@@ -86,7 +86,18 @@ it('retries a lost meal-save response with the same payload and idempotency key'
                     local_date: '2026-10-23',
                     consumed: { calories: 120, protein: 20 },
                     consumptions: [],
+                    day_type: {
+                        id: '33333333-3333-4333-8333-333333333333',
+                        key: 'rest',
+                        name: 'Rest Day',
+                        color: '#2D5C91',
+                        targets: {
+                            consumed_calories: { value: 3000, unit: 'kcal', comparison_rule: 'budget' },
+                            protein_g: { value: 120, unit: 'g', comparison_rule: 'minimum' },
+                        },
+                    },
                 });
+            if (path.endsWith('/day-types')) return result([]);
             throw new Error(`Unexpected request: ${path}`);
         }),
     );

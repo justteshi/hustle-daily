@@ -799,7 +799,7 @@ export default function App() {
                         <SidebarIcon name="signOut" />
                         {t('signOut')}
                     </button>
-                    <a className="sidebar-api-link" href="/api/docs">
+                    <a className="sidebar-api-link" href="/api/docs" target="_blank" rel="noopener noreferrer">
                         {t('apiDocs')}
                     </a>
                 </nav>
